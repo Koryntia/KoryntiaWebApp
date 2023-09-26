@@ -29,8 +29,6 @@
 
 "use client";
 import "./globals.css";
-// import "./data-tables-css.css";
-// import "./satoshi.css";
 import { useState, useEffect } from "react";
 import Loader from "./component/common/Loader";
 import Sidebar from "./component/Sidebar";

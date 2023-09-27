@@ -26,7 +26,8 @@ const config: Config = {
         inputBg: "#F7F9FA",
         textGray: "#93989A",
         white03: "#FAFAFA",
-        purple2: "#f3dbff"
+        purple2: "#f3dbff",
+        textNeutral: "#101010",
       }
     },
   },

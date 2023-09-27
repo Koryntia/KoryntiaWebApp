@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { TbCurrencyEthereum } from 'react-icons/tb';
 
-const KNT = () => {
+const KoryntiaToken = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifying, setNotifying] = useState(true);
 
@@ -60,4 +60,4 @@ const KNT = () => {
   );
 };
 
-export default KNT;
+export default KoryntiaToken;

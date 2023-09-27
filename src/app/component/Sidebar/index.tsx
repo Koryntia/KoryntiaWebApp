@@ -8,6 +8,8 @@ import { TbWallet } from 'react-icons/tb'
 import { RxDashboard } from 'react-icons/rx'
 import { BsClock } from 'react-icons/bs'
 import { PiChatCenteredDotsThin, PiGearSixThin } from 'react-icons/pi'
+import { IoMdClose } from 'react-icons/io'
+import HelpCenter from "../HelpCenter";
 
 
 interface SidebarProps {
@@ -29,6 +31,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   // close on click outside
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
+
       if (!sidebar.current || !trigger.current) return;
       if (
         !sidebarOpen ||
@@ -55,37 +58,38 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   useEffect(() => {
     localStorage.setItem("sidebar-expanded", sidebarExpanded.toString());
     if (sidebarExpanded) {
-      document.querySelector("body")?.classList.add("sidebar-expanded");
+      document.body.classList.add("sidebar-expanded");
     } else {
-      document.querySelector("body")?.classList.remove("sidebar-expanded");
+      document.body.classList.remove("sidebar-expanded");
     }
   }, [sidebarExpanded]);
 
   return (
     <aside
       ref={sidebar}
-      className={`absolute py-4 px-2 left-0 top-20 lg:top-0 z-50 flex h-screen w-[302] 
-      flex-col overflow-y-hidden bg-white03 duration-300 ease-linear lg:static 
+      className={`absolute pt-4 pb-0  left-0 top-20 lg:top-0 z-50 flex h-screen w-[302px] 
+      flex-col items-center overflow-y-hidden bg-white03 duration-300 ease-linear lg:static 
       lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
     >
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-        <div className="flex justify-center items-center gap-2 lg:gap-4">
-          <Link href="/">
+      <div className="flex items-center justify-between gap-2 py- lg:py- px-8 h-[56px] w-full">
+        <div className="flex justify-center items-center gap- lg:gap-4 h-full">
+          <Link href="/" className="" style={{ width: '', height: '100%' }}>
             <Image
-              width={50}
-              height={50}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: 'auto', height: '100%' }}
               src={"/templeuser.jpg"}
               alt="Logo"
               className="rounded-full"
             />
           </Link>
-          <div className="hidden lg:block">
+          <div className="hidden lg:block flex-grow">
             <h2 className="text-textBlack text-[18px] font-semibold">Temple Ndukwu</h2>
             <p className="text-textGray text-[14px]">@temtechie</p>
           </div>
         </div>
-
         <button
           ref={trigger}
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -93,34 +97,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           aria-expanded={sidebarOpen}
           className="block lg:hidden"
         >
-          <svg
-            className="fill-current"
-            width="20"
-            height="18"
-            viewBox="0 0 20 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M19 8.175H2.98748L9.36248 1.6875C9.69998 1.35 9.69998 0.825 9.36248 0.4875C9.02498 0.15 8.49998 0.15 8.16248 0.4875L0.399976 8.3625C0.0624756 8.7 0.0624756 9.225 0.399976 9.5625L8.16248 17.4375C8.31248 17.5875 8.53748 17.7 8.76248 17.7C8.98748 17.7 9.17498 17.625 9.36248 17.475C9.69998 17.1375 9.69998 16.6125 9.36248 16.275L3.02498 9.8625H19C19.45 9.8625 19.825 9.4875 19.825 9.0375C19.825 8.55 19.45 8.175 19 8.175Z"
-              fill=""
-            />
-          </svg>
+          <IoMdClose className="h-5 w-5" />
         </button>
       </div>
-
-      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-        <nav className="mt-8 ">
+      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear h-[539px]">
+        <nav className="mt-8">
           <div>
             <h3 className="mb-2 ml-4 text-base font-semibold text-textBlack">
               General
             </h3>
-            <ul className="mb-6 flex flex-col gap-1.5">
+            <ul className="mb-2 flex flex-col gap-1">
               <li>
                 <Link
                   href="/"
                   className={`group relative flex items-center gap-2 rounded-xl 
-                  py-2 px-4 font-medium duration-300 ease-in-out hover:bg-purple2 hover:text-appColor1
+                  py-2 px-4 font-medium duration-300 ease-in-out hover:bg-purple2
+                  w-[266px]
+                  hover:text-appColor1
                     ${pathname === '/' || pathname === '' ?
                       "bg-purple2 text-appColor1" : "text-textGray"
                     }`}
@@ -161,7 +154,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <h3 className="mb-2 ml-4 text-base font-semibold text-textBlack">
               Marketplace
             </h3>
-            <ul className="mb-6 flex flex-col gap-1.5">
+            <ul className="mb-2 flex flex-col gap-1">
               <li>
                 <Link
                   href="/market"
@@ -194,7 +187,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <h3 className="mb-2 ml-4 text-base font-semibold text-textBlack">
               My Profile
             </h3>
-            <ul className="mb-6 flex flex-col gap-1.5">
+            <ul className="mb-2 flex flex-col gap-1">
               <li>
                 <Link
                   href="/collection"
@@ -238,6 +231,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           </div>
         </nav>
       </div>
+      <HelpCenter />
     </aside>
   );
 };

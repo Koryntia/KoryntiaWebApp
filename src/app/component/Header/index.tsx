@@ -2,7 +2,7 @@ import Link from "next/link";
 import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdownUser";
 import Image from "next/image";
-import KNT from "./KNT";
+import KoryntiaToken from "./KoryntiaToken";
 import { CiSearch } from 'react-icons/ci';
 import { GrMenu } from 'react-icons/gr';
 
@@ -31,7 +31,7 @@ const Header = (props: {
                         <Image
                             width={32}
                             height={32}
-                            src={"/templeuser.jpg"}
+                            src={"/koryntia-logo.png"}
                             alt="Logo"
                         />
                     </Link>
@@ -60,7 +60,7 @@ const Header = (props: {
 
                 <div className="flex items-center gap-3 2xsm:gap-7">
                     <ul className="flex items-center gap-2 2xsm:gap-4">
-                        <KNT />
+                        <KoryntiaToken />
                         <DropdownNotification />
                     </ul>
                     <DropdownUser />

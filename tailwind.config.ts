@@ -28,6 +28,8 @@ const config: Config = {
         white03: "#FAFAFA",
         purple2: "#f3dbff",
         textNeutral: "#101010",
+        black2: "#4E4E4E",
+        blue1: "#F7F9FA",
       }
     },
   },

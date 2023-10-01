@@ -23,3 +23,56 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.cardContainer{
+  position: relative;
+  width: 240px;
+  height: 280px;
+}
+
+.cardChild {
+  position: absolute;
+  top: 14px; 
+  right: 8px; 
+  border-radius: 21px;
+}
+.cardChild :hover{
+  background-color: lightcoral;
+  border-radius: 22px;
+}
+
+.cardImg{
+  height:140px;
+  width: fit-content;
+}
+
+.cardCount{
+  border-radius: 21px;
+  background: rgba(19, 12, 26, 0.15);
+  backdrop-filter: blur(5px);
+  padding: 8px 8px; 
+  position: absolute;
+  top: 14px; 
+  right: 71px; 
+}
+.buttonPurple{
+  border-radius: 8px;
+  background:  #B92FFF;
+  text-align: center;
+  color: white;
+  width: 88px;
+  height: 32px;
+  gap: 10px;
+}
+.cardBid{
+  text-align: center;
+  color: black;
+  width: 88px;
+  height: 32px;
+  gap: 10px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+}
+
+

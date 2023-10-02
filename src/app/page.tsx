@@ -1,9 +1,9 @@
 'use client'
 import { useState } from "react";
-import CreateLoan from "./component/CreateLoan/CreateLoan";
-import LoanButton from "./component/CreateLoan/LoanButton";
-import LoanSummary from "./component/CreateLoan/LoanSummary";
-import LoanSummaryContainer from "./component/CreateLoan/LoanSummaryContainer";
+import CreateLoan from "./component/create-loan/create-loan";
+import LoanButton from "./component/create-loan/LoanButton";
+import LoanSummary from "./component/create-loan/LoanSummary";
+import LoanSummaryContainer from "./component/create-loan/LoanSummaryContainer";
 
 export default function Home() {
 

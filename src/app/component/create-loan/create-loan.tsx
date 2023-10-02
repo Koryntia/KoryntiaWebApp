@@ -1,7 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { AiOutlineDollarCircle } from 'react-icons/ai';
 
+type LoanFormProps = {
+    name: string;
+    value: string;
+};
+
 const CreateLoan = () => {
+
+    const [requestAmountValue, setRequestAmountValue] = useState<LoanFormProps[]>([
+        { name: 'USDC', value: '' },
+        { name: '209730', value: '209730' },
+        { name: '4849', value: '4849' },
+        { name: '99494', value: '99494' },
+    ]);
+    const [loanPeriodValue, setLoanPeriodValue] = useState<LoanFormProps[]>([
+        { name: '', value: '' },
+        { name: '2 Years', value: '3' },
+        { name: '3 Years', value: '4' },
+        { name: '4 Years', value: '5' },
+    ]);
+
     return (
         <section>
             <div className='w-full h-[181.15px] mx-auto'>
@@ -17,10 +36,9 @@ const CreateLoan = () => {
                                 <select name="requestAmount" id="requestAmount"
                                     className='bg-transparent 
                                     cursor-pointer focus:border-transparent outline-none'>
-                                    <option value="">USDC</option>
-                                    <option value="">209730</option>
-                                    <option value="">4849</option>
-                                    <option value="">99494</option>
+                                    {requestAmountValue.map((opt, idx) => (
+                                        <option key={idx} value={opt.value}>{opt.name}</option>
+                                    ))}
                                 </select>
                             </div>
                         </div>
@@ -33,10 +51,9 @@ const CreateLoan = () => {
                                 className='bg-transparent
                                 focus:border-transparent outline-none 
                                 cursor-pointer'>
-                                <option value="">{" "}</option>
-                                <option value="">2 Years</option>
-                                <option value="">3 Years</option>
-                                <option value="">4 Years</option>
+                                {loanPeriodValue.map((period, idx) => (
+                                    <option key={idx} value={period.value}>{period.name}</option>
+                                ))}
                             </select>
                         </div>
                     </div>

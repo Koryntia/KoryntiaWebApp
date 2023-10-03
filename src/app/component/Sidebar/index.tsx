@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,12 +13,9 @@ import { IoMdClose } from 'react-icons/io'
 import HelpCenter from "../HelpCenter";
 
 
-interface SidebarProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: (arg: boolean) => void;
-}
+const Sidebar = () => {
 
-const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
 
   const trigger = useRef<any>(null);

@@ -1,5 +1,37 @@
 {
-    "Index": {
-      "title": "congu jdsoss!"
+  "Index": {
+    "title": "Koryntia",
+    "description": "Revolutionierung der finanziellen Inklusion: Koryntias Mission, 2 Milliarden Menschen einen grenzenlosen Zugang zu Krediten zu ermöglichen"
+  },
+  "NotFoundPage": {
+    "title": "Seite nicht gefunden",
+    "description": "Bitte überprüfen Sie die Adressleiste Ihres Browsers noch einmal oder verwenden Sie die Navigation, um zu einer bekannten Seite zu gelangen."
+  },
+  "LocaleLayout": {
+    "title": "Koryntia"
+  },
+  "SidebarNavigation": {
+    "general": {
+      "title": "Allgemein",
+      "dashboard": "Armaturenbrett",
+      "message": "Nachricht",
+      "settings": "Einstellungen"
+    },
+    "marketplace": {
+      "title": "Marktplatz",
+      "market": "Markt",
+      "myPositions": "Meine Positionen"
+    },
+    "myProfile": {
+      "title": "Mein Profil",
+      "collection": "Sammlung",
+      "wallet": "Geldbörse",
+      "history": "Geschichte"
     }
+  },
+  "HelpCenter": {
+    "title": "Hilfezentrum",
+    "description": "Haben Sie Probleme in Enefti? ",
+    "text": "Gehen Sie zum Hilfezentrum"
   }
+}

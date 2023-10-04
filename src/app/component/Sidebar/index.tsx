@@ -1,7 +1,5 @@
 'use client'
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { MdExplore, MdOutlineShopTwo } from 'react-icons/md'
 import { CiShop } from 'react-icons/ci'
@@ -11,12 +9,16 @@ import { BsClock } from 'react-icons/bs'
 import { PiChatCenteredDotsThin, PiGearSixThin } from 'react-icons/pi'
 import { IoMdClose } from 'react-icons/io'
 import HelpCenter from "../HelpCenter";
+import { useTranslations } from "next-intl";
+import {usePathname} from 'next-intl/client';
+import Link from 'next-intl/link';
 
 
 const Sidebar = () => {
+  const t = useTranslations('SidebarNavigation');
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const pathname = usePathname();
+  const pathname = usePathname();  
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -102,7 +104,7 @@ const Sidebar = () => {
         <nav className="mt-8">
           <div>
             <h3 className="mb-2 ml-4 text-base font-semibold text-textBlack">
-              General
+              {t('general.title')}
             </h3>
             <ul className="mb-2 flex flex-col gap-1">
               <li>
@@ -117,7 +119,7 @@ const Sidebar = () => {
                     }`}
                 >
                   <MdExplore className="h-5 w-5" />
-                  Dashboard
+                  {t('general.dashboard')}
                 </Link>
               </li>
               <li>
@@ -130,7 +132,7 @@ const Sidebar = () => {
                     }`}
                 >
                   <PiChatCenteredDotsThin className="h-5 w-5" />
-                  Message
+                  {t('general.message')}
                 </Link>
               </li>
               <li>
@@ -143,14 +145,14 @@ const Sidebar = () => {
                     }`}
                 >
                   <PiGearSixThin className="h-5 w-5" />
-                  Settings
+                  {t('general.settings')}
                 </Link>
               </li>
             </ul>
           </div>
           <div>
             <h3 className="mb-2 ml-4 text-base font-semibold text-textBlack">
-              Marketplace
+              {t('marketplace.title')}
             </h3>
             <ul className="mb-2 flex flex-col gap-1">
               <li>
@@ -163,7 +165,7 @@ const Sidebar = () => {
                     }`}
                 >
                   <CiShop className="h-5 w-5" />
-                  Market
+                  {t('marketplace.market')}
                 </Link>
               </li>
               <li>
@@ -176,14 +178,14 @@ const Sidebar = () => {
                     }`}
                 >
                   <MdOutlineShopTwo className="h-5 w-5" />
-                  My Positions
+                  {t('marketplace.myPositions')}
                 </Link>
               </li>
             </ul>
           </div>
           <div>
             <h3 className="mb-2 ml-4 text-base font-semibold text-textBlack">
-              My Profile
+              {t('myProfile.title')}
             </h3>
             <ul className="mb-2 flex flex-col gap-1">
               <li>
@@ -196,7 +198,7 @@ const Sidebar = () => {
                     }`}
                 >
                   <RxDashboard className="h-5 w-5" />
-                  Collection
+                  {t('myProfile.collection')}
                 </Link>
               </li>
               <li>
@@ -209,7 +211,7 @@ const Sidebar = () => {
                     }`}
                 >
                   <TbWallet className="h-5 w-5" />
-                  Wallet
+                  {t('myProfile.wallet')}
                 </Link>
               </li>
               <li>
@@ -222,7 +224,7 @@ const Sidebar = () => {
                     }`}
                 >
                   <BsClock className="h-5 w-5" />
-                  History
+                  {t('myProfile.history')}
                 </Link>
               </li>
             </ul>

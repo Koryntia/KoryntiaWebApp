@@ -3,9 +3,10 @@ import Sidebar from "../component/Sidebar";
 import "./globals.css";
 import { ReactNode } from "react";
 
-import {createTranslator, NextIntlClientProvider } from 'next-intl';
+import { createTranslator, NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import LoadingWrapper from "../component/common/loading-wrapper";
+import { ReduxProvider } from "@/redux/provider";
 
 type Props = {
   children: ReactNode;
@@ -21,12 +22,12 @@ async function getMessages(locale: string) {
 }
 
 export async function generateStaticParams() {
-  return ['en', 'de', 'es'].map((locale) => ({locale}));
+  return ['en', 'de', 'es'].map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({params: {locale}}: Props) {
+export async function generateMetadata({ params: { locale } }: Props) {
   const messages = await getMessages(locale);
-  const t = createTranslator({locale, messages});
+  const t = createTranslator({ locale, messages });
   return {
     title: t('LocaleLayout.title')
   };
@@ -36,30 +37,33 @@ export default async function RootLayout({
   children, params: { locale }
 }: Props) {
 
-const messages = await getMessages(locale);
+  const messages = await getMessages(locale);
 
   return (
     <html lang={locale}>
       <body suppressHydrationWarning={true}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <div className="">
-            <LoadingWrapper>
-              <div className="flex h-screen overflow-hidden">
-                <Sidebar
-                />
-                <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                  <Header
+        <ReduxProvider>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <div className="">
+              <LoadingWrapper>
+                <div className="flex h-screen overflow-hidden">
+                  <Sidebar
                   />
-                  <main>
-                    <div className="mx-auto w-full px-4 py-4 md:px-6 2xl:px-11">
-                      {children}
-                    </div>
-                  </main>
+                  <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                    <Header
+                    />
+                    <main>
+                      <div className="mx-auto w-full px-4 py-4 md:px-6 2xl:px-11">
+                        {children}
+                      </div>
+                    </main>
+                  </div>
                 </div>
-              </div>
-            </LoadingWrapper>
-          </div>
-        </NextIntlClientProvider>
+              </LoadingWrapper>
+            </div>
+          </NextIntlClientProvider>
+        </ReduxProvider>
+
       </body>
     </html>
   );

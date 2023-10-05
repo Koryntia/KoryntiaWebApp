@@ -1,9 +1,41 @@
-# KoryntiaWebApp
-Main repository of the front-end 
+# Koryntia App
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Revolutionizing Financial Inclusion: Koryntia's Mission to Empower 2 Billion People with Borderless Credit Access
 
-## Getting Started
+# Background
+This project is built on Next.js 13.5 and is organized as a single application within a standalone repository. This approach allows us to focus on delivering a cohesive and optimized DeFi experience.
+
+# Prerequisites
+
+To run this project locally, the following tools are required on your local machine:
+
+* [Node.js](https://nodejs.org/en/download/)
+* [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+
+### 1. Installation
+
+Clone the project:
+
+``` sh
+git clone https://github.com/Koryntia/KoryntiaWebApp.git
+```
+
+Navigate into the project directory and install its dependencies:
+
+```
+cd KoryntiaWebApp/
+```
+
+# Project Setup Guides
+
+## Install Dependencies
+Before setting up a project, install dependencies for the Project:
+
+```sh
+npm install
+```
+
+### Run
 
 First, run the development server:
 
@@ -21,26 +53,40 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 -http://localhost:3000 --> if you wanna test Metamask connection page
 -http://localhost:3000/landing --> for the langing page
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+N/A
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+List of libraries in building the Koryntia web app
 
-## Learn More
+- [Tailwindcss](https://tailwindcss.com/docs/installation/)
+- [Formik](https://formik.org/docs/)
+- [Yup](https://github.com/jquense/yup/)
+- [React Router DOM V6](https://reactrouter.com/en/main/)
+- [Sweetalert2](https://sweetalert2.github.io/)
+- [Socket io](https://socket.io/)
+- [next-intl](https://next-intl-docs.vercel.app/docs/getting-started/)
+- [Redux toolkit](https://redux-toolkit.js.org/introduction/getting-started/)
+- [Axios](https://axios-http.com/docs/intro/)
+- etc
 
-To learn more about Next.js, take a look at the following resources:
+## Architecture
+N/A
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### File Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+N/A
 
-## Deploy on Vercel
+### IU Components
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+List of common reusable components.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Components
+ - Card
+ - Button
 
+### Application state
+
+N/A

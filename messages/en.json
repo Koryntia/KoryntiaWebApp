@@ -1,0 +1,37 @@
+{
+  "Index": {
+    "title": "Koryntia",
+    "description": "Revolutionizing Financial Inclusion: Koryntia's Mission to Empower 2 Billion People with Borderless Credit Access"
+  },
+  "NotFoundPage": {
+    "title": "Page not found",
+    "description": "Please double-check the browser address bar or use the navigation to go to a known page."
+  },
+  "LocaleLayout": {
+    "title": "Koryntia"
+  },
+  "SidebarNavigation": {
+    "general": {
+      "title": "General",
+      "dashboard": "Dashboard",
+      "message": "Message",
+      "settings": "Settings"
+    },
+    "marketplace": {
+      "title": "Marketplace",
+      "market": "Market",
+      "myPositions": "My Positions"
+    },
+    "myProfile": {
+      "title": "My Profile",
+      "collection": "Collection",
+      "wallet": "Wallet",
+      "history": "History"
+    }
+  },
+  "HelpCenter": {
+    "title": "Help Center",
+    "description": "Having trouble in Enefti? Please contact us for more question",
+    "text": "Go help center"
+  }
+}

@@ -1,3 +1,4 @@
+'use client'
 import Link from "next/link";
 import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdownUser";
@@ -5,12 +6,11 @@ import Image from "next/image";
 import KoryntiaToken from "./KoryntiaToken";
 import { CiSearch } from 'react-icons/ci';
 import { GrMenu } from 'react-icons/gr';
+import { useState } from "react";
 
 
-const Header = (props: {
-    sidebarOpen: string | boolean | undefined;
-    setSidebarOpen: (arg0: boolean) => void;
-}) => {
+const Header = () => {
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     return (
         <header className="sticky top-0 z-50 flex w-full bg-white shadow-sm">
             <div className="flex flex-grow items-center justify-between px-4 py-4 md:px-6 2xl:px-11">
@@ -19,7 +19,7 @@ const Header = (props: {
                         aria-controls="sidebar"
                         onClick={(e) => {
                             e.stopPropagation();
-                            props.setSidebarOpen(!props.sidebarOpen);
+                            setSidebarOpen(!sidebarOpen);
                         }}
                         className="z-50 block rounded-sm bg-white p-1.5 shadow-sm lg:hidden"
                     >

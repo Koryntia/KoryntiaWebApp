@@ -4,8 +4,14 @@ import CreateLoan from "../component/create-loan/create-loan";
 import LoanSummaryContainer from "../component/create-loan/LoanSummaryContainer";
 import LoanSummary from "../component/create-loan/LoanSummary";
 import LoanButton from "../component/create-loan/LoanButton";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { decrement, increment } from '../../redux/features/count-slice';
 
 export default function Home() {
+
+
+  const count = useAppSelector((state) => state.counter.value)
+  const dispatch = useAppDispatch()
 
   const [showSummary, setShowSummary] = useState<boolean>(false);
 
@@ -13,11 +19,24 @@ export default function Home() {
     return setShowSummary(prevState => !prevState)
   }
 
+  const handleAdd = () => {
+    dispatch(increment())
+  }
+  const handleMinus = () => {
+    dispatch(decrement())
+  }
+
   return (
     <section>
       <div className="flex w-full">
         <div className="dashboard-column-1 w-[900px] h-full">
           <h2>Right Column</h2>
+          <h2>{count}</h2>
+          <div>
+            <button className="bg-green-300 p-2" onClick={handleAdd} >add</button> {"  "}
+            <button className="bg-blue-300 p-2" onClick={handleMinus}>minus</button>
+          </div>
+
         </div>
         <div className="dashboard-column-2 w-[330px] h-full">
           <CreateLoan />

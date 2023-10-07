@@ -1,4 +1,8 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig, AxiosRequestHeaders } from 'axios';
+
+interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
+  headers: AxiosRequestHeaders
+}
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: 'baseurlhere/',
@@ -41,7 +45,7 @@ axiosInstance.interceptors.response.use(
 );
 
 axiosInstance.interceptors.request.use(
-  async (config: any) => {
+  async (config: AdaptAxiosRequestConfig) => {
     // const sessionToken = await JSON.parse(localStorage.getItem('token'));
     let sessionToken= ''
     if (sessionToken) {

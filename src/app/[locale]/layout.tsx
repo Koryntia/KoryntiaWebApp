@@ -7,6 +7,9 @@ import { createTranslator, NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import LoadingWrapper from "../component/common/loading-wrapper";
 import { ReduxProvider } from "@/redux/provider";
+import { WagmiConfig } from "wagmi";
+import  config  from "../../services/conectwallet/connectConfiguration";
+
 
 type Props = {
   children: ReactNode;
@@ -45,6 +48,7 @@ export default async function RootLayout({
         <ReduxProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <div className="">
+              <WagmiConfig config={config}>
               <LoadingWrapper>
                 <div className="flex h-screen overflow-hidden">
                   <Sidebar
@@ -60,6 +64,7 @@ export default async function RootLayout({
                   </div>
                 </div>
               </LoadingWrapper>
+              </WagmiConfig>
             </div>
           </NextIntlClientProvider>
         </ReduxProvider>

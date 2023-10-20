@@ -1,10 +1,11 @@
 import { FC } from "react";
+import { ConnectButton } from "@/services/conectwallet/connectButton";
 interface pageProps {
     
 }
  
 const page: FC<pageProps> = () => {
-    return ( <div> collection</div> );
+    return ( <ConnectButton/>  );
 }
  
 export default page;

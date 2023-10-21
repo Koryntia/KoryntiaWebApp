@@ -33,5 +33,9 @@
     "title": "Hilfezentrum",
     "description": "Haben Sie Probleme in Enefti? ",
     "text": "Gehen Sie zum Hilfezentrum"
+  },
+  "ConnectButton":{
+    "reminder":"Installieren Sie Metamask",
+    "pending":" ...Verbinden"
   }
 }

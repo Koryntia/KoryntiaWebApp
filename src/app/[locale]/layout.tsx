@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation';
 import LoadingWrapper from "../component/common/loading-wrapper";
 import { ReduxProvider } from "@/redux/provider";
 import { WagmiConfig } from "wagmi";
-import  config  from "../../services/conectwallet/connectConfiguration";
+import  config  from "../../services/conectwallet/connect-Configuration";
 
 
 type Props = {

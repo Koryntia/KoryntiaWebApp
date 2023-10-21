@@ -1,30 +1,33 @@
 'use client'
+import { useTranslations } from 'next-intl';
 import { useConnect } from 'wagmi'
+import './connectionButton.css'
  
-export function ConnectButton() {
+ export function ConnectButton() {
+  const t = useTranslations('ConnectButton')
   const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect()
+    useConnect();
  
   return (
-    <div >
-        <ul>
+    <div className='connectionButton' >
+        <ul className='flex'>
       {connectors.map((connector) => (
-        <li  className=''
+        <li  className='border'
           key={connector.id}
         >
-         <button onClick={() => connect({ connector })}  disabled={!connector.ready}>
+         <button  onClick={() => connect({ connector })}  disabled={!connector.ready}>
            {connector.name}
            {!connector.ready && ' (unsupported)'}
            {isLoading &&
              connector.id === pendingConnector?.id &&
-             ' (connecting)'}
+             t('pending')}
          </button>
         </li>
       ))}
      </ul>
-      {error && <div>
+      {error && <div className='connectionLink'>
         <a href="https://metamask.io" target="_blank">
-              Install MetaMask
+        {t('reminder')}
             </a>
         </div>}
     </div>

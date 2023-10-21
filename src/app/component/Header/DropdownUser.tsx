@@ -9,9 +9,8 @@ import { BiUser } from 'react-icons/bi';
 import { useDisconnect } from "wagmi";
 
  
-const handleDisconnect = () => {
-  return ( useDisconnect() );
-}
+const handleDisconnect = () =>  useDisconnect();
+
  
 
 const  DropdownUser = () => {

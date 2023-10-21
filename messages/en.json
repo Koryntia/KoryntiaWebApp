@@ -33,5 +33,9 @@
     "title": "Help Center",
     "description": "Having trouble in Enefti? Please contact us for more question",
     "text": "Go help center"
+  },
+  "ConnectButton":{
+    "reminder":"Install Metamask",
+    "pending":" ...Connecting"
   }
 }

@@ -6,8 +6,14 @@ import { RiArrowDownSLine } from 'react-icons/ri';
 import { HiOutlinePower } from 'react-icons/hi2';
 import { MdOutlineManageAccounts } from 'react-icons/md';
 import { BiUser } from 'react-icons/bi';
+import { useDisconnect } from "wagmi";
 
-const DropdownUser = () => {
+ 
+const handleDisconnect = () =>  useDisconnect();
+
+ 
+
+const  DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const trigger = useRef<any>(null);
@@ -87,7 +93,7 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-2 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-appColor1 lg:text-base">
+        <button onClick={handleDisconnect} className="flex items-center gap-2 py-4 px-6 text-sm font-medium duration-300 ease-in-out hover:text-appColor1 lg:text-base">
           <HiOutlinePower className="h-5 w-5" />
           Log Out
         </button>

@@ -8,7 +8,7 @@
     "description": "Vuelva a verificar la barra de direcciones del navegador o utilice la navegación para ir a una página conocida."
   },
   "LocaleLayout": {
-    "title": "Corintia"
+    "title": "Koryntia"
   },
   "SidebarNavigation": {
     "general": {
@@ -33,5 +33,10 @@
     "title": "Centro de ayuda",
     "description": "¿Tienes problemas en Enefti? ",
     "text": "Ir al centro de ayuda"
+  },
+  "ConnectButton":{
+    "reminder":"Instalar Metamask",
+    "pending":" ...Conectando"
   }
+  
 }

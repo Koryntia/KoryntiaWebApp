@@ -23,3 +23,12 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.buttonPurple{
+  border-radius: 8px;
+  background:  #B92FFF;
+  text-align: center;
+  color: white;
+  width: 88px;
+  height: 32px;
+  gap: 10px;
+}

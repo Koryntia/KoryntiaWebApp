@@ -30,6 +30,8 @@ const config: Config = {
         textNeutral: "#101010",
         black2: "#4E4E4E",
         blue1: "#F7F9FA",
+        dark: "#26292E",
+        darkText: "#A7A6B8"
       }
     },
   },

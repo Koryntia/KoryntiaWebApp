@@ -8,7 +8,9 @@ import { notFound } from 'next/navigation';
 import LoadingWrapper from "../component/common/loading-wrapper";
 import { ReduxProvider } from "@/redux/provider";
 import { WagmiConfig } from "wagmi";
-import  config  from "../../services/conectwallet/connect-Configuration";
+import config from "../../services/conectwallet/connect-Configuration";
+import Login from "../component/login/Login";
+import WagmiProvider from "@/wagmi/WagmiProvider";
 
 
 type Props = {
@@ -42,30 +44,39 @@ export default async function RootLayout({
 
   const messages = await getMessages(locale);
 
+  const logged = false
+
   return (
     <html lang={locale}>
       <body suppressHydrationWarning={true}>
         <ReduxProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <div className="">
-              <WagmiConfig config={config}>
-              <LoadingWrapper>
-                <div className="flex h-screen overflow-hidden">
-                  <Sidebar
-                  />
-                  <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-                    <Header
-                    />
-                    <main>
-                      <div className="mx-auto w-full px-4 py-4 md:px-6 2xl:px-11">
-                        {children}
+              <WagmiProvider>
+                <LoadingWrapper>
+                  {!logged ?
+                    <Login />
+                    :
+                    <div className="flex h-screen overflow-hidden">
+                      <Sidebar
+                      />
+                      <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+                        <Header
+                        />
+                        <main>
+                          <div className="mx-auto w-full px-4 py-4 md:px-6 2xl:px-11">
+                            {children}
+                          </div>
+                        </main>
                       </div>
-                    </main>
-                  </div>
-                </div>
-              </LoadingWrapper>
-              </WagmiConfig>
+                    </div>
+                  }
+
+                </LoadingWrapper>
+              </WagmiProvider>
             </div>
+
+
           </NextIntlClientProvider>
         </ReduxProvider>
 

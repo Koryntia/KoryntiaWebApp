@@ -1,21 +1,16 @@
+'use client'
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 interface pageProps {
     
 }
  
 const page: FC<pageProps> = () => {
+   const t = useTranslations('HelpCenter');
     return ( <>
-         <div>
-            <div>
-               <h1>hola</h1>
-               <h3>hola</h3>
-            </div>
-            <div>
-              <span>hola</span>
-              <button className="buttonPurple">hola</button>
-              <button className="disabledButton">hola</button>
-            </div>
-         </div>
+    <section>
+        <div>{t('title')}</div>
+   </section>
     </> );
 }
  

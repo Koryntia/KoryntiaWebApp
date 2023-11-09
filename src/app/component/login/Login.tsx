@@ -98,13 +98,6 @@ const Login = () => {
                 {connectors.map((connector) => (
                   <button key={connector.id} onClick={() => connect({ connector })} className="flex cursor-pointer items-center w-full mb-2 bg-white text-black rounded-lg flex-row  hover:bg-gray-100">
                     <div className='rounded-l-lg px-3 py-2 bg-appColor1'>
-                      {/* <Image
-                        width={30}
-                        height={30}
-                        src={'https://images.unsplash.com/photo-1698417749742-7651a7dcb13a?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDR8Ym84alFLVGFFMFl8fGVufDB8fHx8fA%3D%3D'}
-                        alt={''}
-                        className="object-cover object-center"
-                      /> */}
                       {connector.name === 'MetaMask' && <MetaMask />}
                       {connector.name === 'Coinbase Wallet' && <CoinBase />}
                       {connector.name === 'WalletConnect' && <WalletConnect />}

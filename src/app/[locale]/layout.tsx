@@ -71,7 +71,6 @@ export default async function RootLayout({
                       </div>
                     </div>
                   }
-
                 </LoadingWrapper>
               </WagmiProvider>
             </div>

@@ -1,9 +1,9 @@
 export interface ILoginButtonProps {
     AgreeToTermsOfServices: boolean;
-    name: any;
+    name: string;
     support: any;
     loading: any;
-    onClick?: any
+    OnClick: () => void
     connectFunc: any
     connector: any
 

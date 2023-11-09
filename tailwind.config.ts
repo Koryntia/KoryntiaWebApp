@@ -22,6 +22,7 @@ const config: Config = {
           900: '#43302b',
         },
         appColor1: "#B92FFF",
+        appColor2: "#C77FEE",
         textBlack: "#222222",
         inputBg: "#F7F9FA",
         textGray: "#93989A",

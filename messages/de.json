@@ -37,5 +37,47 @@
   "ConnectButton":{
     "reminder":"Installieren Sie Metamask",
     "pending":" ...Verbinden"
+  },
+  "ActivePositions":{
+    "title":"Ihre aktiven Positionen"
+  },
+  "RecentLoans":{
+    "title":"Aktuelle Kredite"
+  },
+  "Settings":{
+    "title":"Allgemeine Einstellungen",
+
+    "subTitle":"Aktualisieren Sie hier Ihr Foto und Ihre persönlichen Daten.",
+    "subTitleClarification":"Alle Änderungen werden automatisch gespeichert",
+    "subTitleButtonPreview":"Vorschau",
+    "subTitleButtonCancel":"Stornieren",
+
+    "PersonalInfoTitle":"Persönliche Angaben",
+    "PersonalInfoName":"Vorname ",
+    "PersonalInfoLastName":"Familienname, Nachname",
+    "PersonalInfoEmail":"E-Mail-Adresse",
+    "PersonalInfoWallet":"Verknüpftes Wallet",
+    "PersonalInfoUsername":"Nutzername",
+
+    "NotificationTitle":"Benachrichtigungseinstellungen",
+    "NotificationItemSoldTitle":"Artikel ausverkauft",
+    "NotificationItemSoldSubtitle":"Wenn jemand einen Ihrer Artikel gekauft hat",
+    "NotificationAuctionExpiresTitle":"Auktion läuft ab",
+    "NotificationAuctionExpiresSubtitle":"Wenn eine von Ihnen erstellte zeitgesteuerte Auktion endet",
+    "NotificationUpdatesTitle":"Aktualisierungen von Besitzgegenständen",
+    "NotidicationUpdatesSubtile":"Wenn es ein wesentliches Update für einen der Artikel gibt, die Sie auf Enefthy gekauft haben",
+    "NotificationPurchaseTitle":"Erfolgreicher Kauf",
+    "NotificationPurchaseSubtitle":"Wenn Sie einen Artikel erfolgreich gekauft haben",
+
+    "PhotoEditTitle":"Dein Foto",
+    "PhotoEdit":"Bearbeiten Sie Ihr Foto",
+    "PhotoEditCardDeleteButton":"Löschen",
+    "PhotoEditCardUpdateButton":"Aktualisieren",
+    "PhotoEditDrag&Drop":"Zum Hochladen klicken oder ziehen und ablegen. PNG, JPG oder GIF, max. 20 MB",
+
+    "SocialLinkedTitle":"Sozial vernetzt",
+    "SocialLinkedSubtitle":"Melden Sie sich mit Google bei Ihrem Konto an.",
+    "SocialLinkedLink":"Klick hier um mehr zu erfahren."
+
   }
 }

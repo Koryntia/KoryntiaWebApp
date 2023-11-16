@@ -37,5 +37,47 @@
   "ConnectButton":{
     "reminder":"Install Metamask",
     "pending":" ...Connecting"
+  },
+  "ActivePositions":{
+    "title":"Your Active Positions"
+  },
+  "RecentLoans":{
+    "title":"Recent Loans"
+  },
+  "Settings":{
+    "title":"General Settings",
+
+    "subTitle":"Update your photo and personal details here.",
+    "subTitleClarification":"Every changes will be automatically saved",
+    "subTitleButtonPreview":"Preview",
+    "subTitleButtonCancel":"Cancel",
+
+    "PersonalInfoTitle":"Personal Information",
+    "PersonalInfoName":"First Name",
+    "PersonalInfoLastName":"Last Name",
+    "PersonalInfoEmail":"Email Address",
+    "PersonalInfoWallet":"Linked Wallet",
+    "PersonalInfoUsername":"Username",
+
+    "NotificationTitle":"Notification Settings",
+    "NotificationItemSoldTitle":"Item Sold",
+    "NotificationItemSoldSubtitle":"If someone has purchased one of your items",
+    "NotificationAuctionExpiresTitle":"Auction Expires",
+    "NotificationAuctionExpiresSubtitle":"When a timed auction you created ends",
+    "NotificationUpdatesTitle":"Owned Item Updates",
+    "NotidicationUpdatesSubtile":"If there is a material update to any of the items you purchased on Enefthy",
+    "NotificationPurchaseTitle":"Successful Purchase",
+    "NotificationPurchaseSubtitle":"When you have successfully purchased an item",
+
+    "PhotoEditTitle":"Your Photo",
+    "PhotoEdit":"Edit your photo",
+    "PhotoEditCardDeleteButton":"Delete",
+    "PhotoEditCardUpdateButton":"Update",
+    "PhotoEditDrag&Drop":"Click or drag and drop to upload. PNG, JPG or GIF, max. 20 MB",
+
+    "SocialLinkedTitle":"Social Linked",
+    "SocialLinkedSubtitle":"Sign in to your account using Google.",
+    "SocialLinkedLink":"Click here to learn more."
+
   }
 }

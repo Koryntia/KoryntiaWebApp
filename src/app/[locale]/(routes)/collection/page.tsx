@@ -1,11 +1,14 @@
+import Cardcontainer from "@/app/component/common/Cards/cardcontainer";
 import { FC } from "react";
-import { ConnectButton } from "@/services/conectwallet/connectButton";
+
 interface pageProps {
     
 }
  
 const page: FC<pageProps> = () => {
-    return ( <ConnectButton/>  );
+    return ( <>
+    <Cardcontainer/>
+    </> );
 }
  
 export default page;

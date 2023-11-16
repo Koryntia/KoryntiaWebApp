@@ -51,8 +51,7 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 -http://localhost:3000 --> if you wanna test Metamask connection page
--http://localhost:3000/landing --> for the langing page
-
+ 
 ## Deployment
 
 N/A
@@ -64,10 +63,7 @@ List of libraries in building the Koryntia web app
 - [Tailwindcss](https://tailwindcss.com/docs/installation/)
 - [Formik](https://formik.org/docs/)
 - [Yup](https://github.com/jquense/yup/)
-- [React Router DOM V6](https://reactrouter.com/en/main/)
-- [Sweetalert2](https://sweetalert2.github.io/)
-- [Socket io](https://socket.io/)
-- [next-intl](https://next-intl-docs.vercel.app/docs/getting-started/)
+ - [next-intl](https://next-intl-docs.vercel.app/docs/getting-started/)
 - [Redux toolkit](https://redux-toolkit.js.org/introduction/getting-started/)
 - [Axios](https://axios-http.com/docs/intro/)
 - etc

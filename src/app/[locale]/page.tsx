@@ -6,6 +6,7 @@ import LoanSummary from "../component/create-loan/LoanSummary";
 import LoanButton from "../component/create-loan/LoanButton";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { decrement, increment } from '../../redux/features/count-slice';
+import Login from "../component/login/Login";
 
 export default function Home() {
 

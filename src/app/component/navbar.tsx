@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
+import type { Route } from 'next';
 
 const Navbar: FC = () => {
 	const linkGeneral = [
@@ -83,7 +84,7 @@ const Navbar: FC = () => {
 				<h3>General</h3>
 				<ul>
 					<li>
-						<Link href="/">
+						<Link href={'/' as Route}>
 							<Image src="\navbar\history-colorless.svg" alt="Setting icon" />{' '}
 							Dashboard
 						</Link>

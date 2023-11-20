@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { FC } from 'react';
 import { DateTime, Interval } from 'luxon';
 import { TbCurrencyEthereum } from 'react-icons/tb';
-import Image from 'next/image';
 
 interface CardData {
 	data: any;
@@ -55,13 +54,13 @@ const Card: FC<CardData> = ({ data }) => {
 					key={index}
 					className=" shadow-lg bg-white border-black cardContainer rounded-2xl text-xs inline-block m-4"
 				>
-					<Image
+					<img
 						className="w-full rounded-xl cardImg "
 						src={key.imageId}
 						alt={key.title}
 					/>
 					<button className="cardChild">
-						<Image src="../cards/Duration.svg" alt="heart simbol" />
+						<img src="../cards/Duration.svg" alt="heart simbol" />
 					</button>
 					{Clock(key.timeOfCreation)}
 					<div className="text-gray-400 grid grid-rows-2 grid-cols-4 px-4 gap-10">

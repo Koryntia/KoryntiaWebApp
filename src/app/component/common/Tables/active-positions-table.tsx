@@ -70,6 +70,8 @@ const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
 							<Image
 								className="w-10 h-10 rounded-full"
 								src={key.imageId}
+								width={10}
+								height={10}
 								alt="Jese image"
 							/>
 							<div className="pl-4">

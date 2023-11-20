@@ -18,6 +18,8 @@ const RecentLoans: FC<RecentLoansProps> = ({ data }) => {
 					<Image
 						className="w-10 h-10 rounded-full"
 						src="https://random.imagecdn.app/500/15"
+						width={10}
+						height={10}
 						alt="Jese image"
 					/>
 					<div className="pl-4 w-40">

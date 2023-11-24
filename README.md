@@ -70,7 +70,7 @@ List of libraries in building the Koryntia web app
 - [next-intl](https://next-intl-docs.vercel.app/docs/getting-started/)
 - [Redux toolkit](https://redux-toolkit.js.org/introduction/getting-started/)
 - [Axios](https://axios-http.com/docs/intro/)
-- etc
+- [Web3 Wagmi](https://wagmi.sh/)
 
 ## Architecture
 N/A

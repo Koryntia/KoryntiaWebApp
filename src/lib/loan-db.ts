@@ -8,6 +8,7 @@ export type LoanFilter = {
 };
 
 export type Loan = {
+	id?: string;
 	lenderAddress: string;
 	loanToken: string;
 	loanAmount: string;

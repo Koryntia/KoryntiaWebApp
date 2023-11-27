@@ -2,11 +2,10 @@ import { getLoans } from '@/lib/loan-db';
 import React from 'react';
 import NoLoansFound from './no-loans-found';
 import Loans from './loans';
+import LoanForm from './loan-form';
 
 const page = async () => {
 	const { loans, results } = await getLoans();
-
-	console.log(loans, results);
 
 	let markup: JSX.Element;
 
@@ -24,7 +23,13 @@ const page = async () => {
 					break;
 			}
 	}
-	return <>{markup}</>;
+	return (
+		<>
+			<LoanForm />
+			<p className="my-8">Results: {results}</p>
+			{markup}
+		</>
+	);
 };
 
 export default page;

@@ -1,8 +1,8 @@
-import type { Loan } from '@/lib/loan-db';
 import React, { FC } from 'react';
+import { _TLoan } from '@/models/loan';
 
 type Props = {
-	loans: Loan[];
+	loans: _TLoan[];
 };
 const Loans: FC<Props> = ({ loans }) => {
 	return (
@@ -14,6 +14,10 @@ const Loans: FC<Props> = ({ loans }) => {
 				>
 					<dt>ID:</dt>
 					<dd>{loan.id}</dd>
+					<dt>Borrower Address:</dt>
+					<dd>{loan.borrowerAddress}</dd>
+					<dt>Lender Address:</dt>
+					<dd>{loan.lenderAddress}</dd>
 					<dt>Collateral Amount:</dt>
 					<dd>{loan.collateralAmount}</dd>
 					<dt>Collateral Token:</dt>

@@ -5,6 +5,7 @@ import {
 	ModelOptions,
 	Severity,
 } from '@typegoose/typegoose';
+import { FilterOutFunctionKeys } from '@typegoose/typegoose/lib/types';
 import mongoose from 'mongoose';
 
 /**
@@ -36,6 +37,9 @@ import mongoose from 'mongoose';
 	},
 })
 class LoanClass {
+	@prop({ required: true })
+	borrowerAddress: string;
+
 	@prop({ required: true })
 	lenderAddress: string;
 
@@ -78,4 +82,16 @@ class LoanClass {
 }
 
 const Loan = getModelForClass(LoanClass);
+
+/**
+ * `_TLoan`, is useful when interacting with results from the database.
+ * We use FilterOutFunctionKeys to remove the functions from the LoanClass type, and only keep the properties/types.
+ */
+export type _TLoan = FilterOutFunctionKeys<LoanClass>;
+/**
+ * `TLoan`, is useful when interacting with the client, for example, when sending data from the server to the client.
+ * We use Omit to remove the id and _id fields from the `_TLoan` type.
+ */
+export type TLoan = Omit<_TLoan, 'id' | '_id'>;
+
 export { Loan, LoanClass };

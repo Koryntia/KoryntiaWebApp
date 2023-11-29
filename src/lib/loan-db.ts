@@ -1,26 +1,10 @@
-import { Loan } from '@/models/loan';
+import { Loan, TLoan } from '@/models/loan';
 import connectDB from './db';
 import { stringToObjectId } from './utils';
 
 export type LoanFilter = {
 	page?: number;
 	limit?: number;
-};
-
-export type Loan = {
-	id?: string;
-	lenderAddress: string;
-	loanToken: string;
-	loanAmount: string;
-	collateralToken: string;
-	collateralAmount: string;
-	liquidationThreshold: string;
-	initialThreshold: string;
-	loanRepayDeadline: Date;
-	loanRequestDeadline: Date;
-	interestRate: string;
-	managerNFT: string;
-	managerNFTVersion: string;
 };
 
 /**
@@ -54,7 +38,7 @@ export async function getLoans(filter: LoanFilter = {}) {
 	}
 }
 
-export async function createLoan(params: Loan) {
+export async function createLoan(params: TLoan) {
 	try {
 		await connectDB();
 
@@ -93,7 +77,7 @@ export async function getLoan(id: string) {
 
 type UpdateLoanParams = {
 	id: string;
-	params: Partial<Loan>;
+	params: Partial<TLoan>;
 };
 export async function updateLoan({ id, params }: UpdateLoanParams) {
 	try {

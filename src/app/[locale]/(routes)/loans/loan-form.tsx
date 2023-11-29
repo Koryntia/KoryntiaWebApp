@@ -1,22 +1,24 @@
 import { createLoanAction } from '@/app/_action';
-import type { Loan } from '@/lib/loan-db';
+import { TLoan } from '@/models/loan';
 
-const sampleData = {
+const sampleData: TLoan = {
+	borrowerAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0A',
 	collateralAmount: '100',
-	collateralToken: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+	collateralToken: '0x6B175474E89094C44Da98b954EedeAC495271d0B',
 	loanAmount: '100',
-	loanToken: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+	loanToken: '0x6B175474E89094C44Da98b954EedeAC495271d0C',
 	loanRepayDeadline: new Date(2023 - 12 - 31),
 	initialThreshold: '0.5',
 	interestRate: '0.1',
 	liquidationThreshold: '0.8',
-	lenderAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+	lenderAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0D',
 	loanRequestDeadline: new Date(2023 - 12 - 31),
 	managerNFT: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
 	managerNFTVersion: 'v1',
 };
 
-const emptyData = {
+const emptyData: TLoan = {
+	borrowerAddress: '',
 	collateralAmount: '',
 	collateralToken: '',
 	loanAmount: '',
@@ -35,7 +37,7 @@ export default function LoanForm() {
 	async function action(data: FormData) {
 		'use server';
 
-		let _data: Loan = emptyData;
+		let _data: TLoan = emptyData;
 
 		// loop through FormData and assign values to _data object which will be sent to server
 		data.forEach((value, key) => (_data = { ..._data, [key]: value }));
@@ -108,6 +110,12 @@ export default function LoanForm() {
 				type="text"
 				name="liquidationThreshold"
 				placeholder="Liquidation Threshold"
+				className="border rounded px-2 py-1 flex-1"
+			/>
+			<input
+				type="text"
+				name="borrowerAddress"
+				placeholder="Borrower Address"
 				className="border rounded px-2 py-1 flex-1"
 			/>
 			<input

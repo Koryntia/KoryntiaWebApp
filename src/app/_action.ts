@@ -1,7 +1,8 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { createLoan, deleteLoan, updateLoan, type Loan } from '@/lib/loan-db';
+import { createLoan, deleteLoan, updateLoan } from '@/lib/loan-db';
+import { TLoan } from '@/models/loan';
 
 /**
  * Server Action: Create a new loan.
@@ -11,7 +12,7 @@ export async function createLoanAction({
 	params,
 }: {
 	path: string;
-	params: Loan;
+	params: TLoan;
 }) {
 	await createLoan({ ...params });
 	revalidatePath(path);
@@ -26,7 +27,7 @@ export async function updateLoanAction({
 	path,
 }: {
 	id: string;
-	params: Partial<Loan>;
+	params: Partial<TLoan>;
 	path: string;
 }) {
 	await updateLoan({ id, params });

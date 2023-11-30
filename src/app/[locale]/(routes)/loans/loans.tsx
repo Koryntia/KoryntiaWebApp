@@ -3,10 +3,13 @@ import { _TLoan } from '@/models/loan';
 
 type Props = {
 	loans: _TLoan[];
+	results: number;
 };
-const Loans: FC<Props> = ({ loans }) => {
+const Loans: FC<Props> = ({ loans, results }) => {
 	return (
 		<section className="space-y-16">
+			<p className="my-8">Results: {results}</p>
+
 			{loans.map((loan) => (
 				<dl
 					key={loan.id}

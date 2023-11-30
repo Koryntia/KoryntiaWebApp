@@ -50,7 +50,7 @@ export default function LoanForm() {
 		<form
 			action={action}
 			key={Math.random()}
-			className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 place-items-center my-4"
+			className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 place-items-center my-16"
 		>
 			<input
 				type="text"

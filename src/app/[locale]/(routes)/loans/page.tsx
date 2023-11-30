@@ -5,28 +5,36 @@ import Loans from './loans';
 import LoanForm from './loan-form';
 
 const page = async () => {
-	const { loans, results } = await getLoans();
-
 	let markup: JSX.Element;
 
-	switch (loans) {
-		case undefined:
-			markup = <NoLoansFound />;
+	const res = await getLoans();
+
+	switch (res.success) {
+		case false:
+			markup = <NoLoansFound message={String(res.error)} />;
 			break;
 		default:
-			switch (results) {
-				case 0:
+			switch (res.data.loans) {
+				case undefined:
 					markup = <NoLoansFound />;
 					break;
 				default:
-					markup = <Loans loans={loans} />;
+					switch (res.data.results) {
+						case 0:
+							markup = <NoLoansFound />;
+							break;
+						default:
+							markup = (
+								<Loans loans={res.data.loans} results={res.data.results} />
+							);
+							break;
+					}
 					break;
 			}
 	}
 	return (
 		<>
 			<LoanForm />
-			<p className="my-8">Results: {results}</p>
 			{markup}
 		</>
 	);

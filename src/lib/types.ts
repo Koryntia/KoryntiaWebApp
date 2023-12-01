@@ -55,5 +55,5 @@ export type UpdateLoanResponse = {
 };
 
 export type DeleteLoanResponse = {
-	loan: _TLoan;
+	// loan: _TLoan;
 };

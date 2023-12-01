@@ -1,11 +1,23 @@
 import React, { FC } from 'react';
 import { _TLoan } from '@/models/loan';
+import { deleteLoanAction } from '@/app/_action';
 
 type Props = {
 	loans: _TLoan[];
 	results: number;
 };
 const Loans: FC<Props> = ({ loans, results }) => {
+	async function action(data: FormData) {
+		'use server';
+
+		const id = data.get('id');
+		if (!id || typeof id !== 'string') {
+			return;
+		}
+
+		// Invoke server action to add new loan
+		await deleteLoanAction({ id, path: '/loans' });
+	}
 	return (
 		<section className="space-y-16">
 			<p className="my-8">Results: {results}</p>
@@ -43,6 +55,21 @@ const Loans: FC<Props> = ({ loans, results }) => {
 					<dd>{loan.managerNFTVersion}</dd>
 				</dl>
 			))}
+			<form
+				action={action}
+				key={Math.random()}
+				className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 place-items-center my-16"
+			>
+				<input
+					type="text"
+					name="id"
+					placeholder="ID"
+					className="border rounded px-2 py-1 flex-1"
+				/>
+				<button className="px-4 py-1 text-black rounded bg-pink-500">
+					Delete
+				</button>
+			</form>
 		</section>
 	);
 };

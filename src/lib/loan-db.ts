@@ -113,9 +113,13 @@ export async function deleteLoan(
 			return { status: 404, success: false, error: 'Loan not found' };
 		}
 
-		await Loan.findByIdAndDelete(parsedId).exec();
+		const loan = await Loan.findByIdAndDelete(parsedId).lean().exec();
 
-		return { status: 200, success: true, data: {} };
+		if (!loan) {
+			return { status: 404, success: false, error: 'Loan not found' };
+		}
+
+		return { status: 200, success: true, data: { loan } };
 	} catch (error) {
 		return { status: 500, success: false, error };
 	}

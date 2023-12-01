@@ -32,9 +32,6 @@ import mongoose from 'mongoose';
 		timestamps: true,
 		collection: 'loans',
 	},
-	options: {
-		allowMixed: Severity.ALLOW,
-	},
 })
 class LoanClass {
 	@prop({ required: true })

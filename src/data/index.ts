@@ -1,1 +1,1 @@
-export * from './position-cards';
+export * from './position-cards'

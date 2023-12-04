@@ -1,16 +1,16 @@
-'use client';
-import Link from 'next/link';
-import DropdownNotification from './DropdownNotification';
-import DropdownUser from './DropdownUser';
-import Image from 'next/image';
-import KoryntiaToken from './KoryntiaToken';
-import { CiSearch } from 'react-icons/ci';
-import { GrMenu } from 'react-icons/gr';
-import { useState } from 'react';
-import type { Route } from 'next';
+'use client'
+import Link from 'next/link'
+import Image from 'next/image'
+import { CiSearch } from 'react-icons/ci'
+import { GrMenu } from 'react-icons/gr'
+import { useState } from 'react'
+import type { Route } from 'next'
+import KoryntiaToken from './KoryntiaToken'
+import DropdownUser from './DropdownUser'
+import DropdownNotification from './DropdownNotification'
 
-const Header = () => {
-	const [sidebarOpen, setSidebarOpen] = useState(false);
+function Header() {
+	const [sidebarOpen, setSidebarOpen] = useState(false)
 	return (
 		<header className="sticky top-0 z-50 flex w-full bg-white shadow-sm">
 			<div className="flex flex-grow items-center justify-between px-4 py-4 md:px-6 2xl:px-11">
@@ -18,8 +18,8 @@ const Header = () => {
 					<button
 						aria-controls="sidebar"
 						onClick={(e) => {
-							e.stopPropagation();
-							setSidebarOpen(!sidebarOpen);
+							e.stopPropagation()
+							setSidebarOpen(!sidebarOpen)
 						}}
 						className="z-50 block rounded-sm bg-white p-1.5 shadow-sm lg:hidden"
 					>
@@ -30,7 +30,7 @@ const Header = () => {
 						<Image
 							width={32}
 							height={32}
-							src={'/koryntia-logo.png'}
+							src="/koryntia-logo.png"
 							alt="Logo"
 						/>
 					</Link>
@@ -46,8 +46,8 @@ const Header = () => {
 								type="text"
 								placeholder="Search..."
 								className="
-                                text-sm 
-                                bg-inputBg 
+                                text-sm
+                                bg-inputBg
                                 text-textGray
                                 focus:outline-none
                                 block
@@ -66,7 +66,7 @@ const Header = () => {
 				</div>
 			</div>
 		</header>
-	);
-};
+	)
+}
 
-export default Header;
+export default Header

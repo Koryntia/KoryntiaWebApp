@@ -1,82 +1,83 @@
-'use client';
-import { FC, useState } from 'react';
-import React from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import Image from 'next/image';
-import type { Route } from 'next';
+'use client'
+import type { FC } from 'react'
+import React from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import type { Route } from 'next'
+
+// import { usePathname, useRouter } from 'next/navigation'
 
 const Navbar: FC = () => {
-	const linkGeneral = [
-		{
-			label: 'Dashboard',
-			route: '/',
-			ihov: '\navbardashboard-purple.svg',
-			i: '\navbardashboard-colorless.svg',
-		},
-		{
-			label: 'Message',
-			route: '/message',
-			ihov: '\navbarmessage-purple.svg',
-			i: '\navbarmessage-colorless.svg',
-		},
-		{
-			label: 'settings',
-			route: '/settings',
-			ihov: '\navbarsettings-purple.svg',
-			i: '\navbarsettings-colorless.svg',
-		},
-	];
+	// const linkGeneral = [
+	// 	{
+	// 		label: 'Dashboard',
+	// 		route: '/',
+	// 		ihov: '\navbardashboard-purple.svg',
+	// 		i: '\navbardashboard-colorless.svg',
+	// 	},
+	// 	{
+	// 		label: 'Message',
+	// 		route: '/message',
+	// 		ihov: '\navbarmessage-purple.svg',
+	// 		i: '\navbarmessage-colorless.svg',
+	// 	},
+	// 	{
+	// 		label: 'settings',
+	// 		route: '/settings',
+	// 		ihov: '\navbarsettings-purple.svg',
+	// 		i: '\navbarsettings-colorless.svg',
+	// 	},
+	// ]
 
-	const linkMarketplace = [
-		{
-			label: 'market',
-			route: '/market',
-			ihov: '\navbarmarket-purple.svg',
-			i: '\navbarmarket-colorless.svg',
-		},
-		{
-			label: 'mypositions',
-			route: '/mypositions',
-			ihov: '\navbarmypositions-purple.svg',
-			i: '\navbarmypositions-colorless.svg',
-		},
-	];
+	// const linkMarketplace = [
+	// 	{
+	// 		label: 'market',
+	// 		route: '/market',
+	// 		ihov: '\navbarmarket-purple.svg',
+	// 		i: '\navbarmarket-colorless.svg',
+	// 	},
+	// 	{
+	// 		label: 'mypositions',
+	// 		route: '/mypositions',
+	// 		ihov: '\navbarmypositions-purple.svg',
+	// 		i: '\navbarmypositions-colorless.svg',
+	// 	},
+	// ]
 
-	const linkMyprof = [
-		{
-			label: 'collection',
-			route: '/collection',
-			ihov: '\navbarcollection-purple.svg',
-			i: '\navbarcollection-colorless.svg',
-		},
-		{
-			label: 'wallet',
-			route: '/wallet',
-			ihov: '\navbarwallet-purple.svg',
-			i: '\navbarwallet-colorless.svg',
-		},
-		{
-			label: 'history',
-			route: '/history',
-			ihov: '\navbarhistory-purple.svg',
-			i: '\navbarhistory-colorless.svg',
-		},
-	];
+	// const linkMyprof = [
+	// 	{
+	// 		label: 'collection',
+	// 		route: '/collection',
+	// 		ihov: '\navbarcollection-purple.svg',
+	// 		i: '\navbarcollection-colorless.svg',
+	// 	},
+	// 	{
+	// 		label: 'wallet',
+	// 		route: '/wallet',
+	// 		ihov: '\navbarwallet-purple.svg',
+	// 		i: '\navbarwallet-colorless.svg',
+	// 	},
+	// 	{
+	// 		label: 'history',
+	// 		route: '/history',
+	// 		ihov: '\navbarhistory-purple.svg',
+	// 		i: '\navbarhistory-colorless.svg',
+	// 	},
+	// ]
 
-	const router = useRouter();
-	const pathName = usePathname();
-	const [active, setActive] = useState(pathName);
-	const [isHovering, setIsHovering] = useState(false);
-	const [hoverActive, setHoverActive] = useState('');
-	const handleMouseOver = (label: string) => {
-		setIsHovering(true);
-		setHoverActive(label);
-	};
-	const handleMouseOut = () => {
-		setIsHovering(false);
-		setHoverActive('');
-	};
+	// const router = useRouter()
+	// const pathName = usePathname()
+	// const [active, setActive] = useState(pathName)
+	// const [isHovering, setIsHovering] = useState(false)
+	// const [hoverActive, setHoverActive] = useState('')
+	// const handleMouseOver = (label: string) => {
+	// 	setIsHovering(true)
+	// 	setHoverActive(label)
+	// }
+	// const handleMouseOut = () => {
+	// 	setIsHovering(false)
+	// 	setHoverActive('')
+	// }
 
 	return (
 		<>
@@ -85,7 +86,8 @@ const Navbar: FC = () => {
 				<ul>
 					<li>
 						<Link href={'/' as Route}>
-							<Image src="\navbar\history-colorless.svg" alt="Setting icon" />{' '}
+							<Image src="\navbar\history-colorless.svg" alt="Setting icon" />
+							{' '}
 							Dashboard
 						</Link>
 					</li>
@@ -134,14 +136,15 @@ const Navbar: FC = () => {
 					</li>
 					<li>
 						<Link className="" href="/history">
-							<Image src="\navbar\history-colorless.svg" alt="Setting icon" />{' '}
+							<Image src="\navbar\history-colorless.svg" alt="Setting icon" />
+							{' '}
 							history
 						</Link>
 					</li>
 				</ul>
 			</nav>
 		</>
-	);
+	)
 
 	/*             <nav className=''>
           <h1>General</h1>
@@ -156,6 +159,6 @@ const Navbar: FC = () => {
           <Link href="/wallet">Wallet</Link>
           <Link href="/history">History</Link>
          </nav> */
-};
+}
 
-export default Navbar;
+export default Navbar

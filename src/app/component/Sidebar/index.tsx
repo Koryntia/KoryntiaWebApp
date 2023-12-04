@@ -1,67 +1,66 @@
-'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
-import { MdExplore, MdOutlineShopTwo } from 'react-icons/md';
-import { CiShop } from 'react-icons/ci';
-import { TbWallet } from 'react-icons/tb';
-import { RxDashboard } from 'react-icons/rx';
-import { BsClock } from 'react-icons/bs';
-import { PiChatCenteredDotsThin, PiGearSixThin } from 'react-icons/pi';
-import { IoMdClose } from 'react-icons/io';
-import HelpCenter from '../HelpCenter';
-import { useTranslations } from 'next-intl';
-import { usePathname } from 'next-intl/client';
-import Link from 'next-intl/link';
-import type { Route } from 'next';
+'use client'
+import React, { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import { MdExplore, MdOutlineShopTwo } from 'react-icons/md'
+import { CiShop } from 'react-icons/ci'
+import { TbWallet } from 'react-icons/tb'
+import { RxDashboard } from 'react-icons/rx'
+import { BsClock } from 'react-icons/bs'
+import { PiChatCenteredDotsThin, PiGearSixThin } from 'react-icons/pi'
+import { IoMdClose } from 'react-icons/io'
+import { useTranslations } from 'next-intl'
+import { usePathname } from 'next-intl/client'
+import Link from 'next-intl/link'
+import type { Route } from 'next'
+import HelpCenter from '../HelpCenter'
 
-const Sidebar = () => {
-	const t = useTranslations('SidebarNavigation');
+function Sidebar() {
+	const t = useTranslations('SidebarNavigation')
 
-	const [sidebarOpen, setSidebarOpen] = useState(false);
-	const pathname = usePathname();
+	const [sidebarOpen, setSidebarOpen] = useState(false)
+	const pathname = usePathname()
 
-	const trigger = useRef<any>(null);
-	const sidebar = useRef<any>(null);
+	const trigger = useRef<any>(null)
+	const sidebar = useRef<any>(null)
 
-	let storedSidebarExpanded = 'true';
-	const [sidebarExpanded, setSidebarExpanded] = useState(
-		storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
-	);
+	const storedSidebarExpanded = 'true'
+	const [sidebarExpanded, _] = useState(storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true')
 
 	// close on click outside
 	useEffect(() => {
 		const clickHandler = ({ target }: MouseEvent) => {
-			if (!sidebar.current || !trigger.current) return;
+			if (!sidebar.current || !trigger.current)
+				return
 			if (
-				!sidebarOpen ||
-				sidebar.current.contains(target) ||
-				trigger.current.contains(target)
+				!sidebarOpen
+				|| sidebar.current.contains(target)
+				|| trigger.current.contains(target)
 			)
-				return;
-			setSidebarOpen(false);
-		};
-		document.addEventListener('click', clickHandler);
-		return () => document.removeEventListener('click', clickHandler);
-	});
+				return
+			setSidebarOpen(false)
+		}
+		document.addEventListener('click', clickHandler)
+		return () => document.removeEventListener('click', clickHandler)
+	})
 
 	// close if the esc key is pressed
 	useEffect(() => {
 		const keyHandler = ({ keyCode }: KeyboardEvent) => {
-			if (!sidebarOpen || keyCode !== 27) return;
-			setSidebarOpen(false);
-		};
-		document.addEventListener('keydown', keyHandler);
-		return () => document.removeEventListener('keydown', keyHandler);
-	});
+			if (!sidebarOpen || keyCode !== 27)
+				return
+			setSidebarOpen(false)
+		}
+		document.addEventListener('keydown', keyHandler)
+		return () => document.removeEventListener('keydown', keyHandler)
+	})
 
 	useEffect(() => {
-		localStorage.setItem('sidebar-expanded', sidebarExpanded.toString());
-		if (sidebarExpanded) {
-			document.body.classList.add('sidebar-expanded');
-		} else {
-			document.body.classList.remove('sidebar-expanded');
-		}
-	}, [sidebarExpanded]);
+		localStorage.setItem('sidebar-expanded', sidebarExpanded.toString())
+		if (sidebarExpanded)
+			document.body.classList.add('sidebar-expanded')
+		else
+			document.body.classList.remove('sidebar-expanded')
+	}, [sidebarExpanded])
 
 	return (
 		<aside
@@ -82,7 +81,7 @@ const Sidebar = () => {
 							height={0}
 							sizes="100vw"
 							style={{ width: 'auto', height: '100%' }}
-							src={'/templeuser.jpg'}
+							src="/templeuser.jpg"
 							alt="Logo"
 							className="rounded-full"
 						/>
@@ -122,7 +121,7 @@ const Sidebar = () => {
 											pathname === '/' || pathname === ''
 												? 'bg-purple2 text-appColor1'
 												: 'text-textGray'
-										}`}
+									}`}
 								>
 									<MdExplore className="h-5 w-5" />
 									{t('general.dashboard')}
@@ -137,7 +136,7 @@ const Sidebar = () => {
 											pathname === '/message'
 												? 'bg-purple2 text-appColor1'
 												: 'text-textGray'
-										}`}
+									}`}
 								>
 									<PiChatCenteredDotsThin className="h-5 w-5" />
 									{t('general.message')}
@@ -152,7 +151,7 @@ const Sidebar = () => {
 											pathname === '/settings'
 												? 'bg-purple2 text-appColor1'
 												: 'text-textGray'
-										}`}
+									}`}
 								>
 									<PiGearSixThin className="h-5 w-5" />
 									{t('general.settings')}
@@ -174,7 +173,7 @@ const Sidebar = () => {
 											pathname === '/market'
 												? 'bg-purple2 text-appColor1'
 												: 'text-textGray'
-										}`}
+									}`}
 								>
 									<CiShop className="h-5 w-5" />
 									{t('marketplace.market')}
@@ -189,7 +188,7 @@ const Sidebar = () => {
 											pathname === '/mypositions'
 												? 'bg-purple2 text-appColor1'
 												: 'text-textGray'
-										}`}
+									}`}
 								>
 									<MdOutlineShopTwo className="h-5 w-5" />
 									{t('marketplace.myPositions')}
@@ -211,7 +210,7 @@ const Sidebar = () => {
 											pathname === '/collection'
 												? 'bg-purple2 text-appColor1'
 												: 'text-textGray'
-										}`}
+									}`}
 								>
 									<RxDashboard className="h-5 w-5" />
 									{t('myProfile.collection')}
@@ -226,7 +225,7 @@ const Sidebar = () => {
 											pathname === '/wallet'
 												? 'bg-purple2 text-appColor1'
 												: 'text-textGray'
-										}`}
+									}`}
 								>
 									<TbWallet className="h-5 w-5" />
 									{t('myProfile.wallet')}
@@ -241,7 +240,7 @@ const Sidebar = () => {
 											pathname === '/history'
 												? 'bg-purple2 text-appColor1'
 												: 'text-textGray'
-										}`}
+									}`}
 								>
 									<BsClock className="h-5 w-5" />
 									{t('myProfile.history')}
@@ -253,7 +252,7 @@ const Sidebar = () => {
 			</div>
 			<HelpCenter />
 		</aside>
-	);
-};
+	)
+}
 
-export default Sidebar;
+export default Sidebar

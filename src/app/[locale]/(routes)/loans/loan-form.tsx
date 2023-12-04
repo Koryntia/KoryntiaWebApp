@@ -1,21 +1,21 @@
-import { createLoanAction } from '@/app/_action';
-import { TLoan } from '@/models/loan';
+import { createLoanAction } from '@/app/_action'
+import type { TLoan } from '@/models/loan'
 
-const sampleData: TLoan = {
-	borrowerAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0A',
-	collateralAmount: '100',
-	collateralToken: '0x6B175474E89094C44Da98b954EedeAC495271d0B',
-	loanAmount: '100',
-	loanToken: '0x6B175474E89094C44Da98b954EedeAC495271d0C',
-	loanRepayDeadline: new Date(2023 - 12 - 31),
-	initialThreshold: '0.5',
-	interestRate: '0.1',
-	liquidationThreshold: '0.8',
-	lenderAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0D',
-	loanRequestDeadline: new Date(2023 - 12 - 31),
-	managerNFT: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-	managerNFTVersion: 'v1',
-};
+// const sampleData: TLoan = {
+// 	borrowerAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0A',
+// 	collateralAmount: '100',
+// 	collateralToken: '0x6B175474E89094C44Da98b954EedeAC495271d0B',
+// 	loanAmount: '100',
+// 	loanToken: '0x6B175474E89094C44Da98b954EedeAC495271d0C',
+// 	loanRepayDeadline: new Date(2023 - 12 - 31),
+// 	initialThreshold: '0.5',
+// 	interestRate: '0.1',
+// 	liquidationThreshold: '0.8',
+// 	lenderAddress: '0x6B175474E89094C44Da98b954EedeAC495271d0D',
+// 	loanRequestDeadline: new Date(2023 - 12 - 31),
+// 	managerNFT: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+// 	managerNFTVersion: 'v1',
+// }
 
 const emptyData: TLoan = {
 	borrowerAddress: '',
@@ -31,19 +31,19 @@ const emptyData: TLoan = {
 	loanRequestDeadline: new Date(),
 	managerNFT: '',
 	managerNFTVersion: '',
-};
+}
 
 export default function LoanForm() {
 	async function action(data: FormData) {
-		'use server';
+		'use server'
 
-		let _data: TLoan = emptyData;
+		let _data: TLoan = emptyData
 
 		// loop through FormData and assign values to _data object which will be sent to server
-		data.forEach((value, key) => (_data = { ..._data, [key]: value }));
+		data.forEach((value, key) => (_data = { ..._data, [key]: value }))
 
 		// Invoke server action to add new loan
-		await createLoanAction({ params: _data, path: '/loans' });
+		await createLoanAction({ params: _data, path: '/loans' })
 	}
 
 	return (
@@ -139,5 +139,5 @@ export default function LoanForm() {
 
 			<button className="px-4 py-1 text-white rounded bg-green-500">Add</button>
 		</form>
-	);
+	)
 }

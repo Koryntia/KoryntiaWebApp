@@ -1,28 +1,31 @@
-import React, { FC } from 'react';
-import { _TLoan } from '@/models/loan';
-import { deleteLoanAction } from '@/app/_action';
+import type { FC } from 'react'
+import React from 'react'
+import type { _TLoan } from '@/models/loan'
+import { deleteLoanAction } from '@/app/_action'
 
-type Props = {
-	loans: _TLoan[];
-	results: number;
-};
+interface Props {
+	loans: _TLoan[]
+	results: number
+}
 const Loans: FC<Props> = ({ loans, results }) => {
 	async function action(data: FormData) {
-		'use server';
+		'use server'
 
-		const id = data.get('id');
-		if (!id || typeof id !== 'string') {
-			return;
-		}
+		const id = data.get('id')
+		if (!id || typeof id !== 'string')
+			return
 
 		// Invoke server action to add new loan
-		await deleteLoanAction({ id, path: '/loans' });
+		await deleteLoanAction({ id, path: '/loans' })
 	}
 	return (
 		<section className="space-y-16">
-			<p className="my-8">Results: {results}</p>
+			<p className="my-8">
+				Results:
+				{results}
+			</p>
 
-			{loans.map((loan) => (
+			{loans.map(loan => (
 				<dl
 					key={loan.id}
 					className="grid grid-cols-2 md:grid-cols-4 place-items-start text-sm sm:text-base [&>*]:w-full [&>*]:border-b-2 [&>*]:border-dotted [&>*]:py-2 [&>*]:max-w-sm [&>*]:truncate gap-x-4"
@@ -71,7 +74,7 @@ const Loans: FC<Props> = ({ loans, results }) => {
 				</button>
 			</form>
 		</section>
-	);
-};
+	)
+}
 
-export default Loans;
+export default Loans

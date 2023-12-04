@@ -1,41 +1,49 @@
-'use client';
-import Image from 'next/image';
-import { FC } from 'react';
+'use client'
+import Image from 'next/image'
+import type { FC } from 'react'
 
-import { TbCurrencyEthereum } from 'react-icons/tb';
+import { TbCurrencyEthereum } from 'react-icons/tb'
 
 interface TablePorp {
-	data: any;
+	data: any
 }
 const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
-	const keys = Object.values(data);
-	let growt = {};
+	const keys = Object.values(data)
+	let growt = {}
 	const handleColor = (e: string) => {
-		let numberGrowt = parseFloat(e);
+		const numberGrowt = Number.parseFloat(e)
 		if (numberGrowt > 0) {
 			growt = {
 				color: 'lime',
-			};
+			}
 
 			return (
 				<span className="font-semibold " style={growt}>
-					+{e}%
+					+
+					{e}
+					%
 				</span>
-			);
+			)
 		}
 		if (numberGrowt < 0) {
 			growt = {
 				color: 'red',
-			};
+			}
 
 			return (
 				<span className="font-semibold " style={growt}>
-					{e}%
+					{e}
+					%
 				</span>
-			);
+			)
 		}
-		return <span className="font-semibold ">{e}%</span>;
-	};
+		return (
+			<span className="font-semibold ">
+				{e}
+				%
+			</span>
+		)
+	}
 	return (
 		<table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
 			<thead className="text-xs bg-gray-50 text-gray-400">
@@ -106,7 +114,7 @@ const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
 				))}
 			</tbody>
 		</table>
-	);
-};
+	)
+}
 
-export default ActivePositionsTable;
+export default ActivePositionsTable

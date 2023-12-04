@@ -1,44 +1,46 @@
-'use client';
-import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { RiArrowDownSLine } from 'react-icons/ri';
-import { HiOutlinePower } from 'react-icons/hi2';
-import { MdOutlineManageAccounts } from 'react-icons/md';
-import { BiUser } from 'react-icons/bi';
-import { useDisconnect } from 'wagmi';
+'use client'
+import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { RiArrowDownSLine } from 'react-icons/ri'
+import { HiOutlinePower } from 'react-icons/hi2'
+import { MdOutlineManageAccounts } from 'react-icons/md'
+import { BiUser } from 'react-icons/bi'
+import { useDisconnect } from 'wagmi'
 
-const DropdownUser = () => {
-	const [dropdownOpen, setDropdownOpen] = useState(false);
-	const { disconnect } = useDisconnect();
-	const trigger = useRef<any>(null);
-	const dropdown = useRef<any>(null);
+function DropdownUser() {
+	const [dropdownOpen, setDropdownOpen] = useState(false)
+	const { disconnect } = useDisconnect()
+	const trigger = useRef<any>(null)
+	const dropdown = useRef<any>(null)
 
 	// close on click outside
 	useEffect(() => {
 		const clickHandler = ({ target }: MouseEvent) => {
-			if (!dropdown.current) return;
+			if (!dropdown.current)
+				return
 			if (
-				!dropdownOpen ||
-				dropdown.current.contains(target) ||
-				trigger.current.contains(target)
+				!dropdownOpen
+				|| dropdown.current.contains(target)
+				|| trigger.current.contains(target)
 			)
-				return;
-			setDropdownOpen(false);
-		};
-		document.addEventListener('click', clickHandler);
-		return () => document.removeEventListener('click', clickHandler);
-	});
+				return
+			setDropdownOpen(false)
+		}
+		document.addEventListener('click', clickHandler)
+		return () => document.removeEventListener('click', clickHandler)
+	})
 
 	// close if the esc key is pressed
 	useEffect(() => {
 		const keyHandler = ({ keyCode }: KeyboardEvent) => {
-			if (!dropdownOpen || keyCode !== 27) return;
-			setDropdownOpen(false);
-		};
-		document.addEventListener('keydown', keyHandler);
-		return () => document.removeEventListener('keydown', keyHandler);
-	});
+			if (!dropdownOpen || keyCode !== 27)
+				return
+			setDropdownOpen(false)
+		}
+		document.addEventListener('keydown', keyHandler)
+		return () => document.removeEventListener('keydown', keyHandler)
+	})
 
 	return (
 		<div className="relative">
@@ -52,7 +54,7 @@ const DropdownUser = () => {
 					<Image
 						width={112}
 						height={112}
-						src={'/templeuser.jpg'}
+						src="/templeuser.jpg"
 						alt="User"
 						className="rounded-full"
 					/>
@@ -98,7 +100,7 @@ const DropdownUser = () => {
 				</button>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
-export default DropdownUser;
+export default DropdownUser

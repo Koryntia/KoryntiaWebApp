@@ -1,35 +1,35 @@
-import { getLoans } from '@/lib/loan-db';
-import React from 'react';
-import NoLoansFound from './no-loans-found';
-import Loans from './loans';
-import LoanForm from './loan-form';
+import React from 'react'
+import NoLoansFound from './no-loans-found'
+import Loans from './loans'
+import LoanForm from './loan-form'
+import { getLoans } from '@/lib/loan-db'
 
-const page = async () => {
-	let markup: JSX.Element;
+async function page() {
+	let markup: JSX.Element
 
-	const res = await getLoans();
+	const res = await getLoans()
 
 	switch (res.success) {
 		case false:
-			markup = <NoLoansFound message={String(res.error)} />;
-			break;
+			markup = <NoLoansFound message={String(res.error)} />
+			break
 		default:
 			switch (res.data.loans) {
 				case undefined:
-					markup = <NoLoansFound />;
-					break;
+					markup = <NoLoansFound />
+					break
 				default:
 					switch (res.data.results) {
 						case 0:
-							markup = <NoLoansFound />;
-							break;
+							markup = <NoLoansFound />
+							break
 						default:
 							markup = (
 								<Loans loans={res.data.loans} results={res.data.results} />
-							);
-							break;
+							)
+							break
 					}
-					break;
+					break
 			}
 	}
 	return (
@@ -37,7 +37,7 @@ const page = async () => {
 			<LoanForm />
 			{markup}
 		</>
-	);
-};
+	)
+}
 
-export default page;
+export default page

@@ -1,13 +1,14 @@
-import Cardcontainer from "@/app/component/common/Cards/cardcontainer";
-import { FC } from "react";
+import type { FC } from 'react'
+import Cardcontainer from '@/app/component/common/Cards/cardcontainer'
+
 interface pageProps {
-    
+
 }
- 
+
 const page: FC<pageProps> = () => {
-    return ( <Cardcontainer/> 
-    
-    );
+	return (<Cardcontainer />
+
+	)
 }
- 
-export default page;
+
+export default page

@@ -1,13 +1,14 @@
-'use client';
-import Image from 'next/image';
-import { FC } from 'react';
-import { TbCurrencyEthereum } from 'react-icons/tb';
+'use client'
+import Image from 'next/image'
+import type { FC } from 'react'
+import { TbCurrencyEthereum } from 'react-icons/tb'
+
 interface RecentLoansProps {
-	data: any;
+	data: any
 }
 
 const RecentLoans: FC<RecentLoansProps> = ({ data }) => {
-	const keys = Object.values(data);
+	const keys = Object.values(data)
 	return (
 		<ul className="w-80">
 			{keys.map((key: any, index) => (
@@ -35,7 +36,7 @@ const RecentLoans: FC<RecentLoansProps> = ({ data }) => {
 				</li>
 			))}
 		</ul>
-	);
-};
+	)
+}
 
-export default RecentLoans;
+export default RecentLoans

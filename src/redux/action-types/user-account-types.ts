@@ -1,3 +1,3 @@
 export const userAccountTypes = {
-    getUserAccount: 'fetch/user-account',
-};
+	getUserAccount: 'fetch/user-account',
+}

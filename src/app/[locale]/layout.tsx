@@ -1,49 +1,47 @@
-import Header from '../component/Header';
-import Sidebar from '../component/Sidebar';
-import './globals.css';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react'
+import { NextIntlClientProvider, createTranslator } from 'next-intl'
+import { notFound } from 'next/navigation'
+import './globals.css'
+import Header from '../component/Header'
+import Sidebar from '../component/Sidebar'
+import LoadingWrapper from '../component/common/loading-wrapper'
+import Login from '../component/login/Login'
+import { ReduxProvider } from '@/redux/provider'
+import WagmiProvider from '@/wagmi/WagmiProvider'
 
-import { createTranslator, NextIntlClientProvider } from 'next-intl';
-import { notFound } from 'next/navigation';
-import LoadingWrapper from '../component/common/loading-wrapper';
-import { ReduxProvider } from '@/redux/provider';
-import { WagmiConfig } from 'wagmi';
-import config from '../../services/conectwallet/connect-Configuration';
-import Login from '../component/login/Login';
-import WagmiProvider from '@/wagmi/WagmiProvider';
-
-type Props = {
-	children: ReactNode;
-	params: { locale: string };
-};
+interface Props {
+	children: ReactNode
+	params: { locale: string }
+}
 
 async function getMessages(locale: string) {
 	try {
-		return (await import(`../../../messages/${locale}.json`)).default;
-	} catch (error) {
-		notFound();
+		return (await import(`../../../messages/${locale}.json`)).default
+	}
+	catch (error) {
+		notFound()
 	}
 }
 
 export async function generateStaticParams() {
-	return ['en', 'de', 'es'].map((locale) => ({ locale }));
+	return ['en', 'de', 'es'].map(locale => ({ locale }))
 }
 
 export async function generateMetadata({ params: { locale } }: Props) {
-	const messages = await getMessages(locale);
-	const t = createTranslator({ locale, messages });
+	const messages = await getMessages(locale)
+	const t = createTranslator({ locale, messages })
 	return {
 		title: t('LocaleLayout.title'),
-	};
+	}
 }
 
 export default async function RootLayout({
 	children,
 	params: { locale },
 }: Props) {
-	const messages = await getMessages(locale);
+	const messages = await getMessages(locale)
 
-	const logged = false;
+	const logged = false
 
 	return (
 		<html lang={locale}>
@@ -53,21 +51,23 @@ export default async function RootLayout({
 						<div className="">
 							<WagmiProvider>
 								<LoadingWrapper>
-									{!logged ? (
-										<Login />
-									) : (
-										<div className="flex h-screen overflow-hidden">
-											<Sidebar />
-											<div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-												<Header />
-												<main>
-													<div className="mx-auto w-full px-4 py-4 md:px-6 2xl:px-11">
-														{children}
-													</div>
-												</main>
+									{!logged
+										? (
+											<Login />
+											)
+										: (
+											<div className="flex h-screen overflow-hidden">
+												<Sidebar />
+												<div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+													<Header />
+													<main>
+														<div className="mx-auto w-full px-4 py-4 md:px-6 2xl:px-11">
+															{children}
+														</div>
+													</main>
+												</div>
 											</div>
-										</div>
-									)}
+											)}
 								</LoadingWrapper>
 							</WagmiProvider>
 						</div>
@@ -75,5 +75,5 @@ export default async function RootLayout({
 				</ReduxProvider>
 			</body>
 		</html>
-	);
+	)
 }

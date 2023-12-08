@@ -53,9 +53,10 @@ export default async function RootLayout({
 						<div className="">
 							<WagmiProvider>
 								<LoadingWrapper>
-									{!logged ? (
-										<Login />
-									) : (
+									{
+										// !logged ? (
+										// 	<Login />
+										// ) :
 										<div className="flex h-screen overflow-hidden">
 											<Sidebar />
 											<div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
@@ -67,7 +68,7 @@ export default async function RootLayout({
 												</main>
 											</div>
 										</div>
-									)}
+									}
 								</LoadingWrapper>
 							</WagmiProvider>
 						</div>

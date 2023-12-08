@@ -1,4 +1,10 @@
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import mongoose from 'mongoose';
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
+}
 
 /**
  * Converts a string to a mongoose.Types.ObjectId because mongodb doesn't accept strings as ids

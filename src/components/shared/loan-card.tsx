@@ -34,7 +34,7 @@ const LoanCard: FC<CardProps> = ({ image, time, title, description, bid }) => {
 	return (
 		<Card className={cn('border-none bg-muted/50')}>
 			<CardHeader className={cn('p-0')}>
-				<CardTitle>
+				<CardTitle className={cn('relative')}>
 					<Image
 						src={image}
 						width={1920}

@@ -1,7 +1,7 @@
 'use client'
 import { InjectedConnector } from '@wagmi/core'
 import React, { ReactNode } from 'react'
-import { avalanche, avalancheFuji } from 'viem/chains'
+import { avalanche, avalancheFuji, goerli, sepolia } from 'viem/chains'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 
 import { WagmiConfig, createConfig, configureChains, mainnet } from 'wagmi'
@@ -11,11 +11,9 @@ import { publicProvider } from 'wagmi/providers/public'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [mainnet, avalanche, avalancheFuji],
-    [alchemyProvider({ apiKey: 'PmmE67Wr9Td19p4wcOSZBKimpM5k2-4G' }), publicProvider()],
+    [mainnet, avalanche, avalancheFuji, sepolia, goerli ],
+    [alchemyProvider({ apiKey: 'aaogtsr8AWUFzYWjNFEBkM96-wweAWZM' }), publicProvider()],
 )
-
-// PmmE67Wr9Td19p4wcOSZBKimpM5k2-4G
 
 const config = createConfig({
     autoConnect: true,

@@ -1,3 +1,5 @@
+//This function can be used to calculate the account balance
+//used to verify if the account has the funds to make the loan
 import { Address, useBalance } from 'wagmi'
  import { FC } from 'react'
 

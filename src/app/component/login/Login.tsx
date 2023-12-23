@@ -44,6 +44,8 @@ const Login = () => {
     // Call the fetchOneUser function inside the effect
     fetchOneUser();
   }, [dispatch]);
+
+  console.log(address)
   return (
     <section className='bg-gray-200'>
       <div className='flex justify-center items-center h-screen'>

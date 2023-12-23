@@ -1,31 +1,40 @@
 'use client'
 import { useState } from "react";
-import CreateLoan from "../component/create-loan/create-loan";
-import LoanSummaryContainer from "../component/create-loan/LoanSummaryContainer";
-import LoanSummary from "../component/create-loan/LoanSummary";
+
+import CreateLoanForm from "../component/create-loan/create-loan-form";
+
 import LoanButton from "../component/create-loan/LoanButton";
+
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
 import { decrement, increment } from '../../redux/features/count-slice';
-import Login from "../component/login/Login";
+
+import Summary from "../component/create-loan/Summary";
+
+import { useAccount } from "wagmi";
+
 
 export default function Home() {
 
 
+
+  const {address} = useAccount();
   const count = useAppSelector((state) => state.counter.value)
   const dispatch = useAppDispatch()
 
-  const [showSummary, setShowSummary] = useState<boolean>(false);
-
-  const handleShowSummary = () => {
-    return setShowSummary(prevState => !prevState)
-  }
-
+ 
   const handleAdd = () => {
     dispatch(increment())
   }
   const handleMinus = () => {
     dispatch(decrement())
   }
+  const [showSummary, setShowSummary] = useState<boolean>(false);
+
+  const handleShowSummary = () => {
+    return setShowSummary(prevState => !prevState)
+  } 
+ 
 
   return (
     <section>
@@ -40,33 +49,17 @@ export default function Home() {
 
         </div>
         <div className="dashboard-column-2 w-[330px] h-full">
-          <CreateLoan />
-          {
-            showSummary &&
-            <div>
-              <LoanSummaryContainer title="Summary">
-                <LoanSummary title="Borrowing amount" amount="3000,04 USDC" />
-                <LoanSummary title="Your collateral" amount="2,500,50 USDC" />
-                <LoanSummary title="Colateral rate" amount="120 %" />
-                <LoanSummary title="Borrow Fee" amount="2.06%" />
-              </LoanSummaryContainer>
-              <LoanSummaryContainer title="Installment">
-                <LoanSummary title="Monthly Amount" amount="1,000 USDC" />
-                <LoanSummary title="Colateral rate" amount="35 %" />
-                <LoanSummary title="Endorsement rate" amount="1,00 %" />
-              </LoanSummaryContainer>
-            </div>
-          }
-          <div className='w-full mt-2 mx-auto'>
-            <LoanButton
-              title="Calculate Position"
-              showSummary={showSummary}
-              setShowSummary={setShowSummary}
-              handleShowSummary={handleShowSummary}
-            />
+          <div>
+               <CreateLoanForm />
+               {showSummary &&<Summary/>}
           </div>
+
         </div>
+
+
+
       </div>
     </section>
+    
   )
 }

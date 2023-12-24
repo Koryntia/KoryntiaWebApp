@@ -1,6 +1,6 @@
 import type { CardProps } from '@/app/component/my-positions/_components/card';
 
-export const PositionCardsData: CardProps[] = [
+export const positionCardsData: CardProps[] = [
   {
     image:
       'https://images.unsplash.com/photo-1605792657660-596af9009e82?auto=format&fit=crop&q=80&w=3404&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -15,8 +15,8 @@ export const PositionCardsData: CardProps[] = [
       currency: 'KRT',
     },
     liked: false,
-    onLike: () => {},
-    onRepay: () => {},
+    onLike: () => { },
+    onRepay: () => { },
   },
   {
     image:
@@ -32,8 +32,8 @@ export const PositionCardsData: CardProps[] = [
       currency: 'KRT',
     },
     liked: false,
-    onLike: () => {},
-    onRepay: () => {},
+    onLike: () => { },
+    onRepay: () => { },
   },
   {
     image:
@@ -49,8 +49,8 @@ export const PositionCardsData: CardProps[] = [
       currency: 'KRT',
     },
     liked: false,
-    onLike: () => {},
-    onRepay: () => {},
+    onLike: () => { },
+    onRepay: () => { },
   },
   {
     image:
@@ -66,8 +66,8 @@ export const PositionCardsData: CardProps[] = [
       currency: 'KRT',
     },
     liked: false,
-    onLike: () => {},
-    onRepay: () => {},
+    onLike: () => { },
+    onRepay: () => { },
   },
   {
     image:
@@ -83,7 +83,7 @@ export const PositionCardsData: CardProps[] = [
       currency: 'KRT',
     },
     liked: false,
-    onLike: () => {},
-    onRepay: () => {},
+    onLike: () => { },
+    onRepay: () => { },
   },
 ];

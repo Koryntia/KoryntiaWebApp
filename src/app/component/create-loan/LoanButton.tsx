@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react'
 
-interface ButtonProps {
+interface ButtonShowProps {
   title: string,
   showSummary: boolean;
   setShowSummary: Dispatch<SetStateAction<boolean>>;
@@ -8,13 +8,13 @@ interface ButtonProps {
 }
 
 
+
 const LoanButton = ({
   title,
   showSummary,
   setShowSummary,
-  handleShowSummary }: ButtonProps) => {
+  handleShowSummary }: ButtonShowProps) => {
   return (
-    <div className='flex justify-center'>
       <button className='bg-appColor1 
         rounded-xl
         py-2 px-3
@@ -22,8 +22,8 @@ const LoanButton = ({
         text-center text-white'
         onClick={handleShowSummary}
       >{title}</button>
-    </div>
   )
 }
+
 
 export default LoanButton

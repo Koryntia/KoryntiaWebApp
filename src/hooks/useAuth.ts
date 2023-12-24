@@ -15,10 +15,10 @@ const useAuth = () => {
         setError(null);
     };
 
-    const getUserAddress = () => {
-        const { address, connector, isConnected } = useAccount();
-        return { address, connector, isConnected }
-    }
+    // const getUserAddress = () => {
+    //     const { address, connector, isConnected } = useAccount();
+    //     return { address, connector, isConnected }
+    // }
 
     const toggleModal = () => {
         setShowModal(!showModal)

@@ -31,47 +31,98 @@ const CreateLoanRequest: FC<pageProps> = ({
   loanRequestDeadline,
   interestRate,
 }) => {
-  if (loanToken.length && collateralToken.length) {
-    const {
-      config,
-      error: prepareError,
-      isError: isPrepareError,
-    } = usePrepareContractWrite({
-      address: "0x4D080A303646fe3B8CDAdb9eB929148F9fCc5D6D", //this is the old contract
-      abi: LoanPositionManagerAbi,
-      functionName: "createLoanPosition",
-      args: [
-        loanToken,
-        collateralToken,
-        collateralAmount,
-        liquidationThreshold,
-        initialThreshold,
-        loanRepayDeadline,
-        loanRequestDeadline,
-        interestRate,
-      ],
-    });
-    const { data, error, isError, write } = useContractWrite(config);
-    const { isLoading, isSuccess } = useWaitForTransaction({
-      hash: data?.hash,
-    });
+  // if (loanToken.length && collateralToken.length) {
+  //   const {
+  //     config,
+  //     error: prepareError,
+  //     isError: isPrepareError,
+  //   } = usePrepareContractWrite({
+  //     address: "0x4D080A303646fe3B8CDAdb9eB929148F9fCc5D6D", //this is the old contract
+  //     abi: LoanPositionManagerAbi,
+  //     functionName: "createLoanPosition",
+  //     args: [
+  //       loanToken,
+  //       collateralToken,
+  //       collateralAmount,
+  //       liquidationThreshold,
+  //       initialThreshold,
+  //       loanRepayDeadline,
+  //       loanRequestDeadline,
+  //       interestRate,
+  //     ],
+  //   });
+  //   const { data, error, isError, write } = useContractWrite(config);
+  //   const { isLoading, isSuccess } = useWaitForTransaction({
+  //     hash: data?.hash,
+  //   });
+  //   return (
+  //     <div>
+  //       <button onClick={() => write?.()}>
+  //         {isLoading ? "creando..." : "creado"}
+  //       </button>
+  //       {isSuccess && (
+  //         <div>
+  //           <div>
+  //             <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
+  //           </div>
+  //         </div>
+  //       )}
+  //       {(isPrepareError || isError) && (
+  //         <div>Error: {(prepareError || error)?.message}</div>
+  //       )}
+  //     </div>
+  //   );
+  // }
+
+  const {
+    config,
+    error: prepareError,
+    isError: isPrepareError,
+  } = usePrepareContractWrite({
+    address: "0x4D080A303646fe3B8CDAdb9eB929148F9fCc5D6D", //this is the old contract
+    abi: LoanPositionManagerAbi,
+    functionName: "createLoanPosition",
+    args: [
+      loanToken,
+      collateralToken,
+      collateralAmount,
+      liquidationThreshold,
+      initialThreshold,
+      loanRepayDeadline,
+      loanRequestDeadline,
+      interestRate,
+    ],
+  });
+
+  const { data, error, isError, write } = useContractWrite(config);
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
+  if (!loanToken.length || !collateralToken.length) {
     return (
       <div>
-        <button onClick={() => write?.()}>
-          {isLoading ? "creando..." : "creado"}
-        </button>
-        {isSuccess && (
-          <div>
-            <div>
-              <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
-            </div>
-          </div>
-        )}
-        {(isPrepareError || isError) && (
-          <div>Error: {(prepareError || error)?.message}</div>
-        )}
+        <div>Error: Missing loanToken or collateralToken</div>
       </div>
     );
   }
+
+  return (
+    <div>
+      <button onClick={() => write?.()}>
+        {isLoading ? "creando..." : "creado"}
+      </button>
+      {isSuccess && (
+        <div>
+          <div>
+            <a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
+          </div>
+        </div>
+      )}
+      {(isPrepareError || isError) && (
+        <div>Error: {(prepareError || error)?.message}</div>
+      )}
+    </div>
+  );
 };
 export default CreateLoanRequest;

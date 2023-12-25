@@ -1,7 +1,8 @@
-import Image from 'next/image';
-import React, { FC } from 'react';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { TbCurrencyEthereum } from 'react-icons/tb';
+"use client";
+import Image from "next/image";
+import React, { FC } from "react";
+import { AiOutlineHeart } from "react-icons/ai";
+import { TbCurrencyEthereum } from "react-icons/tb";
 
 export type CardProps = {
   image: string;
@@ -67,7 +68,7 @@ const Card: FC<CardProps> = ({
         <p className="flex flex-col gap-1">
           <span className="text-xs text-gray-500">Your Bid</span>
           <span className="flex gap-1 justify-between items-center">
-            <TbCurrencyEthereum className="w-5 h-5 text-purple-500" />{' '}
+            <TbCurrencyEthereum className="w-5 h-5 text-purple-500" />{" "}
             {bid.amount} {bid.currency}
           </span>
         </p>

@@ -24,6 +24,7 @@ const config: Config = {
         appColor1: "#B92FFF",
         appColor2: "#C77FEE",
         textBlack: "#222222",
+        black222: "#222",
         inputBg: "#F7F9FA",
         textGray: "#93989A",
         white03: "#FAFAFA",
@@ -32,7 +33,10 @@ const config: Config = {
         black2: "#4E4E4E",
         blue1: "#F7F9FA",
         dark: "#26292E",
-        darkText: "#A7A6B8"
+        darkText: "#A7A6B8",
+        whiteFFF: "#FFF",
+        purpleLight: "#F4E0FF",
+        purple3: "#e3b3fc",
       }
     },
   },

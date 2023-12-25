@@ -23,8 +23,8 @@ const Page: FC<pageProps> = () => {
     if (isError) {
       return <div>Error Fetching block number</div>;
     }
-    let amountAdd = 216000 * n; //216000 is the number of blocks that represents 30 days
-    let loanRepayDeadLineAddedAmount = BigInt(amountAdd);
+    const amountAdd = 216000 * n; //216000 is the number of blocks that represents 30 days
+    const loanRepayDeadLineAddedAmount = BigInt(amountAdd);
     let loanRepayDeadLine = loanRepayDeadLineAddedAmount;
     if (data?.toString().length) {
       loanRepayDeadLine = loanRepayDeadLine + data;
@@ -36,13 +36,22 @@ const Page: FC<pageProps> = () => {
 
   const { address } = useAccount();
 
+  // const checkAddres = (address: Address | undefined) => {
+  //   if (address !== undefined && address.length) {
+  //     return <Balance address={address} />;
+  //   } else {
+  //     return <span>nope</span>;
+  //   }
+  //   console.log(address);
+  // };
+
   const checkAddres = (address: Address | undefined) => {
     if (address !== undefined && address.length) {
+      console.log(address);
       return <Balance address={address} />;
-    } else {
-      return <span>nope</span>;
     }
-    console.log(address);
+
+    return <span>nope</span>;
   };
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

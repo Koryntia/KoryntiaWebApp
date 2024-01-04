@@ -30,6 +30,7 @@ const config: Config = {
         white03: "#FAFAFA",
         purple2: "#f3dbff",
         textNeutral: "#101010",
+        textGreen1: "#8CB10C",
         black2: "#4E4E4E",
         blue1: "#F7F9FA",
         dark: "#26292E",

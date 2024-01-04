@@ -1,10 +1,11 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Modal from "./modal/modal";
 import useAuth from "@/hooks/useAuth";
 import { useAppSelector } from "@/redux/hooks";
+import { addNewUserWallet } from "@/services/api/user";
 
 type MainContentWrapperProps = {
   children: React.ReactNode;
@@ -15,6 +16,20 @@ const MainContentWrapper: React.FC<MainContentWrapperProps> = ({
 }) => {
   const { address, connector, isConnected, login } = useAuth();
   const showModal = useAppSelector((state) => state.auth.showModal);
+
+  useEffect(() => {
+    if (address) {
+      const createNewUser = async () => {
+        try {
+          const newUser = await addNewUserWallet(address);
+          console.log("New User:", newUser);
+        } catch (error) {
+          console.error("Error adding new user wallet:", error);
+        }
+      };
+      createNewUser();
+    }
+  }, [address]);
 
   console.log("showModal statua", showModal);
   console.log("showModal address", address);

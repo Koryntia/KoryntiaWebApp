@@ -19,6 +19,7 @@ import WalletConnect from "@/app/svg/WalletConnect";
 import MetaMask from "@/app/svg/MetaMask";
 import CoinBase from "@/app/svg/CoinBase";
 import { toggleModal } from "@/redux/features/auth-slice";
+import { addNewUserWallet } from "@/services/api/user";
 
 const Modal = ({}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -29,8 +30,15 @@ const Modal = ({}) => {
   const { address, connector, isConnected } = useAccount();
   // const { data: ensAvatar } = useEnsAvatar({ address })
   const { data: ensName } = useEnsName({ address });
-  const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect();
+  const {
+    connect,
+    connectors,
+    error,
+    isLoading,
+    pendingConnector,
+    isSuccess: connectIsSuccess,
+    data: connectData,
+  } = useConnect();
   const { disconnect } = useDisconnect();
 
   const [AgreedToTermsOfServices, setAgreedToTermsOfServices] = useState<
@@ -45,6 +53,31 @@ const Modal = ({}) => {
     connect({ connector });
     handleCloseModal();
   };
+
+  async function createNewUser() {
+    try {
+      const newUser = await addNewUserWallet(connectData?.account);
+      console.log("New User:", newUser);
+    } catch (error) {
+      console.error("Error adding new user wallet:", error);
+    }
+  }
+
+  // useEffect(() => {
+  //   if (connectIsSuccess) {
+  //     const createNewUser = async () => {
+  //       try {
+  //         const newUser = await addNewUserWallet(address);
+  //         console.log("New User:", newUser);
+  //       } catch (error) {
+  //         console.error("Error adding new user wallet:", error);
+  //       }
+  //     };
+  //     createNewUser();
+  //   }
+  // }, [connectIsSuccess]);
+
+  console.log("connectData?.account", connectData?.account);
 
   return (
     <>

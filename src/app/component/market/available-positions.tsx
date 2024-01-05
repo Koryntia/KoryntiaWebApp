@@ -49,9 +49,8 @@ export const AvailablePositions = () => {
             <li key={tab.label}>
               <a
                 href={tab.href}
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-xl border border-neutral-200 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 gap-2"
+                className="inline-flex items-center justify-center rounded-xl border border-neutral-200 text-sm font-medium px-4 py-2 gap-2"
               >
-                {/* <tab.icon className="w-6 h-6" /> */}
                 <Image src={tab.icon} alt="icon image" height={20} width={20} />
                 {tab.label}
               </a>
@@ -60,7 +59,7 @@ export const AvailablePositions = () => {
         </ol>
         <button
           type="button"
-          className="inline-flex items-center justify-center whitespace-nowrap rounded-xl border border-neutral-200 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 gap-2"
+          className="inline-flex items-center justify-center rounded-xl border border-neutral-200 text-sm font-medium px-4 py-1 gap-2"
         >
           <BsFilter class="w-6 h-6" />
           Filter & Sort

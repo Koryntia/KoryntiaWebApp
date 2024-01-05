@@ -3,6 +3,9 @@ import React, { ChangeEvent, useState } from "react";
 import { useBlockNumber } from "wagmi";
 import Summary from "./Summary";
 import LoanButton from "./LoanButton";
+import SelectToken from "../select-token";
+import SelectLoanPeriod from "./select-loan-period";
+import { allowedCoins, periodOptions } from "@/data";
 
 type LoanFormProps = {
   name: string;
@@ -39,8 +42,8 @@ const CreateLoanForm = () => {
     return <div>none</div>;
   };
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedValue(event.target.value);
+  const handleSelectChange = (value: string) => {
+    setSelectedValue(value);
   };
 
   return (
@@ -60,16 +63,7 @@ const CreateLoanForm = () => {
                   placeholder="Enter Amount"
                   className="p-2 m-2 bg-slate-200 outline-0 rounded-md"
                 />
-                <select
-                  name=""
-                  id=""
-                  className="bg-slate-100 h-10 cursor-pointer "
-                >
-                  <option value="ETH">USD</option>
-                  <option value="USDC">USDC</option>
-                  <option value="LINK">LINK</option>
-                  <option value="USD">ETH</option>
-                </select>
+                <SelectToken options={allowedCoins} />
               </div>
             </div>
             <div>
@@ -81,16 +75,7 @@ const CreateLoanForm = () => {
                   placeholder="Enter Amount"
                   className="p-2 m-2 bg-slate-200 outline-0 rounded-md"
                 />
-                <select
-                  name=""
-                  id=""
-                  className="bg-slate-100 h-10 cursor-pointer "
-                >
-                  <option value="ETH">USD</option>
-                  <option value="USDC">USDC</option>
-                  <option value="LINK">LINK</option>
-                  <option value="USD">ETH</option>
-                </select>
+                <SelectToken options={allowedCoins} />
               </div>
             </div>
             <div>
@@ -100,17 +85,11 @@ const CreateLoanForm = () => {
                 <span className="p-2 m-2 text-base font-normal text-gray-400 opacity-95 bg-slate-200 rounded-md w-60">
                   {`Payment in Month(s)`}
                 </span>
-                <select
-                  className="bg-slate-100 h-10 cursor-pointer"
-                  value={selectedValue}
-                  onChange={handleSelectChange}
-                >
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((value) => (
-                    <option key={value} value={value.toString()}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
+                <SelectLoanPeriod
+                  selectedValue={selectedValue}
+                  handleSelectChange={handleSelectChange}
+                  options={periodOptions}
+                />
               </div>
             </div>
           </form>

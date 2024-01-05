@@ -2,7 +2,7 @@ import React from "react";
 
 const Banner = () => {
   return (
-    <div className="w-740 mb-6 lg:h-[250px] flex flex-col justify-center p-4 flex-shrink-0 rounded-2xl bg-gradient-to-r from-purple-700 to-purple-200">
+    <div className="lg:w-740 mb-6 lg:h-[200px] flex flex-col justify-center p-4 flex-shrink-0 rounded-2xl bg-gradient-to-r from-purple-700 to-purple-200">
       <div className="">
         <h1 className="text-whiteFFF text-[32px] font-semibold not-italic leading-[41.6px] tracking-[0.32px] ">
           Join the Future of Crypto Investments

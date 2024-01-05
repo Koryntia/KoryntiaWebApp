@@ -9,10 +9,14 @@ import { GrMenu } from "react-icons/gr";
 import { useState } from "react";
 import type { Route } from "next";
 import useAuth from "@/hooks/useAuth";
+import { useAccount, useBalance } from "wagmi";
 
 const Header = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { address, logout } = useAuth();
+  const { address, logout, addressBalance } = useAuth();
+  const shortenedAddress = `${address?.substring(0, 4)}...${address?.slice(
+    -4
+  )}`;
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white shadow-sm">
       <div className="flex flex-grow items-center justify-between px-4 py-4 md:px-6 2xl:px-11">
@@ -61,7 +65,18 @@ const Header = () => {
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           <ul className="flex items-center gap-2 2xsm:gap-4">
-            {!address ? null : <KoryntiaToken />}
+            {!address ? null : (
+              <div className="">
+                {/* <span className="text-sm p-0 m-0">
+                  {addressBalance?.formatted.substring(0, 4)}{" "}
+                  {addressBalance?.symbol}
+                </span> */}
+                <p className="text-base text-appColor1 font-bold border p-2 rounded-md border-appColor2 m-0">
+                  {shortenedAddress}
+                </p>
+              </div>
+            )}
+            {/* {!address ? null : <KoryntiaToken />} */}
             <DropdownNotification />
           </ul>
           <DropdownUser />

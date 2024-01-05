@@ -1,11 +1,11 @@
-import { AvailablePositions } from "@/app/component/market/available-positions";
+import { MarketPositionDetail } from "@/app/component/market/market-position-detail";
 import { FC } from "react";
 interface pageProps {}
 
 const page: FC<pageProps> = () => {
   return (
     <div>
-      <AvailablePositions />
+      <MarketPositionDetail />
     </div>
   );
 };

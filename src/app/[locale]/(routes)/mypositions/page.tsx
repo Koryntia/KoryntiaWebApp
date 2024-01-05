@@ -11,7 +11,10 @@ const page: FC<pageProps> = () => {
     <section className="my-4 xl:my-8 space-y-4 lg:space-y-8">
       <PageTitle title="My Positions" />
       <PositionTabs />
-      <PositionCards positionCardsData={positionCardsData} />
+      <PositionCards
+        positionCardsData={positionCardsData}
+        gridStyle="lg:grid-cols-4"
+      />
     </section>
   );
 };

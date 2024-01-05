@@ -13,25 +13,20 @@ const Dashboard = () => {
         <Banner />
       </div>
       <div className="dashboard-market-posistion">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-black222 text-[24px] not-italic leading-[31.2px] font-semibold ">
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-black222 text-[24px] not-italic leading-[31.2px] font-semibold">
             Market Position
           </h2>
           <p className="text-appColor1 text-[14px] tracking-[0.14px] leading-[18.2px] not-italic font-medium ">
             View All
           </p>
         </div>
-        <PositionCards positionCardsData={firstThreePositionData} />
+        <PositionCards
+          positionCardsData={firstThreePositionData}
+          gridStyle="lg:grid-cols-3"
+        />
       </div>
       <div className="dashboard-user-active-position">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-black222 text-[24px] not-italic leading-[31.2px] font-semibold ">
-            Your Active Positions
-          </h2>
-          <p className="text-appColor1 text-[14px] tracking-[0.14px] leading-[18.2px] not-italic font-medium ">
-            View All
-          </p>
-        </div>
         <ActivePositions />
       </div>
     </div>

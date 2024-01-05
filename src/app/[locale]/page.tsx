@@ -25,7 +25,7 @@ export default function Home() {
   const handleMinus = () => {
     dispatch(decrement());
   };
-  const [showSummary, setShowSummary] = useState<boolean>(false);
+  const [showSummary, setShowSummary] = useState<boolean>(true);
 
   const handleShowSummary = () => {
     return setShowSummary((prevState) => !prevState);
@@ -40,7 +40,7 @@ export default function Home() {
         <div className="dashboard-column-2 w-[330px] h-full">
           <div>
             <CreateLoanForm />
-            {showSummary && <Summary />}
+            {/* {showSummary && <Summary />} */}
           </div>
         </div>
       </div>

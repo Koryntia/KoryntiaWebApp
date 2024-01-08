@@ -2,7 +2,7 @@
 import Cardcontainer from "@/app/component/common/Cards/cardcontainer";
 import feedsFinder from "@/app/component/functions/findFees";
 import { FC, useState } from "react";
-import { Address, useAccount, useBlockNumber } from "wagmi";
+import { useAccount, useBlockNumber } from "wagmi";
 import Balance from "@/app/component/functions/BalanceFinder";
 import getBlockTimeStamp from "@/app/component/functions/getBlocktimeStamp";
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
@@ -45,7 +45,7 @@ const Page: FC<pageProps> = () => {
   //   console.log(address);
   // };
 
-  const checkAddres = (address: Address | undefined) => {
+  const checkAddres = (address: any) => {
     if (address !== undefined && address.length) {
       console.log(address);
       return <Balance address={address} />;

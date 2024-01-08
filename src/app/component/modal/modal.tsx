@@ -4,15 +4,23 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 import { useTranslations } from "next-intl";
+// import {
+//   useConnect,
+//   useEnsName,
+//   useAccount,
+//   useEnsAvatar,
+//   useDisconnect,
+//   useBalance,
+// } from "wagmi";
 import {
+  Connector,
   useConnect,
-  useEnsName,
   useAccount,
-  useEnsAvatar,
   useDisconnect,
-  useBalance,
+  useEnsAvatar,
+  useEnsName,
 } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
+// import { InjectedConnector } from "wagmi/connectors/injected";
 import { getUserAccount } from "@/redux/actions/user-account-action";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import WalletConnect from "@/app/svg/WalletConnect";
@@ -23,23 +31,24 @@ import { addNewUserWallet } from "@/services/api/user";
 
 const Modal = ({}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const { connectors, connect } = useConnect();
 
   const t = useTranslations("ConnectButton");
   const dispatch = useAppDispatch();
 
-  const { address, connector, isConnected } = useAccount();
+  // const { address, connector, isConnected } = useAccount();
   // const { data: ensAvatar } = useEnsAvatar({ address })
-  const { data: ensName } = useEnsName({ address });
-  const {
-    connect,
-    connectors,
-    error,
-    isLoading,
-    pendingConnector,
-    isSuccess: connectIsSuccess,
-    data: connectData,
-  } = useConnect();
-  const { disconnect } = useDisconnect();
+  // const { data: ensName } = useEnsName({ address });
+  // const {
+  //   connect,
+  //   connectors,
+  //   error,
+  //   isLoading,
+  //   pendingConnector,
+  //   isSuccess: connectIsSuccess,
+  //   data: connectData,
+  // } = useConnect();
+  // const { disconnect } = useDisconnect();
 
   const [AgreedToTermsOfServices, setAgreedToTermsOfServices] = useState<
     boolean | undefined
@@ -55,12 +64,12 @@ const Modal = ({}) => {
   };
 
   async function createNewUser() {
-    try {
-      const newUser = await addNewUserWallet(connectData?.account);
-      console.log("New User:", newUser);
-    } catch (error) {
-      console.error("Error adding new user wallet:", error);
-    }
+    // try {
+    //   const newUser = await addNewUserWallet(connectData?.account);
+    //   console.log("New User:", newUser);
+    // } catch (error) {
+    //   console.error("Error adding new user wallet:", error);
+    // }
   }
 
   // useEffect(() => {
@@ -77,7 +86,9 @@ const Modal = ({}) => {
   //   }
   // }, [connectIsSuccess]);
 
-  console.log("connectData?.account", connectData?.account);
+  // console.log("connectData?.account", connectData?.account);
+
+  console.log("connectors", connectors);
 
   return (
     <>
@@ -140,18 +151,15 @@ const Modal = ({}) => {
                   p-[40px] h-[339px] lg:rounded-tr-3xl lg:rounded-br-2xl shadow-lg`}
             >
               <div>
-                {connectors.map((connector) => (
+                {connectors.slice(0, 4).map((connector) => (
                   <button
-                    // disabled={AgreedToTermsOfServices}
-                    // id="connectButton"
-                    key={connector.id}
-                    // onClick={() => connect({ connector })}
                     onClick={() => handleConnection(connector)}
+                    key={connector.uid}
                     className="flex cursor-pointer items-center w-full mb-2 bg-white text-black rounded-lg flex-row  hover:bg-gray-100"
                   >
                     <div className="rounded-l-lg px-3 py-2 bg-appColor1">
                       {connector.name === "MetaMask" && <MetaMask />}
-                      {connector.name === "Coinbase Wallet" && <CoinBase />}
+                      {connector.name === "Safe" && <CoinBase />}
                       {connector.name === "WalletConnect" && <WalletConnect />}
                       {connector.name === "Injected" && <WalletConnect />}
                     </div>
@@ -159,14 +167,14 @@ const Modal = ({}) => {
                       <span className="text-lg font-medium tracking-tight text-gray-900 ">
                         {connector.name}
                       </span>
-                      {!connector.ready && " (unsupported)"}
+                      {/* {!connector.ready && " (unsupported)"}
                       {isLoading &&
                         connector.id === pendingConnector?.id &&
-                        " (connecting)"}
+                        " (connecting)"} */}
                     </div>
                   </button>
                 ))}
-                {error && <div>{error.message}</div>}
+                {/* {error && <div>{error.message}</div>} */}
               </div>
             </div>
           </div>

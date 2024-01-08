@@ -1,6 +1,5 @@
 "use client";
 import Cardcontainer from "@/app/component/common/Cards/cardcontainer";
-import feedsFinder from "@/app/component/functions/findFees";
 import { FC, useState } from "react";
 import { useAccount, useBlockNumber } from "wagmi";
 import Balance from "@/app/component/functions/BalanceFinder";

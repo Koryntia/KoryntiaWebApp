@@ -3,7 +3,6 @@ import Cardcontainer from "@/app/component/common/Cards/cardcontainer";
 import { FC, useState } from "react";
 import { useAccount, useBlockNumber } from "wagmi";
 import Balance from "@/app/component/functions/BalanceFinder";
-import getBlockTimeStamp from "@/app/component/functions/getBlocktimeStamp";
 import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { parse } from "path";
 

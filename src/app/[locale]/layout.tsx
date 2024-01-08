@@ -5,7 +5,7 @@ import { createTranslator, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 import LoadingWrapper from "../component/common/loading-wrapper";
 import { ReduxProvider } from "@/redux/provider";
-import WagmiProvider from "@/wagmi/WagmiProvider";
+import WagmiWrapper from "@/wagmi/WagmiWrapper";
 import MainContentWrapper from "../component/main-content-wrapper";
 
 type Props = {
@@ -45,11 +45,11 @@ export default async function RootLayout({
         <ReduxProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <div className="">
-              <WagmiProvider>
+              <WagmiWrapper>
                 <LoadingWrapper>
                   <MainContentWrapper>{children}</MainContentWrapper>
                 </LoadingWrapper>
-              </WagmiProvider>
+              </WagmiWrapper>
             </div>
           </NextIntlClientProvider>
         </ReduxProvider>

@@ -14,14 +14,14 @@ type MainContentWrapperProps = {
 const MainContentWrapper: React.FC<MainContentWrapperProps> = ({
   children,
 }) => {
-  const { address, connector, isConnected, login } = useAuth();
+  const { address, login } = useAuth();
   const showModal = useAppSelector((state) => state.auth.showModal);
 
   useEffect(() => {
     if (address) {
       const createNewUser = async () => {
         try {
-          const newUser = await addNewUserWallet(address);
+          const newUser = await addNewUserWallet(address.toString());
           console.log("New User:", newUser);
         } catch (error) {
           console.error("Error adding new user wallet:", error);

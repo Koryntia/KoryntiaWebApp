@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { useAccount, useBalance, useDisconnect } from 'wagmi';
 
 const useAuth = () => {
-    const { address, connector, isConnected } = useAccount();
-    const { disconnect } = useDisconnect();
+    // const { address, connector, isConnected } = useAccount();
+    const { address } = useAccount()
+    const { disconnect } = useDisconnect()
     const [showModal, setShowModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -27,7 +28,7 @@ const useAuth = () => {
         localStorage.removeItem('token');
     };
 
-    return { address, addressBalance, connector, isConnected, login, logout, toggleModal, showModal };
+    return { address, addressBalance, login, logout, toggleModal, showModal };
 };
 
 export default useAuth;

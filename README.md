@@ -2,6 +2,9 @@
 
 Revolutionizing Financial Inclusion: Koryntia's Mission to Empower 2 Billion People with Borderless Credit Access
 
+[NETLIFY URL](https://frabjous-choux-1af204.netlify.app/)
+
+
 # Background
 
 This project is built on Next.js 13.5 and is organized as a single application within a standalone repository. This approach allows us to focus on delivering a cohesive and optimized DeFi experience.

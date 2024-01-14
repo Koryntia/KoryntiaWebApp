@@ -1,25 +1,67 @@
-import React, { ChangeEvent, useState } from "react";
+"use client";
 
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useBlockNumber } from "wagmi";
 import Summary from "./Summary";
 import LoanButton from "./LoanButton";
-import SelectToken from "../select-token";
 import SelectLoanPeriod from "./select-loan-period";
 import { allowedCoins, periodOptions } from "@/data";
+import SelectLoanToken from "./select-loan-token";
+import SelectCollateralToken from "./select-collateral-token";
+import { createNewLoan } from "@/services/api/loan-service";
+import { useAccount, useWriteContract } from "wagmi";
+import abi from "../../../abis/loanPositionManager";
+import { calculatePeriodTimestamp } from "@/utils/helper";
 
-type LoanFormProps = {
-  name: string;
-  value: string;
-};
+interface FormValues {
+  address: any | `0x${string}`;
+  loanAmount: number;
+  loanAmountToken: string;
+  collateralAmount: number;
+  collateralAmountToken: string;
+  loanPeriod: number;
+  loanRequestDeadline: number;
+
+  interestRate: any;
+}
 
 const CreateLoanForm = () => {
+  const { address, status } = useAccount();
+  const [loanRequestDeadlinePeriod, setLoanRequestDeadlinePeriod] =
+    useState<number>(0);
+
+  const initialState: FormValues = {
+    address: status === "connected" ? address : "",
+    loanAmount: 0,
+    loanAmountToken: "",
+    collateralAmount: 0,
+    collateralAmountToken: "",
+    loanPeriod: 0,
+    loanRequestDeadline: loanRequestDeadlinePeriod,
+
+    interestRate: 30000,
+  };
+
   const [showSummary, setShowSummary] = useState<boolean>(true);
+  const [formValues, setFormValues] = useState<FormValues>(initialState);
+  const [userWalletAddress, setUserWalletAddress] = useState<any>("");
 
   const handleShowSummary = () => {
     return setShowSummary((prevState) => !prevState);
   };
 
-  const [selectedValue, setSelectedValue] = useState<string>("1");
+  function calculatePeriod(period: number) {
+    const result = calculatePeriodTimestamp(period);
+
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      ["loanPeriod"]: result,
+    }));
+  }
+
+  useEffect(() => {
+    setUserWalletAddress(address);
+  }, [address]);
 
   const { data, isError, isLoading } = useBlockNumber();
 
@@ -42,9 +84,40 @@ const CreateLoanForm = () => {
     return <div>none</div>;
   };
 
-  const handleSelectChange = (value: string) => {
-    setSelectedValue(value);
+  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: value,
+    }));
   };
+
+  async function handleCreateLoanSubmit() {
+    await createNewLoan(formValues);
+    setShowSummary((prevState) => !prevState);
+  }
+
+  const { data: hash, writeContract } = useWriteContract();
+
+  async function submit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    writeContract({
+      address: userWalletAddress,
+      abi,
+      functionName: "createLoanPosition",
+      args: [
+        address,
+        formValues?.loanAmount,
+        formValues?.loanAmountToken,
+        formValues?.collateralAmount,
+        formValues?.collateralAmountToken,
+        formValues?.loanPeriod,
+        formValues?.interestRate,
+      ],
+    });
+  }
+
+  console.log("formValues", formValues);
 
   return (
     <>
@@ -60,10 +133,16 @@ const CreateLoanForm = () => {
                 <input
                   type="number"
                   required
+                  name="loanAmount"
                   placeholder="Enter Amount"
                   className="p-2 m-2 bg-slate-200 outline-0 rounded-md"
+                  onChange={handleChange}
                 />
-                <SelectToken options={allowedCoins} />
+                <SelectLoanToken
+                  options={allowedCoins}
+                  handleChange={handleChange}
+                  formValues={formValues.loanAmountToken}
+                />
               </div>
             </div>
             <div>
@@ -72,10 +151,16 @@ const CreateLoanForm = () => {
                 <input
                   type="number"
                   required
+                  name="collateralAmount"
+                  onChange={handleChange}
                   placeholder="Enter Amount"
                   className="p-2 m-2 bg-slate-200 outline-0 rounded-md"
                 />
-                <SelectToken options={allowedCoins} />
+                <SelectCollateralToken
+                  options={allowedCoins}
+                  handleChange={handleChange}
+                  formValues={formValues.collateralAmountToken}
+                />
               </div>
             </div>
             <div>
@@ -86,9 +171,10 @@ const CreateLoanForm = () => {
                   {`Payment in Month(s)`}
                 </span>
                 <SelectLoanPeriod
-                  selectedValue={selectedValue}
-                  handleSelectChange={handleSelectChange}
+                  handleChange={handleChange}
+                  formValues={formValues.loanPeriod}
                   options={periodOptions}
+                  calculatePeriod={calculatePeriod}
                 />
               </div>
             </div>
@@ -119,7 +205,7 @@ const CreateLoanForm = () => {
                 Cancel
               </button>
               <button
-                onClick={handleShowSummary}
+                onClick={handleCreateLoanSubmit}
                 className="bg-appColor1 flex-1 rounded-xl py-2 px-3 w-32 text-center text-white"
               >
                 Request Loan

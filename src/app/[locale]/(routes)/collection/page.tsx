@@ -45,7 +45,6 @@ const Page: FC<pageProps> = () => {
 
   const checkAddres = (address: any) => {
     if (address !== undefined && address.length) {
-      console.log(address);
       return <Balance address={address} />;
     }
 

@@ -1,12 +1,12 @@
 import React from "react";
 
-type SelectTokenProps = {
-  options: { value: string; token: string }[];
+type SelectCollateralTokenProps = {
+  options: { name: string; tokenAddress: any }[];
   handleChange: (e: any) => void;
   formValues: string;
 };
 
-const SelectToken: React.FC<SelectTokenProps> = ({
+const SelectCollateralToken: React.FC<SelectCollateralTokenProps> = ({
   options,
   handleChange,
   formValues,
@@ -14,16 +14,16 @@ const SelectToken: React.FC<SelectTokenProps> = ({
   return (
     <select
       className="bg-slate-100 h-10 cursor-pointer"
-      name={formValues}
+      name="collateralAmountToken"
       onChange={handleChange}
     >
       {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.token}
+        <option key={option.tokenAddress} value={option.tokenAddress}>
+          {option.name}
         </option>
       ))}
     </select>
   );
 };
 
-export default SelectToken;
+export default SelectCollateralToken;

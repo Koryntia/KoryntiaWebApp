@@ -2,7 +2,21 @@ import LoanSummary from "./LoanSummary";
 import LoanSummaryContainer from "./LoanSummaryContainer";
 import { useState } from "react";
 
-const Summary = () => {
+interface ISummary {
+  borrowingAmount: number;
+  collateral: number;
+  collateralRate: number;
+  platformFee: string;
+  period: number;
+}
+
+const Summary = ({
+  borrowingAmount,
+  collateral,
+  collateralRate,
+  platformFee,
+  period,
+}: ISummary) => {
   // the inputs are from create loan forms
   //is needed to call the contract for this step
   /*function calculateDebtAmount(
@@ -15,10 +29,10 @@ We do not have the criteria to use to make these calculations.
     */
 
   const currency = "USDC";
-  const borrow = 11;
-  const collateralRate = 1.2;
-  const collateral = borrow * collateralRate;
-  const months = 12;
+  // const borrow = 11;
+  // const collateralRate = 1.2;
+  // const collateral = borrow * collateralRate;
+  // const months = 12;
 
   return (
     <div
@@ -26,29 +40,26 @@ We do not have the criteria to use to make these calculations.
     "
     >
       <LoanSummaryContainer title="Summary">
-        <LoanSummary
+        {/* <LoanSummary
           title="Health Factor"
           amount={`${borrow.toString()} ${"%"}`}
-        />
+        /> */}
         <LoanSummary
           title="Borrowing amount"
-          amount={`${borrow.toString()} ${currency}`}
+          amount={`${borrowingAmount.toString()} ${currency}`}
         />
         <LoanSummary
           title="Your collateral"
           amount={`${collateral.toString()} ${currency}`}
         />
-        <LoanSummary
-          title="Colateral rate"
-          amount={`${(collateralRate * 100).toString()}%`}
-        />
+        <LoanSummary title="Colateral rate" amount={`${3}%`} />
         <LoanSummary
           title="Platform Fee"
           amount={`${collateral.toString()} ${currency}`}
         />
         <LoanSummary
-          title="Amount"
-          amount={`${collateral.toString()} ${currency}`}
+          title="Period"
+          amount={`${period.toString()} ${"Month(s)"}`}
         />
       </LoanSummaryContainer>
     </div>

@@ -3,7 +3,7 @@ import { baseUrl } from "@/shared/constant";
 const createNewLoan = async (loanData: any) => {
 
     try {
-        const response = await fetch(`${baseUrl}/api/loan`, {
+        const response = await fetch(`http://localhost:3000/api/loan`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -14,7 +14,7 @@ const createNewLoan = async (loanData: any) => {
         return newLoan;
     } catch (error) {
         console.log("Failed creating new loan, api/loan: ", error);
-
+        return { error }
     }
 };
 

@@ -99,23 +99,23 @@ const CreateLoanForm = () => {
 
   const { data: hash, writeContract } = useWriteContract();
 
-  async function submit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    writeContract({
-      address: userWalletAddress,
-      abi,
-      functionName: "createLoanPosition",
-      args: [
-        address,
-        formValues?.loanAmount,
-        formValues?.loanAmountToken,
-        formValues?.collateralAmount,
-        formValues?.collateralAmountToken,
-        formValues?.loanPeriod,
-        formValues?.interestRate,
-      ],
-    });
-  }
+  // async function submit(e: React.FormEvent<HTMLFormElement>) {
+  //   e.preventDefault();
+  //   writeContract({
+  //     address: userWalletAddress,
+  //     abi,
+  //     functionName: "createLoanPosition",
+  //     args: [
+  //       address,
+  //       formValues?.loanAmount,
+  //       formValues?.loanAmountToken,
+  //       formValues?.collateralAmount,
+  //       formValues?.collateralAmountToken,
+  //       formValues?.loanPeriod,
+  //       formValues?.interestRate,
+  //     ],
+  //   });
+  // }
 
   console.log("formValues", formValues);
 
@@ -183,13 +183,20 @@ const CreateLoanForm = () => {
         <div>
           {
             showSummary && (
-              <Summary />
+              <Summary
+                borrowingAmount={formValues.loanAmount}
+                collateral={formValues.collateralAmount}
+                collateralRate={formValues.interestRate}
+                platformFee={"1%"}
+                period={formValues.loanPeriod}
+              />
             ) /*Here the inputs will be added to generate the loan calculations */
           }
         </div>
         <div className="py-5">
           {!showSummary && (
             <LoanButton
+              disabledButton={!address ? true : false}
               title="Calculate Position"
               showSummary={showSummary}
               setShowSummary={setShowSummary}

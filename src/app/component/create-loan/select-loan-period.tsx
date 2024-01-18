@@ -3,7 +3,7 @@ import React from "react";
 type CalculatePeriodFunction = (period: number) => void;
 
 type SelectLoanPeriodProps = {
-  options: number[];
+  options: { label: string; value: number }[];
   handleChange: (e: any) => void;
   formValues: number;
   calculatePeriod: CalculatePeriodFunction;
@@ -24,12 +24,11 @@ const SelectLoanPeriod: React.FC<SelectLoanPeriodProps> = ({
       className="bg-slate-100 h-10 cursor-pointer"
       value={formValues}
       onChange={handleSelectChange}
-      // onChange={handleChange}
       name="loanPeriod"
     >
-      {options.map((value) => (
-        <option key={value} value={Number(value)}>
-          {value}
+      {options.map((item) => (
+        <option key={item.value} value={Number(item.value)}>
+          {item.label}
         </option>
       ))}
     </select>

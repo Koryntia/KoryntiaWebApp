@@ -17,7 +17,8 @@ export async function POST(request: NextRequest) {
         await newLoan.save();
         return NextResponse.json({ message: "Successfully created a Loan", data: newLoan }, { status: 201 });
     } catch (error) {
-        return NextResponse.json({ message: "Successfully created a Loan" }, { status: 500 });
+        console.log("Create Loan Error: ", error);
+        return NextResponse.json({ message: "Server Error: Failed to create Loan" }, { status: 500 });
     }
 }
 

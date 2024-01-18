@@ -22,7 +22,6 @@ const MainContentWrapper: React.FC<MainContentWrapperProps> = ({
       const createNewUser = async () => {
         try {
           const newUser = await addNewUserWallet(address.toString());
-          console.log("New User:", newUser);
         } catch (error) {
           console.error("Error adding new user wallet:", error);
         }
@@ -30,9 +29,6 @@ const MainContentWrapper: React.FC<MainContentWrapperProps> = ({
       createNewUser();
     }
   }, [address]);
-
-  console.log("showModal statua", showModal);
-  console.log("showModal address", address);
 
   return (
     <div className="flex h-screen overflow-hidden">

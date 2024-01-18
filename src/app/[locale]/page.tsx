@@ -40,7 +40,6 @@ export default function Home() {
         <div className="dashboard-column-2 w-[330px] h-full">
           <div>
             <CreateLoanForm />
-            {/* {showSummary && <Summary />} */}
           </div>
         </div>
       </div>

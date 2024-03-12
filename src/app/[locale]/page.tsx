@@ -1,71 +1,43 @@
-'use client'
+"use client";
 import { useState } from "react";
-import CreateLoan from "../component/create-loan/create-loan";
-import LoanSummaryContainer from "../component/create-loan/LoanSummaryContainer";
-import LoanSummary from "../component/create-loan/LoanSummary";
-import LoanButton from "../component/create-loan/LoanButton";
+
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { decrement, increment } from '../../redux/features/count-slice';
+
+import { decrement, increment } from "../../redux/features/count-slice";
+
+import { useAccount } from "wagmi";
+import Dashboard from "../component/dashboard/Dashboard";
+import RecentPositionsList from "../component/common/Tables/recent-loans-container";
+import CreateLoan from "../component/create-loan/create-loan";
 
 export default function Home() {
-
-
-  const count = useAppSelector((state) => state.counter.value)
-  const dispatch = useAppDispatch()
-
-  const [showSummary, setShowSummary] = useState<boolean>(false);
-
-  const handleShowSummary = () => {
-    return setShowSummary(prevState => !prevState)
-  }
+  const { address } = useAccount();
+  const count = useAppSelector((state) => state.counter.value);
+  const dispatch = useAppDispatch();
 
   const handleAdd = () => {
-    dispatch(increment())
-  }
+    dispatch(increment());
+  };
   const handleMinus = () => {
-    dispatch(decrement())
-  }
+    dispatch(decrement());
+  };
+  const [showSummary, setShowSummary] = useState<boolean>(true);
+
+  const handleShowSummary = () => {
+    return setShowSummary((prevState) => !prevState);
+  };
 
   return (
     <section>
-      <div className="flex w-full">
-        <div className="dashboard-column-1 w-[900px] h-full">
-          <h2>Right Column</h2>
-          <h2>{count}</h2>
-          <div>
-            <button className="bg-green-300 p-2" onClick={handleAdd} >add</button> {"  "}
-            <button className="bg-blue-300 p-2" onClick={handleMinus}>minus</button>
-          </div>
-
+      <div className="flex w-full justify-between gap-[20px]">
+        <div className="flex-grow pl-[35px] pt-[34px]">
+          <Dashboard />
         </div>
-        <div className="dashboard-column-2 w-[330px] h-full">
+        <div className="flex flex-col h-full gap-3 px-[26px] py-[20px] min-w-[330px]">
           <CreateLoan />
-          {
-            showSummary &&
-            <div>
-              <LoanSummaryContainer title="Summary">
-                <LoanSummary title="Borrowing amount" amount="3000,04 USDC" />
-                <LoanSummary title="Your collateral" amount="2,500,50 USDC" />
-                <LoanSummary title="Colateral rate" amount="120 %" />
-                <LoanSummary title="Borrow Fee" amount="2.06%" />
-              </LoanSummaryContainer>
-              <LoanSummaryContainer title="Installment">
-                <LoanSummary title="Monthly Amount" amount="1,000 USDC" />
-                <LoanSummary title="Colateral rate" amount="35 %" />
-                <LoanSummary title="Endorsement rate" amount="1,00 %" />
-              </LoanSummaryContainer>
-            </div>
-          }
-          <div className='w-full mt-2 mx-auto'>
-            <LoanButton
-              title="Calculate Position"
-              showSummary={showSummary}
-              setShowSummary={setShowSummary}
-              handleShowSummary={handleShowSummary}
-            />
-          </div>
+          <RecentPositionsList />
         </div>
       </div>
     </section>
-  )
+  );
 }

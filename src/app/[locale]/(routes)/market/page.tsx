@@ -1,10 +1,9 @@
+import Market from "@/app/component/market";
 import { FC } from "react";
-interface pageProps {
-    
-}
- 
+interface pageProps {}
+
 const page: FC<pageProps> = () => {
-    return ( <div>market</div> );
-}
- 
+  return <Market />;
+};
+
 export default page;

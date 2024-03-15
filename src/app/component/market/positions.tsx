@@ -5,18 +5,18 @@ import useAuth from "@/hooks/useAuth";
 import { LoanData, getMyLoan } from "@/services/api/my-position";
 import useElementWidth from "@/hooks/useElementWidth";
 import { useRouter } from "next/navigation";
+import { Route } from "next";
 // import LiquidationModal from "./LiquidationModal";
 
 interface PositionCardsProps {
   positionCardsData: CardProps[];
 }
 
-const routePath = 254;
-
 export const AvailablePositions = ({
   positionCardsData,
 }: PositionCardsProps) => {
   const router = useRouter();
+  const routePath = 254;
 
   const { address, logout, addressBalance } = useAuth();
   const [loanData, setLoanData] = useState<LoanData[]>();
@@ -30,6 +30,9 @@ export const AvailablePositions = ({
   };
 
   useEffect(() => handleGetMyLoanAPI(), []);
+
+  const handleButtonClick = () =>
+    router.push(`/market/${routePath}/details` as Route);
 
   return (
     <section
@@ -56,7 +59,7 @@ export const AvailablePositions = ({
             description={{ by: "12%", collateral: "110%" }}
             image={"/assets/placeholder/cover.png"}
             time="2h 4m 32s"
-            onButtonClick={() => router.push(`/market/${routePath}/details`)}
+            onButtonClick={handleButtonClick}
           />
         ))}
       {/* <LiquidationModal

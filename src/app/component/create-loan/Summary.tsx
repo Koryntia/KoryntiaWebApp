@@ -4,7 +4,7 @@ import { useState } from "react";
 
 interface ISummary {
   borrowingAmount: number;
-  collateral: number;
+  collateral?: number;
   collateralRate: number;
   platformFee: number;
   period: number;
@@ -47,7 +47,7 @@ We do not have the criteria to use to make these calculations.
         />
         <LoanSummary
           title="Your collateral"
-          amount={`${collateral.toString() || 0} ${currency}`}
+          amount={`${collateral?.toString() || 0} ${currency}`}
         />
         <LoanSummary title="Colateral rate" amount={`${3}%`} />
         <LoanSummary

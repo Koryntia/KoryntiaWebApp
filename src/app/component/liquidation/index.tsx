@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Card, { CardProps } from "@/app/component/common/Card";
 import useAuth from "@/hooks/useAuth";
 import { LoanData, getMyLoan } from "@/services/api/my-position";
-import useElementWidth from "@/hooks/useElementWidth";
 import LiquidationModal from "./LiquidationModal";
 
 interface PositionCardsProps {
@@ -15,7 +14,6 @@ export const LliquidationCards = ({
 }: PositionCardsProps) => {
   const { address, logout, addressBalance } = useAuth();
   const [loanData, setLoanData] = useState<LoanData[]>();
-  const [sectionWidth, sectionRef] = useElementWidth<HTMLDivElement>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleGetMyLoanAPI = () => {
@@ -27,16 +25,7 @@ export const LliquidationCards = ({
 
   return (
     <section
-      ref={sectionRef}
-      className={`grid grid-cols-1 gap-6 place-items-start pt-8 ${
-        sectionWidth && sectionWidth < 800
-          ? "grid-cols-2"
-          : sectionWidth && sectionWidth > 1200 && sectionWidth < 1600
-          ? "grid-cols-4"
-          : sectionWidth && sectionWidth > 1600
-          ? "grid-cols-5"
-          : "grid-cols-3"
-      }  `}
+      className={`grid grid-cols-1 gap-6 place-items-start pt-8 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4  2xl:grid-cols-5 `}
     >
       {positionCardsData &&
         positionCardsData.map((item, index) => (

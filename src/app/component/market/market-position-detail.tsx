@@ -8,6 +8,7 @@ import Card from "../common/Card";
 import { useEffect, useState } from "react";
 import MarketModal from "./marketModal";
 import Slider from "react-slick";
+import { calculateSlidesToShow } from "@/utils/helper";
 
 export const MarketPositionDetail = () => {
   const router = useRouter();
@@ -17,17 +18,8 @@ export const MarketPositionDetail = () => {
 
   useEffect(() => {
     if (sectionWidth) {
-      if (sectionWidth > 1800) {
-        setSlidesToShow(5);
-      } else if (sectionWidth < 768 && sectionWidth > 350) {
-        setSlidesToShow(2);
-      } else if (sectionWidth > 1200 && sectionWidth <= 1800) {
-        setSlidesToShow(4);
-      } else if (sectionWidth > 768 && sectionWidth <= 1200) {
-        setSlidesToShow(3);
-      } else {
-        setSlidesToShow(1);
-      }
+      const slides = calculateSlidesToShow(sectionWidth);
+      setSlidesToShow(slides);
     }
   }, [sectionWidth]);
 

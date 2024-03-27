@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { FC } from "react";
 import { DateTime, Interval } from "luxon";
 import { TbCurrencyEthereum } from "react-icons/tb";
+import { calculateTPass } from "@/utils/helper";
 
 interface CardData {
   data: any;
@@ -15,17 +16,6 @@ const Card: FC<CardData> = ({ data }) => {
       time,
       "EEE, MMM dd yyyy HH:mm:ss ZZZ"
     ); // Date of creation of the nft
-    const calculateTPass = (startDate: any) => {
-      const now = DateTime.now();
-      const timeDifference = Interval.fromDateTimes(startDate, now);
-      const secondsDifference = timeDifference.count("seconds");
-      const hours = Math.floor(secondsDifference / 3600);
-      const remainingSeconds = secondsDifference % 3600;
-      const minutes = Math.floor(remainingSeconds / 60);
-      const seconds = remainingSeconds % 60;
-
-      return { hours, minutes, seconds };
-    };
 
     const [timePassed, setTimepassed] = useState(calculateTPass(creationDate));
 

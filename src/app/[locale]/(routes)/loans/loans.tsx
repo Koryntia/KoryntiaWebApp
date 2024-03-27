@@ -1,3 +1,4 @@
+"use server";
 import React, { FC } from "react";
 import { _TLoan } from "@/models/loan";
 import { deleteLoanAction } from "@/app/_action";
@@ -6,18 +7,18 @@ type Props = {
   loans: _TLoan[];
   results: number;
 };
+
 const Loans: FC<Props> = ({ loans, results }) => {
   async function action(data: FormData) {
-    "use server";
-
     const id = data.get("id");
     if (!id || typeof id !== "string") {
       return;
     }
 
-    // Invoke server action to add new loan
+    // Invoke server action to delete loan
     await deleteLoanAction({ id, path: "/loans" });
   }
+
   return (
     <section className="space-y-16">
       <p className="my-8">Results: {results}</p>

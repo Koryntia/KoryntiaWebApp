@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
-import Modal from "./modal/modal";
 import useAuth from "@/hooks/useAuth";
 import { useAppSelector } from "@/redux/hooks";
 import { addNewUserWallet } from "@/services/api/user";
+import SelectWalletModal from "./modal/SelectWalletModal";
 
 type MainContentWrapperProps = {
   children: React.ReactNode;
@@ -40,7 +40,7 @@ const MainContentWrapper: React.FC<MainContentWrapperProps> = ({
           <div className="w-full">{children}</div>
         </main>
       </div>
-      {showModal ? <Modal /> : null}
+      {showModal ? <SelectWalletModal /> : null}
     </div>
   );
 };

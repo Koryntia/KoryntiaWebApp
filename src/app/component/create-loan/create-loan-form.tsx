@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import Summary from "./Summary";
 import { createNewLoan } from "@/services/api/loan-service";
 import { calculatePeriodTimestamp } from "@/utils/helper";
-import Button from "../button/Button";
+import Button from "../elements/button/Button";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
@@ -10,9 +10,9 @@ import { toast } from "react-toastify";
 interface FormValues {
   userAddress: string;
   loanAmount: number;
-  loanToken: string;
+  loanToken?: string;
   collateralAmount: number;
-  collateralToken: string;
+  collateralToken?: string;
   loanPeriod: number;
   healthFactor: number;
   platformFee: number;
@@ -23,8 +23,8 @@ interface CreateLoanFormProps {
   requestAmount: number;
   loanPeriod: number;
   collateralAmount: number;
-  requestToken: string;
-  collateralToken: string;
+  requestToken?: string;
+  collateralToken?: string;
 }
 
 const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
@@ -95,21 +95,11 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
     }));
   };
 
-  // function calculatePeriod(period: number) {
-  //   const result = calculatePeriodTimestamp(period);
-  //   setFormValues((prevValues) => ({
-  //     ...prevValues,
-  //     loanPeriod: result,
-  //   }));
-  // }
-
   async function handleCreateLoanSubmit() {
     try {
       const response = await createNewLoan(formValues);
 
-      // Check if the request was successful
       if (response.status === 201) {
-        // Display a success toast
         toast.success(response.message || "Successfully created a Loan");
       } else if (response.status === 400) {
         toast.error(response.data.message || "Failed to create loan");
@@ -201,7 +191,7 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
       <div>
         <Summary
           borrowingAmount={formValues.loanAmount}
-          collateral={formValues.collateralAmount}
+          collateral={formValues?.collateralAmount}
           collateralRate={formValues.interestRate}
           platformFee={formValues.platformFee}
           period={formValues.loanPeriod}

@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { AiOutlineHeart } from "react-icons/ai";
 import { TbCurrencyEthereum } from "react-icons/tb";
-import Button from "../../button/Button";
+import Button from "../../elements/button/Button";
 
 export type CardProps = {
   image: string;
@@ -17,9 +17,7 @@ export type CardProps = {
     currency: string;
   };
   liked?: boolean;
-  onLike?: () => void;
   buttonText?: string;
-  onRepay?: () => void;
   isLliquidation?: boolean;
   isCurrentBid?: boolean;
   onButtonClick?: () => void;
@@ -32,8 +30,6 @@ const Card = ({
   description,
   bid,
   liked,
-  onLike,
-  onRepay,
   isLliquidation,
   buttonText,
   isCurrentBid,
@@ -57,7 +53,6 @@ const Card = ({
             type="button"
             title="Like"
             className="rounded-full p-1 supports-[backdrop-filter]:bg-white/10 backdrop-blur-lg drop-shadow"
-            onClick={onLike}
           >
             <AiOutlineHeart />
           </button>

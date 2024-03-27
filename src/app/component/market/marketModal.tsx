@@ -3,7 +3,7 @@ import Modal from "../common/Modal";
 import { useState } from "react";
 import LoanSummaryContainer from "../create-loan/LoanSummaryContainer";
 import LoanSummary from "../create-loan/LoanSummary";
-import Button from "../button/Button";
+import Button from "../elements/button/Button";
 
 type MarketModalProps = {
   open: boolean;

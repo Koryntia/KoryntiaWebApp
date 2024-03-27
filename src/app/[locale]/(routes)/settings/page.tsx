@@ -1,17 +1,13 @@
-'use client';
-import { FC } from 'react';
-import { useTranslations } from 'next-intl';
-interface pageProps {}
+"use client";
+import { useTranslations } from "next-intl";
 
-const Page: FC<pageProps> = () => {
-	const t = useTranslations('HelpCenter');
-	return (
-		<>
-			<section>
-				<div>{t('title')}</div>
-			</section>
-		</>
-	);
+const Page = () => {
+  const t = useTranslations("HelpCenter");
+  return (
+    <section>
+      <div>{t("title")}</div>
+    </section>
+  );
 };
 
 export default Page;

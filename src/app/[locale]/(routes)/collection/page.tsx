@@ -1,14 +1,10 @@
 "use client";
 import Cardcontainer from "@/app/component/common/Cards/cardcontainer";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { useAccount, useBlockNumber } from "wagmi";
 import Balance from "@/app/component/functions/BalanceFinder";
-import { LayoutRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { parse } from "path";
 
-interface pageProps {}
-
-const Page: FC<pageProps> = () => {
+const CollectionPage = () => {
   const [selectedValue, setSelectedValue] = useState<string>("1");
   const [showResult, setShowResult] = useState<boolean>(false);
   const { data, isError, isLoading } = useBlockNumber();
@@ -33,15 +29,6 @@ const Page: FC<pageProps> = () => {
   };
 
   const { address } = useAccount();
-
-  // const checkAddres = (address: Address | undefined) => {
-  //   if (address !== undefined && address.length) {
-  //     return <Balance address={address} />;
-  //   } else {
-  //     return <span>nope</span>;
-  //   }
-  //   console.log(address);
-  // };
 
   const checkAddres = (address: any) => {
     if (address !== undefined && address.length) {
@@ -75,4 +62,4 @@ const Page: FC<pageProps> = () => {
   );
 };
 
-export default Page;
+export default CollectionPage;

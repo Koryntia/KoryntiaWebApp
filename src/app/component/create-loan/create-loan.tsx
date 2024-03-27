@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { AiOutlineDollarCircle } from "react-icons/ai";
-import Button from "../button/Button";
+import Button from "../elements/button/Button";
 import CreateLoanForm from "./create-loan-form";
 import { toast } from "react-toastify";
+import { RoundedInput } from "../elements/Input";
+import Select from "../elements/select";
 
 type LoanFormProps = {
   name: string;
@@ -61,28 +63,20 @@ const CreateLoan = () => {
   useEffect(() => {
     // Perform form validation
     const isFormInvalid =
-      Number(requestAmount) === 0 ||
-      Number(collateralAmount) === 0 ||
-      Number(loanPeriod) === 0;
+      +requestAmount === 0 || +collateralAmount === 0 || +loanPeriod === 0;
 
     // Set formInvalid state based on validation result
     setFormInvalid(isFormInvalid);
   }, [requestAmount, collateralAmount, loanPeriod]);
 
-  const handleRequestAmountOptionChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const selectedValue = e.target.value;
+  const handleRequestAmountOptionChange = (selectedValue: string) => {
     const selectedOption = requestAmountOptions.find(
       (option) => option.value === selectedValue
     );
     setSelectedRequestAmountOption(selectedOption || null);
   };
 
-  const handleCollateralOptionChange = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const selectedValue = e.target.value;
+  const handleCollateralOptionChange = (selectedValue: string) => {
     const selectedOption = collateralAmountOptions.find(
       (option) => option.value === selectedValue
     );
@@ -101,29 +95,23 @@ const CreateLoan = () => {
               Request Amount
             </h4>
             <div className="bg-gray-100 px-2 py-4 flex rounded-2xl relative">
-              <input
-                type="text"
+              <RoundedInput
                 placeholder="3,000.04"
-                className="text-textBlack bg-transparent border border-transparent w-[55%] focus:outline-none"
                 value={requestAmount}
                 onChange={(e) => setRequestAmount(e.target.value)}
               />
               <div className="w-[45%] flex gap-4 justify-end self-center relative">
                 <span className="h-full text-[#C3C8CA]">{"|"}</span>
-                <div className="flex justify-center items-center relative">
-                  <AiOutlineDollarCircle className="h-7 w-7 inline text-appColor1" />
-                  <select
+                <div className="flex justify-center gap-2 items-center relative">
+                  <AiOutlineDollarCircle className="h-6 w-6 inline text-appColor1" />
+                  <Select
                     name="requestToken"
                     id="requestToken"
-                    className="bg-transparent cursor-pointer focus:border-transparent outline-none"
-                    onChange={handleRequestAmountOptionChange}
-                  >
-                    {requestAmountOptions.map((opt, idx) => (
-                      <option key={idx} value={opt.value}>
-                        {opt.name}
-                      </option>
-                    ))}
-                  </select>
+                    options={requestAmountOptions}
+                    onChange={(selectedValue: string) =>
+                      handleRequestAmountOptionChange(selectedValue)
+                    }
+                  />
                 </div>
               </div>
             </div>
@@ -133,10 +121,8 @@ const CreateLoan = () => {
               Collateral Amount
             </h4>
             <div className="bg-gray-100 px-2 py-4 flex rounded-2xl relative">
-              <input
-                type="text"
+              <RoundedInput
                 placeholder="3,000.04"
-                className="text-textBlack bg-transparent border border-transparent w-[55%] focus:outline-none"
                 value={collateralAmount}
                 onChange={(e) => setCollateralAmount(e.target.value)}
               />
@@ -144,19 +130,12 @@ const CreateLoan = () => {
                 <span className="h-full text-[#C3C8CA]">{"|"}</span>
                 <div className="flex justify-center gap-2 items-center relative">
                   <AiOutlineDollarCircle className="h-6 w-6 inline text-appColor1" />
-                  <select
+                  <Select
                     name="requestAmount"
                     id="requestAmount"
-                    // className="bg-transparent cursor-pointer focus:border-transparent outline-none"
-                    className="block w-full text-sm bg-transparent appearance-none  focus:outline-none focus:ring-0 peer"
+                    options={collateralAmountOptions}
                     onChange={handleCollateralOptionChange}
-                  >
-                    {collateralAmountOptions.map((opt, idx) => (
-                      <option key={idx} value={opt.value}>
-                        {opt.name}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 </div>
               </div>
             </div>
@@ -205,13 +184,11 @@ const CreateLoan = () => {
             </span>
             <div className="flex items-center h-full px-4">
               <CreateLoanForm
-                requestAmount={Number(requestAmount)}
-                requestToken={selectedRequestAmountOption?.name || "USDT"}
-                collateralToken={
-                  selectedCollateralAmountOptions?.name || "USDT"
-                }
-                loanPeriod={Number(loanPeriod)}
-                collateralAmount={Number(collateralAmount)}
+                requestAmount={+requestAmount}
+                requestToken={selectedRequestAmountOption?.name}
+                collateralToken={selectedCollateralAmountOptions?.name}
+                loanPeriod={+loanPeriod}
+                collateralAmount={+collateralAmount}
               />
             </div>
           </div>

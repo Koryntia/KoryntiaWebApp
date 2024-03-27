@@ -3,25 +3,10 @@ import Modal from "../common/Modal";
 import { useState } from "react";
 import LoanSummaryContainer from "../create-loan/LoanSummaryContainer";
 import LoanSummary from "../create-loan/LoanSummary";
-import Button from "../button/Button";
+import Button from "../elements/button/Button";
 
-type LiquidationModalProps = {
-  open: boolean;
-  handleClose: () => void;
-};
-
-type CurrencyOption = {
-  name: string;
-  value: string;
-};
-const collateralAmountOptions: CurrencyOption[] = [
-  { name: "USDT", value: "usdt" },
-  { name: "BTC", value: "btc" },
-  { name: "USDC", value: "usdc" },
-  { name: "ETH", value: "eth" },
-  { name: "MATIC", value: "matic" },
-  { name: "SOL", value: "sol" },
-];
+import { collateralAmountOptions } from "@/constant/liquidation";
+import { CurrencyOption, LiquidationModalProps } from "@/types/liquidation";
 
 const LiquidationModal = (props: LiquidationModalProps) => {
   const { open, handleClose } = props;
@@ -67,7 +52,6 @@ const LiquidationModal = (props: LiquidationModalProps) => {
                 <select
                   name="requestAmount"
                   id="requestAmount"
-                  // className="bg-transparent cursor-pointer focus:border-transparent outline-none"
                   className="block w-full text-sm bg-transparent appearance-none  focus:outline-none focus:ring-0 peer"
                   onChange={handleCollateralOptionChange}
                 >
@@ -86,7 +70,10 @@ const LiquidationModal = (props: LiquidationModalProps) => {
           <LoanSummaryContainer title="Summary">
             <LoanSummary title="Health Factor" amount={`40  ${"%"}`} />
             <LoanSummary title="Borrowing amount" amount={`3000,04 USDC`} />
-            <LoanSummary title="Your collateral" amount={`2,500,50 USDC`} />
+            <LoanSummary
+              title="Your collateral"
+              amount={`${collateralAmount} USDC`}
+            />
             <LoanSummary title="Colateral rate" amount={`${150}%`} />
             <LoanSummary title="Platform Fee" amount={`3.34 USDC`} />
             <LoanSummary title="Amount" amount={`386.95 USDC`} />

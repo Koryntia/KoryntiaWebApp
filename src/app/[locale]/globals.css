@@ -2,38 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-/*  Design Colors */
-  --black-1:rgba(34, 34, 34, 1);
-  --purple-1:rgba(185, 47, 255, 1);
-  --purple-3:rgba(230, 207, 242, 1);
-  --white-1:rgba(255, 255, 255, 1);
-  --white-2:rgba(247, 249, 250, 1);
-  --white-3:rgba(250, 250, 250, 1);
-  --red-1:rgba(226, 52, 52, 1);
-  --grey-1:rgba(147, 152, 154, 1)
-  /**/
-
+/*Font Families*/
+@font-face {
+  font-family: "Inter";
+  src: local("Inter"), url("../../fonts/Inter.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "Outfit";
+  src: local("Outfit"), url("../../fonts/Outfit.ttf") format("truetype");
+}
 
+@font-face {
+  font-family: "Raleway";
+  src: local("Raleway"), url("../../fonts/Raleway.ttf") format("truetype");
+}
+
+:root {
+  --inter: Inter, sans-serif;
+  --outfit: Outfit, sans-serif;
+  --raleway: Raleway, sans-serif;
+
+  /*  Design Colors */
+  --black-1: rgba(34, 34, 34, 1);
+  --purple-1: rgba(185, 47, 255, 1);
+  --purple-3: rgba(230, 207, 242, 1);
+  --white-1: rgba(255, 255, 255, 1);
+  --white-2: rgba(247, 249, 250, 1);
+  --white-3: rgba(250, 250, 250, 1);
+  --red-1: rgba(226, 52, 52, 1);
+  --grey-1: rgba(147, 152, 154, 1);
+}
 
 body {
   color: rgb(var(--foreground-rgb));
-  background:
-    rgb(var(--background-start-rgb));
+  background: rgb(var(--background-start-rgb));
 }
 
-.buttonPurple{
+.buttonPurple {
   border-radius: 8px;
-  background:  #B92FFF;
+  background: #b92fff;
   text-align: center;
   color: white;
   width: 88px;
   height: 32px;
   gap: 10px;
 }
-.disabledButton{
+
+.disabledButton {
   background-color: var(--white-3);
   color: var(--grey-1);
   width: 88px;

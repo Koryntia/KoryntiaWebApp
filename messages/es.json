@@ -20,7 +20,8 @@
     "marketplace": {
       "title": "Mercado",
       "market": "Mercado",
-      "myPositions": "Mis Posiciones"
+      "myPositions": "Mis Posiciones",
+      "liquidation": "Liquidación"
     },
     "myProfile": {
       "title": "Mi perfil",

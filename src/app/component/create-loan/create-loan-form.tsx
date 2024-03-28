@@ -1,11 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Summary from "./Summary";
 import { createNewLoan } from "@/services/api/loan-service";
-import { calculatePeriodTimestamp } from "@/utils/helper";
 import Button from "../elements/button/Button";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { useAccount } from "wagmi";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 interface FormValues {
   userAddress: string;

@@ -86,7 +86,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SideBarProps) => {
             style={{ width: "auto", height: "100%" }}
             src={"/logo.png"}
             alt="Logo"
-            className="rounded-full cursor-pointer"
+            className="cursor-pointer"
             onClick={() => router.push("/" as Route)}
           />
         </div>

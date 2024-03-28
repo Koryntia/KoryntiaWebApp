@@ -1,41 +1,16 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { AiOutlineDollarCircle } from "react-icons/ai";
+import React, { useEffect, useState } from "react";
+
+import toast from "react-hot-toast";
 import Button from "../elements/button/Button";
 import CreateLoanForm from "./create-loan-form";
-import { toast } from "react-toastify";
 import { RoundedInput } from "../elements/Input";
 import Select from "../elements/select";
-
-type LoanFormProps = {
-  name: string;
-  value: string;
-};
-
-type CurrencyOption = {
-  name: string;
-  value: string;
-};
+import IconMap from "../common/Icons";
+import { collateralAmountOptions, requestAmountOptions } from "@/constant/loan";
+import { CurrencyOption } from "@/types/liquidation";
 
 const CreateLoan = () => {
-  const requestAmountOptions: CurrencyOption[] = [
-    { name: "USDT", value: "usdt" },
-    { name: "BTC", value: "btc" },
-    { name: "USDC", value: "usdc" },
-    { name: "ETH", value: "eth" },
-    { name: "MATIC", value: "matic" },
-    { name: "SOL", value: "sol" },
-  ];
-
-  const collateralAmountOptions: CurrencyOption[] = [
-    { name: "USDT", value: "usdt" },
-    { name: "BTC", value: "btc" },
-    { name: "USDC", value: "usdc" },
-    { name: "ETH", value: "eth" },
-    { name: "MATIC", value: "matic" },
-    { name: "SOL", value: "sol" },
-  ];
-
-  const [loanPeriodValue, setLoanPeriodValue] = useState<LoanFormProps[]>([
+  const [loanPeriodValue, setLoanPeriodValue] = useState<CurrencyOption[]>([
     { name: "1 Year", value: "1" },
     { name: "2 Years", value: "2" },
     { name: "3 Years", value: "3" },
@@ -103,7 +78,9 @@ const CreateLoan = () => {
               <div className="w-[45%] flex gap-4 justify-end self-center relative">
                 <span className="h-full text-[#C3C8CA]">{"|"}</span>
                 <div className="flex justify-center gap-2 items-center relative">
-                  <AiOutlineDollarCircle className="h-6 w-6 inline text-appColor1" />
+                  <IconMap
+                    currencyName={selectedRequestAmountOption?.name || "USDT"}
+                  />
                   <Select
                     name="requestToken"
                     id="requestToken"
@@ -129,7 +106,11 @@ const CreateLoan = () => {
               <div className="w-[45%] flex gap-4 justify-end self-center relative">
                 <span className="h-full text-[#C3C8CA]">{"|"}</span>
                 <div className="flex justify-center gap-2 items-center relative">
-                  <AiOutlineDollarCircle className="h-6 w-6 inline text-appColor1" />
+                  <IconMap
+                    currencyName={
+                      selectedCollateralAmountOptions?.name || "USDT"
+                    }
+                  />
                   <Select
                     name="requestAmount"
                     id="requestAmount"

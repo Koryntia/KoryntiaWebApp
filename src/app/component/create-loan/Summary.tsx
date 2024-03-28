@@ -45,15 +45,15 @@ We do not have the criteria to use to make these calculations.
           title="Borrowing amount"
           amount={`${borrowingAmount.toString() || 0} ${currency}`}
         />
-        <LoanSummary
+        {/* <LoanSummary
           title="Your collateral"
           amount={`${collateral?.toString() || 0} ${currency}`}
-        />
+        /> */}
         <LoanSummary title="Colateral rate" amount={`${3}%`} />
-        <LoanSummary
+        {/* <LoanSummary
           title="Platform Fee"
           amount={`${platformFee.toString() || 0} ${currency}`}
-        />
+        /> */}
         <LoanSummary
           title="Period"
           amount={`${period.toString() || 0} ${"Year(s)"}`}

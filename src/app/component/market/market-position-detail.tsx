@@ -9,12 +9,18 @@ import { useEffect, useState } from "react";
 import MarketModal from "./marketModal";
 import Slider from "react-slick";
 import { calculateSlidesToShow } from "@/utils/helper";
+import Timer from "../common/Timer";
+import { Route } from "next";
 
 export const MarketPositionDetail = () => {
   const router = useRouter();
   const [isPositionName, setIsPositionName] = useState(false);
   const [sectionWidth, sectionRef] = useElementWidth<HTMLDivElement>();
   const [slidesToShow, setSlidesToShow] = useState<number>(3);
+
+  const currentDate = new Date();
+  const endDate = new Date(currentDate);
+  endDate.setDate(currentDate.getDate() + 1);
 
   useEffect(() => {
     if (sectionWidth) {
@@ -31,6 +37,7 @@ export const MarketPositionDetail = () => {
     arrows: false,
     slidesToScroll: 1,
   };
+
   return (
     <section className="p-8">
       <div className="direction  ">
@@ -70,17 +77,7 @@ export const MarketPositionDetail = () => {
                     Auction End In
                   </p>
                   <div className="pt-3">
-                    <button className="text-[16px] mr-1 not-italic font-semibold leading-[26px] tracking-[0.2px] bg-gray-200 px-1 rounded-md">
-                      03
-                    </button>
-                    {":"}
-                    <button className="text-[16px] mx-1 not-italic font-semibold leading-[26px] tracking-[0.2px] bg-gray-200 px-1 rounded-md">
-                      12
-                    </button>
-                    {":"}
-                    <button className="text-[16px] ml-1 not-italic font-semibold leading-[26px] tracking-[0.2px] bg-gray-200 px-1 rounded-md">
-                      42
-                    </button>
+                    <Timer endTime={endDate} />
                   </div>
                 </div>
                 <div>
@@ -152,6 +149,10 @@ export const MarketPositionDetail = () => {
                     description={item.description}
                     image={item.image}
                     time={item.time}
+                    onButtonClick={() => setIsPositionName(true)}
+                    onCardClick={() =>
+                      router.push(`/market/895/details` as Route)
+                    }
                   />
                 </div>
               ))}

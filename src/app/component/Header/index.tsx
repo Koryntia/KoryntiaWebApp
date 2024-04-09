@@ -35,12 +35,7 @@ const Header = ({ setSidebarOpen }: HeaderProps) => {
           </button>
 
           <Link className="block flex-shrink-0 lg:hidden" href={"/" as Route}>
-            <Image
-              width={32}
-              height={32}
-              src={"/koryntia-logo.png"}
-              alt="Logo"
-            />
+            <Image width={32} height={32} src={"/logo-sm.png"} alt="Logo" />
           </Link>
         </div>
 

@@ -20,11 +20,11 @@ export const PositionCards = ({ isDashBoard }: PositionCardsProps) => {
     if (sectionWidth) {
       if (sectionWidth > 1800) {
         setSlidesToShow(5);
-      } else if (sectionWidth < 768 && sectionWidth > 350) {
+      } else if (sectionWidth < 650 && sectionWidth > 450) {
         setSlidesToShow(2);
       } else if (sectionWidth > 1200 && sectionWidth <= 1800) {
         setSlidesToShow(4);
-      } else if (sectionWidth > 768 && sectionWidth <= 1200) {
+      } else if (sectionWidth > 650 && sectionWidth <= 1200) {
         setSlidesToShow(3);
       } else {
         setSlidesToShow(1);
@@ -58,11 +58,14 @@ export const PositionCards = ({ isDashBoard }: PositionCardsProps) => {
   }, []);
 
   return (
-    <div className="w-full aspect-square h-[300px] " ref={sectionRef}>
-      <Slider {...settings}>
+    <div className="w-full aspect-square h-[300px]" ref={sectionRef}>
+      <Slider
+        {...settings}
+        className="flex justify-between items-center w-full "
+      >
         {positionCardsData &&
           positionCardsData.map((item, index) => (
-            <div key={index} className="max-w-xs px-2 rounded-[15px] shadow">
+            <div key={index} className="max-w-sm px-2 rounded-[15px] shadow">
               <Card
                 title={item.title}
                 bid={item.bid}

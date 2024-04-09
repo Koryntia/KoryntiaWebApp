@@ -42,7 +42,7 @@ const Card: FC<CardProps> = ({
       }}
     >
       <article className="bg-gray-50 rounded-lg cursor-pointer shadow-sm">
-        <header className="max-w-xs relative">
+        <header className="max-w-sm relative">
           <Image
             src={image}
             width={1920}

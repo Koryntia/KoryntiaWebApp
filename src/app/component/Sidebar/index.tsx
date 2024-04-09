@@ -157,7 +157,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SideBarProps) => {
                         : "text-textGray"
                     }`}
                 >
-                  <MdOutlineShopTwo className="h-5 w-5" />
+                  <Image
+                    src={"/icons/positionicon.svg"}
+                    alt="ico"
+                    width={0}
+                    height={0}
+                    className="h-5 w-5"
+                  />
                   {t("marketplace.myPositions")}
                 </Link>
               </li>
@@ -172,7 +178,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SideBarProps) => {
                         : "text-textGray"
                     }`}
                 >
-                  <MdOutlineShopTwo className="h-5 w-5" />
+                  <Image
+                    src={"/icons/liquidationicon.svg"}
+                    alt="ico"
+                    width={0}
+                    height={0}
+                    className="h-5 w-5"
+                  />
                   {t("marketplace.liquidation")}
                 </Link>
               </li>

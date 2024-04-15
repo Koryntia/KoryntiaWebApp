@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import connectDatabase from "@/lib/database";
+import connectDB from "@/lib/db";
 import LoanModel from "@/models/loan-model";
 
 export async function POST(request: NextRequest) {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       // { status: 400 }
     );
   }
-  await connectDatabase();
+  await connectDB();
   try {
     const newLoan = new LoanModel(body);
     await newLoan.save();

@@ -1,12 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
-import connectDatabase from "@/lib/database";
+import connectDB from "@/lib/db";
 import UserSignee from "@/models/user-model";
 
 export async function POST(request: NextRequest) {
 
     const { signeeWalletAddress } = await request.json();
 
-    await connectDatabase();
+    await connectDB();
 
     try {
         const existingUser = await UserSignee.findOne({ signeeWalletAddress });

@@ -1,18 +1,27 @@
-import { ILoan } from "@/interfaces/loan-interface";
 import { Document, Schema, model } from "mongoose";
+import { ILoanRequest } from "@/interfaces/loan-interface";
 
-const loanSchema = new Schema<ILoan>({
+const loanSchema = new Schema<ILoanRequest>({
   userAddress: { type: String, required: true },
-  loanAmount: { type: Number, required: true },
-  loanPeriod: { type: Number, required: true },
+  loanAmount: { type: String, required: true },
   loanToken: { type: String, required: true },
-  collateralAmount: { type: Number, required: true },
+  collateralAmount: { type: String, required: true },
   collateralToken: { type: String, required: true },
-  healthFactor: { type: Number, required: true },
-  platformFee: { type: Number, required: true },
-  interestRate: { type: Number, required: true },
+  loanPeriod: { type: Date, required: true },
+  loanRequestPeriod:{ type: Date, required: true },
+  healthFactor: { type: String, required: true },
+  platformFee: { type: String, required: true },
+  interestRate: { type: String, required: true },
+  initialThreshold:{ type: String, required: true },
+  liquidationThreshold:{ type: String, required: true },
+  nftManager:{ type: String, required: true },
+  nftVersion:{ type: String, required: true },
+  healtFactor:{ type: String, required: true },
+  crationDate: { type: Date, required: true },
+}, {
+  timestamps: true,
 });
 
-const loan_model = model<ILoan>("loan_model", loanSchema);
+const LoanModel = model<ILoanRequest>("LoanModel", loanSchema);
 
-export default loan_model;
+export default LoanModel;

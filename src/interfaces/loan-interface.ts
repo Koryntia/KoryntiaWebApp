@@ -1,11 +1,18 @@
-export interface ILoan {
+export interface ILoanRequest {
   userAddress: string;
-  loanAmount: number;
+  loanAmount: string;
   loanToken: string;
-  collateralAmount: number;
+  collateralAmount: string;
   collateralToken: string;
-  loanPeriod: number;
-  healthFactor: number;
-  platformFee: number;
-  interestRate: number;
+  loanPeriod: Date;
+  loanRequestPeriod:Date;
+  healthFactor: string;
+  platformFee: string;
+  interestRate: string;
+  initialThreshold:string;
+  liquidationThreshold:string;
+  nftManager:string;
+  nftVersion:string;
+  healtFactor:string;
+  crationDate: Date;
 }

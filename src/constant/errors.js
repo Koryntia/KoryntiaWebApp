@@ -27,6 +27,7 @@ export const REQUIRED = {
     PHONE_REQUIRED: `Phone Number is required`,
     IMAGE_REQUIRED: `Image is required`,
     TITLE_REQUIRED: "Title is required. Please Enter Title",
+    WALLETADDRESS_REQUIRED: "Wallet address required"
 };
 
 export const UNIQUE = {

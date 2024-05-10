@@ -6,8 +6,6 @@ export async function POST(request: NextRequest) {
 
     const { signeeWalletAddress } = await request.json();
 
-    await connectDB();
-
     try {
         const existingUser = await UserSignee.findOne({ signeeWalletAddress });
         if (existingUser) {

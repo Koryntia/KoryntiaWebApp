@@ -18,6 +18,10 @@ const loanSchema = new Schema<ILoanRequest>({
   nftVersion:{ type: String, required: true },
   healtFactor:{ type: String, required: true },
   crationDate: { type: Date, required: true },
+  borrowedStatus:{type: String, default:'unborrowed', required: false},
+  investortAddress:{type:String, required:false},
+  updatedDate:{type:Date, required: false}
+
 }, {
   timestamps: true,
 });

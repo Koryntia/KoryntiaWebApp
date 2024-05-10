@@ -15,4 +15,7 @@ export interface ILoanRequest {
   nftVersion:string;
   healtFactor:string;
   crationDate: Date;
+  borrowedStatus: string;
+  investortAddress:string;
+  updatedDate: Date;
 }

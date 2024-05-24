@@ -7,11 +7,12 @@ export function AtLeastOneField(property: string[], validationOptions?: Validati
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
+      constraints: [property],
       validator: {
         validate(value: any, args: ValidationArguments) {
-          const relatedProperties = property;
+          const relatedProperties = args.constraints[0];
           const object = args.object as any;
-          return relatedProperties.some((key) => object[key] !== undefined && object[key] !== null);
+          return relatedProperties.some((key: string) => object[key] !== undefined && object[key] !== null);
         },
         defaultMessage(args: ValidationArguments) {
           return 'At least one field other than loanToken must be provided';

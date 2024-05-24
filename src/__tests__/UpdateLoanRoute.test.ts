@@ -16,6 +16,7 @@ describe("PUT /api/loan", () => {
   }, 1000000);
 
   afterAll(async () => {
+    await LoanModel.deleteMany({});
     await mongoose.connection.close();
   });
 

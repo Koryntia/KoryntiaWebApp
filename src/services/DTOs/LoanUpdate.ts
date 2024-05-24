@@ -9,7 +9,7 @@ enum BorrowedStatus {
 }
 
 export class UpdateLoanDto {
-  @IsNotEmpty({ message: 'User address is required.' })
+  @IsNotEmpty({ message: 'Loan token is required.' })
   @IsString()
   loanToken: string;
 
@@ -32,6 +32,7 @@ export class UpdateLoanDto {
     ],
     { message: 'At least one field other than loanToken must be provided' }
   )
+  someField: any;
 
   @IsString()
   @IsOptional()

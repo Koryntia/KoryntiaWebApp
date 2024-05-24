@@ -4,6 +4,7 @@
 
 import { testApiHandler } from "next-test-api-route-handler";
 import mongoose from "mongoose";
+import LoanModel from '@/models/loan-model';
 import * as appHandler from "@/app/api/new-loan/route";
 import config from "@/utils/config";
 
@@ -15,6 +16,7 @@ describe("newLoan API route", () => {
   }, 1000000);
 
   afterAll(async () => {
+    await LoanModel.deleteMany({});
     await mongoose.connection.close();
   });
 

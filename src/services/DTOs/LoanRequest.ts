@@ -1,5 +1,11 @@
-import { IsNotEmpty, IsString, IsDateString } from 'class-validator';
+import { IsNotEmpty, IsString, IsDateString, IsEnum } from 'class-validator';
 import { ILoanRequest } from "@/interfaces/loan-interface";
+
+enum BorrowedStatus {
+    new = 'new',
+    invested = 'invested',
+    closed = 'closed'
+}
 
 export class LoanRequestDto implements ILoanRequest {
     @IsNotEmpty({ message: 'User address is required.' })
@@ -55,8 +61,8 @@ export class LoanRequestDto implements ILoanRequest {
     nftVersion: string;
 
     @IsNotEmpty({ message: 'Borrowed status is required.' })
-    @IsString()
-    borrowedStatus: string;
+    @IsEnum(BorrowedStatus)
+    borrowedStatus: BorrowedStatus;
 
     @IsNotEmpty({ message: 'Investor Address is required.' })
     @IsString()
@@ -69,42 +75,4 @@ export class LoanRequestDto implements ILoanRequest {
     @IsNotEmpty({ message: 'Updated date is required.' })
     @IsDateString()
     updatedDate: Date;
-
-    constructor(
-        userAddress: string,
-        loanAmount: string,
-        loanToken: string,
-        collateralAmount: string,
-        collateralToken: string,
-        loanPeriod: Date,
-        loanRequestPeriod: Date,
-        healthFactor: string,
-        interestRate: string,
-        initialThreshold: string,
-        liquidationThreshold: string,
-        nftManager: string,
-        nftVersion: string,
-        creationDate: Date,
-        borrowedStatus: string,
-        investorAddress: string,
-        updatedDate: Date
-    ) {
-        this.userAddress = userAddress;
-        this.loanAmount = loanAmount;
-        this.loanToken = loanToken;
-        this.collateralAmount = collateralAmount;
-        this.collateralToken = collateralToken;
-        this.loanPeriod = loanPeriod;
-        this.loanRequestPeriod = loanRequestPeriod;
-        this.healthFactor = healthFactor;
-        this.interestRate = interestRate;
-        this.initialThreshold = initialThreshold;
-        this.liquidationThreshold = liquidationThreshold;
-        this.nftManager = nftManager;
-        this.nftVersion = nftVersion;
-        this.creationDate = creationDate;
-        this.borrowedStatus = borrowedStatus;
-        this.investorAddress = investorAddress;
-        this.updatedDate = updatedDate;
-    }
 }

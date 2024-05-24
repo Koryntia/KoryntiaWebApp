@@ -4,8 +4,9 @@ import { Type } from 'class-transformer';
 import { AtLeastOneField } from "../validators/ATLeastOneField"
 
 enum BorrowedStatus {
-  Pending = 'pending',
-  Borrowed = 'borrowed'
+  new = 'new',
+  invested = 'invested',
+  closed = 'closed'
 }
 
 export class UpdateLoanDto {

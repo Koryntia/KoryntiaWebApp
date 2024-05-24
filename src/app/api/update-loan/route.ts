@@ -25,7 +25,7 @@ export async function PUT(req: Request) {
         return NextResponse.json({ message: `The loan with the address ${data.loanToken} doesn't exist` }, { status: 404 });
       }
 
-      if (loan.borrowedStatus === 'borrowed' && data.borrowedStatus === 'borrowed') {
+      if (loan.borrowedStatus === 'invested' && data.borrowedStatus === 'invested') {
         return NextResponse.json({ message: 'This Loan is already borrowed' }, { status: 409 });
       }
 

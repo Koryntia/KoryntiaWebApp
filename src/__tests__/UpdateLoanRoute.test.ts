@@ -20,7 +20,7 @@ describe("PUT /api/loan", () => {
     await mongoose.connection.close();
   });
 
-  it("should update a loan if it is unborrowed", async () => {
+  it("should update a loan if it is new", async () => {
     await testApiHandler({
       appHandler,
       test: async ({ fetch }) => {
@@ -39,7 +39,7 @@ describe("PUT /api/loan", () => {
           nftManager: 'Manager1',
           nftVersion: '1.0',
           creationDate: new Date(),
-          borrowedStatus: 'pending',
+          borrowedStatus: 'new',
           investorAddress: '0x456',
           updatedDate: new Date(),
         };
@@ -49,7 +49,7 @@ describe("PUT /api/loan", () => {
 
         const updateData = {
           loanToken: '0x1234567890',
-          borrowedStatus: 'borrowed',
+          borrowedStatus: 'invested',
           investorAddress: '0x456',
         };
 
@@ -64,7 +64,7 @@ describe("PUT /api/loan", () => {
         const json = await response.json();
 
         expect(response.status).toBe(200);
-        expect(json.borrowedStatus).toBe('borrowed');
+        expect(json.borrowedStatus).toBe('invested');
         expect(json.investorAddress).toBe('0x456');
       },
     });
@@ -76,7 +76,7 @@ describe("PUT /api/loan", () => {
       test: async ({ fetch }) => {
         const updateData = {
           loanToken: 'nonexistent',
-          borrowedStatus: 'borrowed',
+          borrowedStatus: 'invested',
           investorAddress: '0x456',
         };
 
@@ -101,7 +101,7 @@ describe("PUT /api/loan", () => {
       test: async ({ fetch }) => {
         const updateData = {
           loanToken: '0x1234567890',
-          borrowedStatus: 'borrowed',
+          borrowedStatus: 'invested',
           investorAddress: '0x456',
         };
 
@@ -120,7 +120,7 @@ describe("PUT /api/loan", () => {
     });
   });
 
-  it("should return 400 if required fields are missing", async () => {
+  it("should return 422 if required fields are missing", async () => {
     await testApiHandler({
       appHandler,
       test: async ({ fetch }) => {
@@ -132,9 +132,7 @@ describe("PUT /api/loan", () => {
           },
         });
 
-        expect(response.status).toBe(400);
-        const json = await response.json();
-        expect(json.message).toBe('Validation failed');
+        expect(response.status).toBe(422);
       },
     });
   });

@@ -61,4 +61,23 @@ describe('POST /api/user', () => {
       },
     });
   }, 1000000);
+
+  it('should return 400 if required fields are missing', async () => {
+    await testApiHandler({
+      appHandler,
+      url: '/api/user',
+      test: async ({ fetch }) => {
+        // Send POST request with missing required fields
+        const response = await fetch({
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        });
+
+        expect(response.status).toBe(422);
+      },
+    });
+  }, 1000000);
 });

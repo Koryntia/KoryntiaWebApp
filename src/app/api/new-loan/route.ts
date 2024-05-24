@@ -11,11 +11,17 @@ export async function POST(req: Request) {
 
         try {
             const loanRequestDto = plainToInstance(LoanRequestDto, data);
-            console.log(loanRequestDto);
             await validateOrReject(loanRequestDto);
         } catch (error) {
             console.error('Validation error', error);
             return NextResponse.json({ error }, { status: 422 });
+        }
+
+        const existingLoan = await LoanModel.findOne({ loanToken: data.loanToken });
+        if (existingLoan) {
+            return NextResponse.json({
+                message: 'Loan with the provided loanToken already exists.',
+            }, { status: 409 });
         }
 
         const formattedLoanPeriod: Date = new Date(data.loanPeriod);

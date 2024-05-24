@@ -1,20 +1,31 @@
-import { NextResponse, NextRequest } from "next/server";
-import connectDB from "@/lib/db";
+import { NextResponse } from "next/server";
+import { plainToClass } from 'class-transformer';
+import { validateOrReject } from 'class-validator';
 import UserSignee from "@/models/user-model";
+import { CreateUserDto } from "@/services/DTOs/User";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
 
-    const { signeeWalletAddress } = await request.json();
+    const data = await request.json();
 
     try {
-        const existingUser = await UserSignee.findOne({ signeeWalletAddress });
+
+        try {
+            const createUserDto: CreateUserDto = plainToClass(CreateUserDto, data);
+            await validateOrReject(createUserDto);
+        } catch (error) {
+            console.error('Validation error', error);
+            return NextResponse.json({ error }, { status: 422 });
+        }
+
+        const existingUser = await UserSignee.findOne(data);
         if (existingUser) {
             return new Response(null, {
                 status: 204,
             })
         }
         const newUser = new UserSignee({
-            signeeWalletAddress
+            ...data
         });
 
         await newUser.save();

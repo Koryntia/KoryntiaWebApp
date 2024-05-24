@@ -4,7 +4,7 @@ import { ILoanRequest } from "@/interfaces/loan-interface";
 const loanSchema = new Schema<ILoanRequest>({
   userAddress: { type: String, required: true },
   loanAmount: { type: String, required: true },
-  loanToken: { type: String, required: true },
+  loanToken: { type: String, required: true, unique: true },
   collateralAmount: { type: String, required: true },
   collateralToken: { type: String, required: true },
   loanPeriod: { type: Date, required: true },

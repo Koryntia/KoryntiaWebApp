@@ -11,16 +11,21 @@ export async function PUT(req: Request) {
     try {
       const data = await req.json();
 
-      const updateLoanDto = plainToClass(UpdateLoanDto, data);
-      await validateOrReject(updateLoanDto);
-
-      const loan = await LoanModel.findOne({ loanToken: updateLoanDto.loanToken });
-
-      if (!loan) {
-        return NextResponse.json({ message: `The loan with the address ${updateLoanDto.loanToken} doesn't exist` }, { status: 404 });
+      try {
+        const updateLoanDto = plainToClass(UpdateLoanDto, data);
+        await validateOrReject(updateLoanDto);
+      } catch (error) {
+        console.error('Validation error', error);
+        return NextResponse.json({ error }, { status: 422 });
       }
 
-      if (loan.borrowedStatus === 'borrowed' && updateLoanDto.borrowedStatus === 'borrowed') {
+      const loan = await LoanModel.findOne({ loanToken: data.loanToken });
+
+      if (!loan) {
+        return NextResponse.json({ message: `The loan with the address ${data.loanToken} doesn't exist` }, { status: 404 });
+      }
+
+      if (loan.borrowedStatus === 'borrowed' && data.borrowedStatus === 'borrowed') {
         return NextResponse.json({ message: 'This Loan is already borrowed' }, { status: 409 });
       }
 

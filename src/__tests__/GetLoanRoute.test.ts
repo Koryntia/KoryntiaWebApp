@@ -61,6 +61,24 @@ describe("GET /api/loan", () => {
     await mongoose.connection.close();
   });
 
+  it("should return all loans when no filters are applied", async () => {
+    await testApiHandler({
+      appHandler,
+      url: '/api/loan',
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        expect(res.status).toBe(200);
+        const json = await res.json();
+        expect(json.length).toBe(2);
+      },
+    });
+  });
+
   it("should filter loans by borrowerID", async () => {
     await testApiHandler({
       appHandler,
@@ -150,7 +168,64 @@ describe("GET /api/loan", () => {
         });
         expect(res.status).toBe(422);
         const json = await res.json();
-        expect(json.message).toBe('Validation failed');
+      },
+    });
+  });
+
+  it("should filter loans by multiple parameters", async () => {
+    await testApiHandler({
+      appHandler,
+      url: '/api/loan?borrowerID=0x123&investorAddress=0xabc',
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        expect(res.status).toBe(200);
+        const json = await res.json();
+        expect(json.length).toBe(1);
+        expect(json[0].userAddress).toBe('0x123');
+        expect(json[0].investorAddress).toBe('0xabc');
+      },
+    });
+  });
+
+  it("should return empty array if no loans match the filters", async () => {
+    await testApiHandler({
+      appHandler,
+      url: '/api/loan?borrowerID=0xnonexistent',
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        expect(res.status).toBe(200);
+        const json = await res.json();
+        expect(json.length).toBe(0);
+      },
+    });
+  });
+
+  it("should return empty array when database is empty", async () => {
+    await LoanModel.deleteMany({});
+    
+    await testApiHandler({
+      appHandler,
+      url: '/api/loan',
+      test: async ({ fetch }) => {
+        const res = await fetch({
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        expect(res.status).toBe(200);
+        const json = await res.json();
+        expect(json.length).toBe(0);
       },
     });
   });

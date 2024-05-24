@@ -1,57 +1,46 @@
-import { NextResponse, NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import LoanModel from '@/models/loan-model';
-import { ERRORS } from '../../../constant/index';
+import { validateOrReject } from 'class-validator';
+import { plainToClass } from 'class-transformer';
+import { GetLoanDto } from '@/services/DTOs/LoanGet';
 
-interface LoanRequest {
-    loanToken?: string;
-    userAddress?: string;
-    investorAddress?: string;
-    borrowedStatus?: string;
-}
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const query = {
+    borrowerID: url.searchParams.get('borrowerID'),
+    investorAddress: url.searchParams.get('investorAddress'),
+    loanToken: url.searchParams.get('loanToken'),
+    status: url.searchParams.get('status'),
+  };
 
-export async function PUT(request: NextRequest) {
+  try {
+
     try {
-        const body: LoanRequest = await request.json();
-
-        if (!body.loanToken || !body.borrowedStatus || !body.investorAddress) {
-            return NextResponse.json({
-                status: 400,
-                message: 'You must provide at least one allowed field in the request',
-            });
-        }
-
-        const data = await LoanModel.findOne({ loanToken: body.loanToken });
-
-        if (!data) {
-            return NextResponse.json({
-                status: 404,
-                message: `The loan with the address ${body.loanToken} doesn't exist`,
-            });
-        }
-
-        if (data.borrowedStatus === 'unborrowed') {
-            data.borrowedStatus = 'borrowed';
-            data.investortAddress = body.investorAddress;
-            data.updatedDate = new Date();
-            await data.save();
-            return NextResponse.json({ data }, { status: 200 });
-        }
-
-        if (data.borrowedStatus === 'borrowed') {
-            return NextResponse.json({
-                status: 409,
-                message: 'This Loan is already borrowed',
-            });
-        }
-
-        return NextResponse.json({
-            status: 500,
-            message: 'Server Error: Failed to borrow the loan',
-        });
+      const getLoanDto = plainToClass(GetLoanDto, query);
+      await validateOrReject(getLoanDto);
     } catch (error) {
-        return NextResponse.json({
-            status: 500,
-            message: ERRORS.REQUIRED.WALLETADDRESS_REQUIRED,
-        });
+      console.error('Validation error', error);
+      return NextResponse.json({ error }, { status: 422 });
     }
+
+    const filter: any = {};
+
+    if (query.borrowerID) {
+      filter.userAddress = query.borrowerID;
+    }
+    if (query.investorAddress) {
+      filter.investorAddress = query.investorAddress;
+    }
+    if (query.loanToken) {
+      filter.loanToken = query.loanToken;
+    }
+    if (query.status) {
+      filter.borrowedStatus = query.status;
+    }
+
+    const loans = await LoanModel.find(filter);
+    return NextResponse.json(loans, { status: 200 });
+  } catch (errors) {
+    return NextResponse.json({ message: 'Validation failed', errors }, { status: 400 });
+  }
 }

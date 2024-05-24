@@ -7,15 +7,13 @@ export interface ILoanRequest {
   loanPeriod: Date;
   loanRequestPeriod:Date;
   healthFactor: string;
-  platformFee: string;
   interestRate: string;
   initialThreshold:string;
   liquidationThreshold:string;
   nftManager:string;
   nftVersion:string;
-  healtFactor:string;
-  crationDate: Date;
+  creationDate: Date;
   borrowedStatus: string;
-  investortAddress:string;
+  investorAddress:string;
   updatedDate: Date;
 }

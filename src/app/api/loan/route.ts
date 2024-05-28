@@ -1,33 +1,46 @@
-import { NextResponse, NextRequest } from "next/server";
-import connectDatabase from "@/lib/database";
-import LoanModel from "@/models/loan-model";
+import { NextResponse } from 'next/server';
+import LoanModel from '@/models/loan-model';
+import { validateOrReject } from 'class-validator';
+import { plainToClass } from 'class-transformer';
+import { GetLoanDto } from '@/services/DTOs/LoanGet';
 
-export async function POST(request: NextRequest) {
-  const body = await request.json();
-  if (!body.userAddress) {
-    return NextResponse.json(
-      { status: 400, message: "User wallet address is required" },
-      // { status: 400 }
-    );
-  }
-  if (!body) {
-    return NextResponse.json(
-      { status: 400, message: "Please provide loan details" },
-      // { status: 400 }
-    );
-  }
-  await connectDatabase();
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const query = {
+    borrowerID: url.searchParams.get('borrowerID'),
+    investorAddress: url.searchParams.get('investorAddress'),
+    loanToken: url.searchParams.get('loanToken'),
+    status: url.searchParams.get('status'),
+  };
+
   try {
-    const newLoan = new LoanModel(body);
-    await newLoan.save();
-    return NextResponse.json(
-      { status: 201, message: "Successfully created a Loan", data: newLoan },
-      // { status: 201 }
-    );
-  } catch (error) {
-    return NextResponse.json(
-      { status: 500, message: "Server Error: Failed to create Loan" },
-      // { status: 500 }
-    );
+
+    try {
+      const getLoanDto = plainToClass(GetLoanDto, query);
+      await validateOrReject(getLoanDto);
+    } catch (error) {
+      console.error('Validation error', error);
+      return NextResponse.json({ error }, { status: 422 });
+    }
+
+    const filter: any = {};
+
+    if (query.borrowerID) {
+      filter.userAddress = query.borrowerID;
+    }
+    if (query.investorAddress) {
+      filter.investorAddress = query.investorAddress;
+    }
+    if (query.loanToken) {
+      filter.loanToken = query.loanToken;
+    }
+    if (query.status) {
+      filter.borrowedStatus = query.status;
+    }
+
+    const loans = await LoanModel.find(filter);
+    return NextResponse.json(loans, { status: 200 });
+  } catch (errors) {
+    return NextResponse.json({ message: 'Validation failed', errors }, { status: 400 });
   }
 }

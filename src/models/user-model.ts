@@ -6,6 +6,7 @@ const userSigneeSchema = new Schema<IUser>({
         type: Schema.Types.Mixed,
         unique: true,
         trim: true,
+        required: true,
     },
 }, {
     timestamps: true

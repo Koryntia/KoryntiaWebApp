@@ -16,4 +16,5 @@ export interface ILoanRequest {
   borrowedStatus: string;
   investorAddress:string;
   updatedDate: Date;
+  name: string;
 }

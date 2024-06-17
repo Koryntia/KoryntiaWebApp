@@ -24,6 +24,7 @@
     "axios": "^1.6.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "cron": "^3.1.7",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
     "jest-fetch-mock": "^3.0.3",

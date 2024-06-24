@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsDateString, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsString, IsDateString, IsEnum, IsOptional } from 'class-validator';
 import { ILoanRequest } from "@/interfaces/loan-interface";
 
 enum BorrowedStatus {
@@ -75,4 +75,8 @@ export class LoanRequestDto implements ILoanRequest {
     @IsNotEmpty({ message: 'Updated date is required.' })
     @IsDateString()
     updatedDate: Date;
+
+    @IsOptional()
+    @IsString()
+    name: string;
 }

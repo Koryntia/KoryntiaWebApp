@@ -10,10 +10,6 @@ enum BorrowedStatus {
 }
 
 export class UpdateLoanDto {
-  @IsNotEmpty({ message: 'Loan token is required.' })
-  @IsString()
-  loanToken: string;
-
   @AtLeastOneField(
     [
       'userAddress',
@@ -29,11 +25,16 @@ export class UpdateLoanDto {
       'nftManager',
       'nftVersion',
       'borrowedStatus',
-      'investorAddress'
+      'investorAddress',
+      'loanToken'
     ],
     { message: 'At least one field other than loanToken must be provided' }
   )
   someField: any;
+  
+  @IsOptional()
+  @IsString()
+  loanToken: string;
 
   @IsString()
   @IsOptional()
@@ -92,4 +93,8 @@ export class UpdateLoanDto {
   @IsString()
   @IsOptional()
   investorAddress?: string;
+
+  @IsOptional()
+  @IsString()
+  name: string;
 }

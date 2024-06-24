@@ -4,7 +4,7 @@ import { ILoanRequest } from "@/interfaces/loan-interface";
 const loanSchema = new Schema<ILoanRequest>({
   userAddress: { type: String, required: true },
   loanAmount: { type: String, required: true },
-  loanToken: { type: String, required: true, unique: true },
+  loanToken: { type: String, required: true },
   collateralAmount: { type: String, required: true },
   collateralToken: { type: String, required: true },
   loanPeriod: { type: Date, required: true },
@@ -16,10 +16,10 @@ const loanSchema = new Schema<ILoanRequest>({
   nftManager:{ type: String, required: true },
   nftVersion:{ type: String, required: true },
   creationDate: { type: Date, required: true },
-  borrowedStatus:{type: String, default:'unborrowed', required: false},
+  borrowedStatus:{type: String, default:'new', required: true},
   investorAddress:{type:String, required:false},
-  updatedDate:{type:Date, required: false}
-
+  updatedDate:{type:Date, required: false},
+  name: { type: String, required: false }
 }, {
   timestamps: true,
 });

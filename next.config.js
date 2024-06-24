@@ -17,7 +17,7 @@ const nextConfig = {
       },
     ],
   },
-  useFileSystemPublicRoutes: false,
+  // useFileSystemPublicRoutes: false,
 };
 
 module.exports = nextConfig;

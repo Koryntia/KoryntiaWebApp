@@ -76,6 +76,9 @@ class LoanClass {
 	@prop({ required: false })
 	name: string;
 
+	@prop({ required: false })
+	imageUrl: string;
+
 	_id: mongoose.Types.ObjectId | string;
 
 	id: string;

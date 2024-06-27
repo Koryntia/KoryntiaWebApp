@@ -79,4 +79,8 @@ export class LoanRequestDto implements ILoanRequest {
     @IsOptional()
     @IsString()
     name: string;
+
+    @IsOptional()
+    @IsString()
+    imageUrl: string;
 }

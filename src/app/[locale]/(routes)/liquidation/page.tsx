@@ -7,12 +7,12 @@ import { LliquidationCards } from "@/app/component/liquidation";
 interface pageProps {}
 
 const page: FC<pageProps> = () => {
-  return (
-    <section className="p-8">
-      <PageTitle title="Available liquidation" />
-      <LliquidationCards positionCardsData={positionCardsData} />
-    </section>
-  );
+   return (
+      <section className="p-8">
+         <PageTitle title="Available liquidation" />
+         <LliquidationCards positionCardsData={positionCardsData} />
+      </section>
+   );
 };
 
 export default page;

@@ -1,12 +1,12 @@
 // loan.dto.ts
-import { IsString, IsNumber, IsDate, IsEnum, IsOptional, IsNotEmpty } from 'class-validator';
-import { Type } from 'class-transformer';
-import { AtLeastOneField } from "../validators/ATLeastOneField"
+import { IsString, IsNumber, IsDate, IsEnum, IsOptional, IsNotEmpty } from "class-validator";
+import { Type } from "class-transformer";
+import { AtLeastOneField } from "../validators/ATLeastOneField";
 
 enum BorrowedStatus {
-  new = 'new',
-  invested = 'invested',
-  closed = 'closed'
+   new = "new",
+   invested = "invested",
+   closed = "closed",
 }
 
 export class UpdateLoanDto {

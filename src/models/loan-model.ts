@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose";
+import { Document, Schema, model, models } from "mongoose";
 import { ILoanRequest } from "@/interfaces/loan-interface";
 
 const loanSchema = new Schema<ILoanRequest>({

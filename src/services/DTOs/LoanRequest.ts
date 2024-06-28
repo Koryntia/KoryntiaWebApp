@@ -2,9 +2,9 @@ import { IsNotEmpty, IsString, IsDateString, IsEnum, IsOptional } from 'class-va
 import { ILoanRequest } from "@/interfaces/loan-interface";
 
 enum BorrowedStatus {
-    new = 'new',
-    invested = 'invested',
-    closed = 'closed'
+   new = "new",
+   invested = "invested",
+   closed = "closed",
 }
 
 export class LoanRequestDto implements ILoanRequest {

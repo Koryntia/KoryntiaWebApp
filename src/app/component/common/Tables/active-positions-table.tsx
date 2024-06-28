@@ -97,7 +97,9 @@ const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
                      <span>{"static"}</span>
                   </td>
                   <td className="w-[20%] py-4 text-black text-center font-semibold">
-                     <span className="bg-[#8CB10C] text-[14px] rounded-3xl px-[15px] py-1 text-white">{"static"}</span>
+                     <span className="bg-[#8CB10C] text-[14px] rounded-3xl px-[15px] pt-0.5 pb-1 text-white">
+                        {key.healthFactor || 0}%
+                     </span>
                   </td>
                </tr>
             ))}

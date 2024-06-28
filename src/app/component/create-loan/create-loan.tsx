@@ -53,6 +53,8 @@ const CreateLoan = () => {
    const [collateralAmount, setCollateralAmount] = useState("");
    const [loanPeriod, setLoanPeriod] = useState("1");
    const [liquidationThreshold, setLiquidationThreshold] = useState("");
+   const [interestRate, setInterestRate] = useState("");
+   const [name, setName] = useState("");
    const [formInvalid, setFormInvalid] = useState(false);
 
    const toggleModal = () => {
@@ -66,11 +68,16 @@ const CreateLoan = () => {
    useEffect(() => {
       // Perform form validation
       const isFormInvalid =
-         +requestAmount === 0 || +collateralAmount === 0 || +loanPeriod === 0 || +liquidationThreshold === 0;
+         +requestAmount === 0 ||
+         +collateralAmount === 0 ||
+         +loanPeriod === 0 ||
+         +liquidationThreshold === 0 ||
+         +interestRate === 0 ||
+         name === "";
 
       // Set formInvalid state based on validation result
       setFormInvalid(isFormInvalid);
-   }, [requestAmount, collateralAmount, loanPeriod, liquidationThreshold]);
+   }, [requestAmount, collateralAmount, loanPeriod, liquidationThreshold, interestRate, name]);
 
    const handleRequestAmountOptionChange = (selectedValue: string) => {
       const selectedOption = requestAmountOptions.find((option) => option.value === selectedValue);
@@ -157,6 +164,20 @@ const CreateLoan = () => {
                </div>
                <div className="loan-period flex flex-col gap-2">
                   <h4 className="text-textBlack text-[16px] tracking-[0.16px] leading-[20.08px] font-inter font-medium my-1">
+                     Interest Rate
+                  </h4>
+                  <div className="bg-gray-100 px-2 rounded-2xl cursor-pointer">
+                     <input
+                        className="block px-2 py-4 w-full text-sm bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
+                        type="number"
+                        placeholder="15"
+                        value={interestRate}
+                        onChange={(e) => setInterestRate(e.target.value)}
+                     />
+                  </div>
+               </div>
+               <div className="loan-period flex flex-col gap-2">
+                  <h4 className="text-textBlack text-[16px] tracking-[0.16px] leading-[20.08px] font-inter font-medium my-1">
                      Loan Period
                   </h4>
                   <div className="bg-gray-100 px-2 rounded-2xl cursor-pointer">
@@ -173,6 +194,20 @@ const CreateLoan = () => {
                            </option>
                         ))}
                      </select>
+                  </div>
+               </div>
+               <div className="loan-period flex flex-col gap-2">
+                  <h4 className="text-textBlack text-[16px] tracking-[0.16px] leading-[20.08px] font-inter font-medium my-1">
+                     Title
+                  </h4>
+                  <div className="bg-gray-100 px-2 rounded-2xl cursor-pointer">
+                     <input
+                        className="block px-2 py-4 w-full text-sm bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
+                        type="text"
+                        placeholder="eg. Dayco Serpentine Belt"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                     />
                   </div>
                </div>
                <div className="w-full" onClick={toggleModal}>
@@ -205,6 +240,8 @@ const CreateLoan = () => {
                         loanPeriod={+loanPeriod}
                         collateralAmount={+collateralAmount}
                         liquidationThreshold={+liquidationThreshold}
+                        interestRate={+interestRate}
+                        name={name}
                      />
                   </div>
                </div>

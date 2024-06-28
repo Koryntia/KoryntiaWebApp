@@ -2,11 +2,12 @@
 import React, { useEffect, useState } from "react";
 import Card, { CardProps } from "@/app/component/common/Card";
 import useAuth from "@/hooks/useAuth";
-import { LoanData, getMyLoan } from "@/services/api/my-position";
 import useElementWidth from "@/hooks/useElementWidth";
 import { useRouter } from "next/navigation";
 import { Route } from "next";
 import { DateTime } from "luxon";
+import { getMarketLoans } from "@/services/api/market-loans";
+import { ILoanRequest } from "@/interfaces/loan-interface";
 // import LiquidationModal from "./LiquidationModal";
 
 interface PositionCardsProps {
@@ -18,21 +19,24 @@ export const AvailablePositions = ({ positionCardsData }: PositionCardsProps) =>
    const routePath = 254;
 
    const { address, logout, addressBalance } = useAuth();
-   const [loanData, setLoanData] = useState<LoanData[]>();
+   const [loanData, setLoanData] = useState<ILoanRequest[]>();
    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+   const [isLoading, setIsLoading] = useState(false);
 
    const [sectionWidth, sectionRef] = useElementWidth<HTMLDivElement>();
 
-   const handleGetMyLoanAPI = () => {
-      if (!address) return;
-      getMyLoan(address).then((data) => setLoanData(data));
+   const handleGetMarketLoans = () => {
+      setIsLoading(true);
+      getMarketLoans()
+         .then((data) => setLoanData(data))
+         .finally(() => setIsLoading(false));
    };
 
-   useEffect(() => handleGetMyLoanAPI(), []);
+   useEffect(() => handleGetMarketLoans(), []);
 
    const handleButtonClick = () => router.push(`/market/${routePath}/details` as Route);
 
-   if (!loanData) return <div>Loading...</div>;
+   if (isLoading) return <div>Loading...</div>;
 
    function calculateCountdown(date: string) {
       const targetDate = DateTime.fromISO(date);
@@ -74,11 +78,11 @@ export const AvailablePositions = ({ positionCardsData }: PositionCardsProps) =>
             loanData.map((item, index) => (
                <Card
                   key={index}
-                  title={"title"}
+                  title={item.name || "title"}
                   bid={{ amount: item.loanAmount, currency: item.loanToken }}
                   description={{ by: "static", collateral: item.collateralAmount + "%" }}
                   image={"/assets/placeholder/cover.png"}
-                  time={calculateCountdown(item.loanPeriod)}
+                  time={calculateCountdown(item.loanPeriod.toString())}
                   onButtonClick={handleButtonClick}
                />
             ))}

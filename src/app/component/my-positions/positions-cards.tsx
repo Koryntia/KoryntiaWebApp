@@ -6,6 +6,8 @@ import { positionCardsData } from "@/data";
 import Slider from "react-slick";
 import useElementWidth from "@/hooks/useElementWidth";
 import { DateTime, Duration } from "luxon";
+import { getMarketLoans } from "@/services/api/market-loans";
+import { ILoanRequest } from "@/interfaces/loan-interface";
 
 interface PositionCardsProps {
    positionCardsData: CardProps[];
@@ -43,22 +45,37 @@ export const PositionCards = ({ isDashBoard }: PositionCardsProps) => {
    };
 
    const { address, logout, addressBalance } = useAuth();
-   const [loanData, setLoanData] = useState<LoanData[]>();
+   const [loanData, setLoanData] = useState<ILoanRequest[]>();
+   const [isLoading, setIsLoading] = useState(false);
 
    const handleGetMyLoanAPI = () => {
       if (!address) return;
-      getMyLoan(address).then((data) => {
-         if (data) {
-            setLoanData(isDashBoard ? data?.slice(0, 3) : data);
-         }
-      });
+      setIsLoading(true);
+      getMyLoan(address)
+         .then((data) => {
+            if (data) {
+               setLoanData(data);
+            }
+         })
+         .finally(() => setIsLoading(false));
+   };
+
+   const handleGetMarketLoans = () => {
+      setIsLoading(true);
+      getMarketLoans()
+         .then((data) => setLoanData(data?.slice(0, 3)))
+         .finally(() => setIsLoading(false));
    };
 
    useEffect(() => {
-      handleGetMyLoanAPI();
+      if (isDashBoard) {
+         handleGetMarketLoans();
+      } else {
+         handleGetMyLoanAPI();
+      }
    }, []);
 
-   if (!loanData) return <div>Loading...</div>;
+   if (isLoading) return <div>Loading...</div>;
 
    function calculateCountdown(date: string) {
       const targetDate = DateTime.fromISO(date);
@@ -89,11 +106,11 @@ export const PositionCards = ({ isDashBoard }: PositionCardsProps) => {
                loanData.map((item, index) => (
                   <div key={index} className="max-w-xs px-2 rounded-[15px] shadow">
                      <Card
-                        title={"Title"}
+                        title={item.name || "Title"}
                         bid={{ amount: item.loanAmount, currency: item.loanToken }}
                         description={{ by: "Static", collateral: item.collateralAmount + "%" }}
                         image={positionCardsData[0].image}
-                        time={calculateCountdown(item.loanPeriod)}
+                        time={calculateCountdown(item.loanPeriod.toString())}
                      />
                   </div>
                ))}

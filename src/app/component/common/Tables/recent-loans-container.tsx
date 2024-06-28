@@ -24,7 +24,7 @@ const RecentPositionsList: FC = () => {
       getRecentLoan(address)
          .then((res) => {
             if (res) {
-               setRecentLoan(active ? res?.slice(0, 3) : res);
+               setRecentLoan(res);
             }
          })
          .catch((er) => console.error(er));
@@ -35,6 +35,9 @@ const RecentPositionsList: FC = () => {
       _getRecentLoadAPI(address);
    }, [active]);
 
+   const sortedData = recentLoan?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+   const data = active ? sortedData?.slice(0, 3) : sortedData;
+
    return (
       <div className="">
          <div className="flex justify-between w-full">
@@ -43,7 +46,7 @@ const RecentPositionsList: FC = () => {
                {tableButtonInfo}
             </button>
          </div>
-         <RecentLoans data={recentLoan} />
+         <RecentLoans data={data} />
       </div>
    );
 };

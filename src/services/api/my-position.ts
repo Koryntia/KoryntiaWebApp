@@ -1,3 +1,4 @@
+import { ILoanRequest } from "@/interfaces/loan-interface";
 import { post, get } from "@/services/utils";
 
 // export type LoanData = {
@@ -18,11 +19,12 @@ import { post, get } from "@/services/utils";
 //    __v: number;
 // };
 export type LoanData = {
+   _id: string;
+   name: string;
    liquidationThreshold: string;
    initialThreshold: string;
    loanRepayDeadline: string;
    loanRequestDeadline: string;
-   _id: string;
    userAddress: string;
    loanAmount: string;
    loanPeriod: string;
@@ -42,7 +44,7 @@ export type LoanData = {
 //    // status: 200;
 //    data: LoanData[];
 // };
-type GetMyLoanResponse = LoanData[];
+type GetMyLoanResponse = ILoanRequest[];
 
 export const getMyLoan = async (walletAddress: String) => {
    return get<GetMyLoanResponse>("/loan?borrowerID=" + walletAddress).then((data) => data.data);

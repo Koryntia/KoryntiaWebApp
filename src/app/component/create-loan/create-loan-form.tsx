@@ -11,8 +11,12 @@ import { platform } from "os";
 
 const INITIAL_THRESHOLD_PERCENTAGE = 15;
 const PLATFORM_FEE = 12;
+const INTEREST_PRECISION = 10 ** 18;
+const LOAN_TOKEN_PRICE = 10;
+const COLLATERAL_TOKEN_PRICE = 10;
 
 interface FormValues {
+   name: string;
    userAddress: string;
    loanAmount: string;
    loanToken?: string;
@@ -40,6 +44,8 @@ interface CreateLoanFormProps {
    requestToken: string;
    collateralToken: string;
    liquidationThreshold: number;
+   interestRate: number;
+   name: string;
 }
 
 const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
@@ -49,10 +55,13 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
    requestToken,
    collateralToken,
    liquidationThreshold,
+   interestRate,
+   name,
 }) => {
    const account = useAccount();
    const [connectedAccount, setConnectedAccount] = useState<string>(account?.address || "");
    const initialState: FormValues = {
+      name: name,
       userAddress: connectedAccount,
       loanAmount: requestAmount.toString(),
       loanToken: requestToken,
@@ -61,12 +70,12 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
       loanPeriod: loanPeriod.toString(),
       healthFactor: "to_be_made_dynamic",
       platformFee: ((requestAmount * PLATFORM_FEE) / 100).toFixed(4).toString(),
-      interestRate: "to_be_made_dynamic",
       investorAddress: "0x0000000000000000000000000000000000000000",
       borrowedStatus: "new",
       nftManager: "0x0000000000000000000000000000000000000000",
       nftVersion: "to_be_made_dynamic",
       liquidationThreshold: liquidationThreshold.toString(),
+      interestRate: interestRate.toString(),
       initialThreshold: ((collateralAmount * INITIAL_THRESHOLD_PERCENTAGE) / requestAmount).toFixed(4).toString(),
       loanRequestPeriod: "2",
       updatedDate: new Date().toISOString(),
@@ -87,6 +96,14 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
          platformFee: ((+formValues.loanAmount * PLATFORM_FEE) / 100).toFixed(4).toString(),
          initialThreshold: ((+formValues.collateralAmount * INITIAL_THRESHOLD_PERCENTAGE) / +formValues.loanAmount)
             .toFixed(4)
+            .toString(),
+         healthFactor: calculateHealthFactor(
+            +formValues.loanAmount,
+            +formValues.collateralAmount,
+            +formValues.liquidationThreshold,
+            +formValues.interestRate
+         )
+            .toFixed(2)
             .toString(),
       }));
    }, [formValues.loanAmount, formValues.collateralAmount]);
@@ -150,6 +167,17 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
       const loanPeriodInSeconds = loanPeriodInYears * 365 * 24 * 60 * 60;
       const loanPeriodInISOFormat = new Date(Date.now() + loanPeriodInSeconds * 1000).toISOString();
       return loanPeriodInISOFormat;
+   }
+
+   function calculateHealthFactor(
+      loanAmount: number,
+      collateralAmount: number,
+      liquidationThreshold: number,
+      interestRate: number
+   ): number {
+      const totalDebt = loanAmount * (1 + interestRate / INTEREST_PRECISION) * LOAN_TOKEN_PRICE;
+      const totalCollateral = collateralAmount * COLLATERAL_TOKEN_PRICE;
+      return (totalCollateral * liquidationThreshold) / totalDebt;
    }
 
    return (
@@ -232,6 +260,7 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
                collateralRate={formValues.interestRate}
                platformFee={formValues.platformFee}
                period={formValues.loanPeriod}
+               healthFactor={formValues.healthFactor}
             />
          </div>
          <div className="flex gap-3" onClick={handleCreateLoanSubmit}>

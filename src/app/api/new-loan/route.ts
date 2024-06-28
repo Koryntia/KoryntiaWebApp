@@ -19,10 +19,12 @@ export async function POST(req: Request) {
 
       const existingLoan = await LoanModel.findOne({ loanToken: data.loanToken });
       if (existingLoan) {
-         return NextResponse.json({
-            message: "Loan with the provided loanToken already exists.",
-            status: 409,
-         });
+         return NextResponse.json(
+            {
+               message: "Loan with the provided loanToken already exists.",
+            },
+            { status: 409 }
+         );
       }
 
       const formattedLoanPeriod: Date = new Date(data.loanPeriod);
@@ -32,22 +34,23 @@ export async function POST(req: Request) {
          ...data,
          loanPeriod: formattedLoanPeriod,
          loanRequestPeriod: formattedLoanRequestPeriod,
-         creationDate: new Date().toISOString(),
-         updatedDate: new Date().toISOString(),
       });
 
       const result = await newLoan.save();
-
-      return NextResponse.json({
-         message: "Loan created successfully.",
-         data: result,
-         status: 201,
-      });
+      return NextResponse.json(
+         {
+            message: "Loan created successfully.",
+            data: result,
+         },
+         { status: 201 }
+      );
    } catch (error) {
       console.error("Error:", error);
-      return NextResponse.json({
-         message: "Internal server error.",
-         status: 500,
-      });
+      return NextResponse.json(
+         {
+            message: "Internal server error.",
+         },
+         { status: 500 }
+      );
    }
 }

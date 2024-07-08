@@ -1,8 +1,9 @@
-import { createLoanAction } from "@/app/_action";
+// import { createLoanAction } from "@/app/_action";
 import { Input } from "@/app/component/elements/Input";
 import { TLoan } from "@/models/loan";
 
 const emptyData: TLoan = {
+  name: "",
   borrowerAddress: "",
   collateralAmount: "",
   collateralToken: "",
@@ -23,7 +24,7 @@ export default function LoanForm() {
     "use server";
     let _data: TLoan = emptyData;
     data.forEach((value, key) => (_data = { ..._data, [key]: value }));
-    await createLoanAction({ params: _data, path: "/loans" });
+    // await createLoanAction({ params: _data, path: "/loans" });
   }
 
   return (

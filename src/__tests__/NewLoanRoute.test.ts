@@ -11,6 +11,7 @@ import config from "@/utils/config";
 describe("newLoan API route", () => {
   beforeAll(async () => {
     const MongoURI = config.MONGODB_URI;
+    if (!MongoURI) throw new Error("MongoURI is not defined");
     console.log(`Connecting to ${MongoURI}`);
     await mongoose.connect(MongoURI as string);
   }, 1000000);

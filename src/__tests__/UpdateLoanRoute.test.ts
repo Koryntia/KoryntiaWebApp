@@ -11,6 +11,7 @@ import config from "@/utils/config";
 describe("PUT /api/loan/[id]", () => {
   beforeAll(async () => {
     const MongoURI = config.MONGODB_URI;
+    if (!MongoURI) throw new Error("MongoURI is not defined");
     console.log(`Connecting to ${MongoURI}`);
     await mongoose.connect(MongoURI);
   }, 1000000);
@@ -22,24 +23,24 @@ describe("PUT /api/loan/[id]", () => {
 
   it("should update a loan if it is new", async () => {
     const loanData = {
-      userAddress: '0x123',
-      loanAmount: '1000',
-      loanToken: '0x1234567890',
-      collateralAmount: '500',
-      collateralToken: 'BTC',
-      loanPeriod: new Date(Date.parse('31 Dec 2024 00:00:00 GMT')),
-      loanRequestPeriod: new Date(Date.parse('30 Nov 2024 00:00:00 GMT')),
-      healthFactor: '1.5',
-      interestRate: '5',
-      initialThreshold: '0.8',
-      liquidationThreshold: '0.5',
-      nftManager: 'Manager1',
-      nftVersion: '1.0',
+      userAddress: "0x123",
+      loanAmount: "1000",
+      loanToken: "0x1234567890",
+      collateralAmount: "500",
+      collateralToken: "BTC",
+      loanPeriod: new Date(Date.parse("31 Dec 2024 00:00:00 GMT")),
+      loanRequestPeriod: new Date(Date.parse("30 Nov 2024 00:00:00 GMT")),
+      healthFactor: "1.5",
+      interestRate: "5",
+      initialThreshold: "0.8",
+      liquidationThreshold: "0.5",
+      nftManager: "Manager1",
+      nftVersion: "1.0",
       creationDate: new Date(),
-      borrowedStatus: 'new',
-      investorAddress: '0x456',
+      borrowedStatus: "new",
+      investorAddress: "0x456",
       updatedDate: new Date(),
-      name: 'Loan1'
+      name: "Loan1",
     };
 
     const loan = new LoanModel(loanData);
@@ -47,8 +48,8 @@ describe("PUT /api/loan/[id]", () => {
     console.log(loan._id);
 
     const updateData = {
-      borrowedStatus: 'invested',
-      investorAddress: '0x456',
+      borrowedStatus: "invested",
+      investorAddress: "0x456",
     };
 
     await testApiHandler({
@@ -66,8 +67,8 @@ describe("PUT /api/loan/[id]", () => {
         const json = await response.json();
 
         expect(response.status).toBe(200);
-        expect(json.borrowedStatus).toBe('invested');
-        expect(json.investorAddress).toBe('0x456');
+        expect(json.borrowedStatus).toBe("invested");
+        expect(json.investorAddress).toBe("0x456");
       },
     });
   });
@@ -75,11 +76,11 @@ describe("PUT /api/loan/[id]", () => {
   it("should return 400 if invalid loan id is passed", async () => {
     await testApiHandler({
       appHandler,
-      params: { id: 'nonexistent' },
+      params: { id: "nonexistent" },
       test: async ({ fetch }) => {
         const updateData = {
-          borrowedStatus: 'invested',
-          investorAddress: '0x456',
+          borrowedStatus: "invested",
+          investorAddress: "0x456",
         };
 
         const response = await fetch({
@@ -98,11 +99,11 @@ describe("PUT /api/loan/[id]", () => {
   it("should return 404 if loan does not exist", async () => {
     await testApiHandler({
       appHandler,
-      params: { id: '507f1f77bcf86cd799439011' },
+      params: { id: "507f1f77bcf86cd799439011" },
       test: async ({ fetch }) => {
         const updateData = {
-          borrowedStatus: 'invested',
-          investorAddress: '0x456',
+          borrowedStatus: "invested",
+          investorAddress: "0x456",
         };
 
         const response = await fetch({
@@ -115,31 +116,33 @@ describe("PUT /api/loan/[id]", () => {
 
         expect(response.status).toBe(404);
         const json = await response.json();
-        expect(json.message).toBe(`The loan with the id 507f1f77bcf86cd799439011 doesn't exist`);
+        expect(json.message).toBe(
+          `The loan with the id 507f1f77bcf86cd799439011 doesn't exist`
+        );
       },
     });
   });
 
   it("should return 409 if loan is already borrowed", async () => {
     const loanData = {
-      userAddress: '0x123',
-      loanAmount: '1000',
-      loanToken: '0x1234567890',
-      collateralAmount: '500',
-      collateralToken: 'BTC',
-      loanPeriod: new Date(Date.parse('31 Dec 2024 00:00:00 GMT')),
-      loanRequestPeriod: new Date(Date.parse('30 Nov 2024 00:00:00 GMT')),
-      healthFactor: '1.5',
-      interestRate: '5',
-      initialThreshold: '0.8',
-      liquidationThreshold: '0.5',
-      nftManager: 'Manager1',
-      nftVersion: '1.0',
+      userAddress: "0x123",
+      loanAmount: "1000",
+      loanToken: "0x1234567890",
+      collateralAmount: "500",
+      collateralToken: "BTC",
+      loanPeriod: new Date(Date.parse("31 Dec 2024 00:00:00 GMT")),
+      loanRequestPeriod: new Date(Date.parse("30 Nov 2024 00:00:00 GMT")),
+      healthFactor: "1.5",
+      interestRate: "5",
+      initialThreshold: "0.8",
+      liquidationThreshold: "0.5",
+      nftManager: "Manager1",
+      nftVersion: "1.0",
       creationDate: new Date(),
-      borrowedStatus: 'invested',
-      investorAddress: '0x456',
+      borrowedStatus: "invested",
+      investorAddress: "0x456",
       updatedDate: new Date(),
-      name: 'Loan2'
+      name: "Loan2",
     };
 
     const loan = new LoanModel(loanData);
@@ -150,8 +153,8 @@ describe("PUT /api/loan/[id]", () => {
       params: { id: loan._id.toString() },
       test: async ({ fetch }) => {
         const updateData = {
-          borrowedStatus: 'invested',
-          investorAddress: '0x456',
+          borrowedStatus: "invested",
+          investorAddress: "0x456",
         };
 
         const response = await fetch({
@@ -164,31 +167,31 @@ describe("PUT /api/loan/[id]", () => {
 
         expect(response.status).toBe(409);
         const json = await response.json();
-        expect(json.message).toBe('This Loan is already invested');
+        expect(json.message).toBe("This Loan is already invested");
       },
     });
   });
 
   it("should return 422 if required fields are missing", async () => {
     const loanData = {
-      userAddress: '0x123',
-      loanAmount: '1000',
-      loanToken: '0x1234567890',
-      collateralAmount: '500',
-      collateralToken: 'BTC',
-      loanPeriod: new Date(Date.parse('31 Dec 2024 00:00:00 GMT')),
-      loanRequestPeriod: new Date(Date.parse('30 Nov 2024 00:00:00 GMT')),
-      healthFactor: '1.5',
-      interestRate: '5',
-      initialThreshold: '0.8',
-      liquidationThreshold: '0.5',
-      nftManager: 'Manager1',
-      nftVersion: '1.0',
+      userAddress: "0x123",
+      loanAmount: "1000",
+      loanToken: "0x1234567890",
+      collateralAmount: "500",
+      collateralToken: "BTC",
+      loanPeriod: new Date(Date.parse("31 Dec 2024 00:00:00 GMT")),
+      loanRequestPeriod: new Date(Date.parse("30 Nov 2024 00:00:00 GMT")),
+      healthFactor: "1.5",
+      interestRate: "5",
+      initialThreshold: "0.8",
+      liquidationThreshold: "0.5",
+      nftManager: "Manager1",
+      nftVersion: "1.0",
       creationDate: new Date(),
-      borrowedStatus: 'new',
-      investorAddress: '0x456',
+      borrowedStatus: "new",
+      investorAddress: "0x456",
       updatedDate: new Date(),
-      name: 'Loan3'
+      name: "Loan3",
     };
 
     const loan = new LoanModel(loanData);

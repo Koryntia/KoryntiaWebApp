@@ -13,12 +13,12 @@
     "@react-jvectormap/core": "^1.0.4",
     "@react-jvectormap/unitedstates": "^1.0.1",
     "@reduxjs/toolkit": "^1.9.7",
-    "@tanstack/react-query": "^5.17.9",
+    "@tanstack/react-query": "^5.50.1",
     "@typegoose/typegoose": "^12.0.0",
     "@types/node": "20.6.3",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
-    "@wagmi/core": "^1.4.3",
+    "@wagmi/core": "^2.11.6",
     "apexcharts": "^3.41.1",
     "autoprefixer": "10.4.15",
     "axios": "^1.6.7",
@@ -48,8 +48,8 @@
     "slick-carousel": "^1.8.1",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
-    "viem": "^2.0.3",
-    "wagmi": "^2.0.3"
+    "viem": "^2.17.3",
+    "wagmi": "^2.10.9"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

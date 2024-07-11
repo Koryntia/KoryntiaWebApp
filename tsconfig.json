@@ -25,13 +25,18 @@
 			"@/*": [
 				"./src/*"
 			]
-		}
+		},
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"strictPropertyInitialization": false
 	},
 	"include": [
 		"next-env.d.ts",
 		"**/*.ts",
 		"**/*.tsx",
-		".next/types/**/*.ts"
+		".next/types/**/*.ts",
+		"src/utils/AppError.js",
+		"src/controllers/errorControllers.ts"
 	],
 	"exclude": [
 		"node_modules"

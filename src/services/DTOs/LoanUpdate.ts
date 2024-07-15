@@ -97,4 +97,8 @@ export class UpdateLoanDto {
   @IsOptional()
   @IsString()
   name: string;
+
+  @IsOptional()
+  @IsString()
+  imageUrl: string;
 }

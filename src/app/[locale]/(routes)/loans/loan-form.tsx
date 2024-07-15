@@ -15,6 +15,7 @@ const emptyData: TLoan = {
   liquidationThreshold: "",
   lenderAddress: "",
   loanRequestDeadline: new Date(),
+  imageUrl: "",
   managerNFT: "",
   managerNFTVersion: "",
 };

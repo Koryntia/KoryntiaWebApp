@@ -3,7 +3,7 @@ import mongoose, { Document } from "mongoose";
 import LoanModel from "@/models/loan-model";
 import { ILoanRequest } from "@/interfaces/loan-interface";
 import config from "@/utils/config";
-import { getTokenPrice } from "@/utils/getPrice"; // Adjust the import path as needed
+import { getTokenPrice } from "../api/oracle"; // Adjust the import path as needed
 
 interface ILoanDocument extends ILoanRequest, Document {}
 
@@ -23,7 +23,9 @@ const calculateHealthFactorJob = new CronJob(
           const collateralAmount = parseFloat(loan.collateralAmount);
 
           const loanTokenPrice = await getTokenPrice(loan.loanToken);
-          const collateralTokenPrice = await getTokenPrice(loan.loanToken);
+          const collateralTokenPrice = await getTokenPrice(
+            loan.collateralToken
+          );
 
           const collateralValue = collateralAmount * collateralTokenPrice;
           const loanValue = loanAmount * loanTokenPrice;
@@ -47,7 +49,7 @@ const calculateHealthFactorJob = new CronJob(
   },
   null,
   true,
-  "UTC",
+  "UTC"
 );
 
 calculateHealthFactorJob.start();

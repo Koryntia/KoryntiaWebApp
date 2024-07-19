@@ -8,12 +8,11 @@ import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import init from "module-alias";
 import { platform } from "os";
+import { getPriceApi } from "@/services/api/getPrice";
 
 const INITIAL_THRESHOLD_PERCENTAGE = 15;
 const PLATFORM_FEE = 12;
 const INTEREST_PRECISION = 10 ** 18;
-const LOAN_TOKEN_PRICE = 10;
-const COLLATERAL_TOKEN_PRICE = 10;
 
 interface FormValues {
    name: string;
@@ -60,6 +59,9 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
 }) => {
    const account = useAccount();
    const [connectedAccount, setConnectedAccount] = useState<string>(account?.address || "");
+   const [loanTokenPrice, setLoanTokenPrice] = useState<number>(0);
+   const [collateralTokenPrice, setCollateralTokenPrice] = useState<number>(0);
+
    const initialState: FormValues = {
       name: name,
       userAddress: connectedAccount,
@@ -101,16 +103,18 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
             +formValues.loanAmount,
             +formValues.collateralAmount,
             +formValues.liquidationThreshold,
-            +formValues.interestRate
+            +formValues.interestRate,
+            loanTokenPrice,
+            collateralTokenPrice
          )
             .toFixed(2)
             .toString(),
       }));
-   }, [formValues.loanAmount, formValues.collateralAmount]);
+   }, [formValues.loanAmount, formValues.collateralAmount, loanTokenPrice, collateralTokenPrice]);
 
    useEffect(() => {
-      const { loanAmount, collateralAmount } = formValues;
-      if (!+loanAmount || !+collateralAmount) {
+      const { loanAmount, collateralAmount, healthFactor } = formValues;
+      if (!+loanAmount || !+collateralAmount || !+healthFactor) {
          setFormInvalid(true);
          return;
       }
@@ -173,12 +177,29 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
       loanAmount: number,
       collateralAmount: number,
       liquidationThreshold: number,
-      interestRate: number
+      interestRate: number,
+      loanTokenPrice: number,
+      collateralTokenPrice: number
    ): number {
-      const totalDebt = loanAmount * (1 + interestRate / INTEREST_PRECISION) * LOAN_TOKEN_PRICE;
-      const totalCollateral = collateralAmount * COLLATERAL_TOKEN_PRICE;
+      const totalDebt = loanAmount * (1 + interestRate / INTEREST_PRECISION) * loanTokenPrice;
+      const totalCollateral = collateralAmount * collateralTokenPrice;
       return (totalCollateral * liquidationThreshold) / totalDebt;
    }
+
+   async function getLoanTokenPrice(token: string) {
+      const data = await getPriceApi(token + "/USD");
+      setLoanTokenPrice(data?.price || 0);
+   }
+
+   async function getCollateralTokenPrice(token: string) {
+      const data = await getPriceApi(token + "/USD");
+      setCollateralTokenPrice(data?.price || 0);
+   }
+
+   useEffect(() => {
+      getCollateralTokenPrice(formValues.collateralToken || "");
+      getLoanTokenPrice(formValues.loanToken || "");
+   }, []);
 
    return (
       <section className="w-full flex flex-col gap-2">

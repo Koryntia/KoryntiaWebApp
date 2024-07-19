@@ -10,91 +10,91 @@ enum BorrowedStatus {
 }
 
 export class UpdateLoanDto {
-  @AtLeastOneField(
-    [
-      'userAddress',
-      'loanAmount',
-      'collateralAmount',
-      'collateralToken',
-      'loanPeriod',
-      'loanRequestPeriod',
-      'healthFactor',
-      'interestRate',
-      'initialThreshold',
-      'liquidationThreshold',
-      'nftManager',
-      'nftVersion',
-      'borrowedStatus',
-      'investorAddress',
-      'loanToken'
-    ],
-    { message: 'At least one field other than loanToken must be provided' }
-  )
-  someField: any;
-  
-  @IsOptional()
-  @IsString()
-  loanToken: string;
+   @AtLeastOneField(
+      [
+         "userAddress",
+         "loanAmount",
+         "collateralAmount",
+         "collateralToken",
+         "loanPeriod",
+         "loanRequestPeriod",
+         "healthFactor",
+         "interestRate",
+         "initialThreshold",
+         "liquidationThreshold",
+         "nftManager",
+         "nftVersion",
+         "borrowedStatus",
+         "investorAddress",
+         "loanToken",
+      ],
+      { message: "At least one field other than loanToken must be provided" }
+   )
+   someField: any;
 
-  @IsString()
-  @IsOptional()
-  userAddress?: string;
+   @IsOptional()
+   @IsString()
+   loanToken: string;
 
-  @IsNumber()
-  @IsOptional()
-  loanAmount?: number;
+   @IsString()
+   @IsOptional()
+   userAddress?: string;
 
-  @IsString()
-  @IsOptional()
-  collateralAmount?: string;
+   @IsNumber()
+   @IsOptional()
+   loanAmount?: number;
 
-  @IsString()
-  @IsOptional()
-  collateralToken?: string;
+   @IsString()
+   @IsOptional()
+   collateralAmount?: string;
 
-  @IsDate()
-  @IsOptional()
-  @Type(() => Date)
-  loanPeriod?: Date;
+   @IsString()
+   @IsOptional()
+   collateralToken?: string;
 
-  @IsDate()
-  @IsOptional()
-  @Type(() => Date)
-  loanRequestPeriod?: Date;
+   @IsDate()
+   @IsOptional()
+   @Type(() => Date)
+   loanPeriod?: Date;
 
-  @IsString()
-  @IsOptional()
-  healthFactor?: string;
+   @IsDate()
+   @IsOptional()
+   @Type(() => Date)
+   loanRequestPeriod?: Date;
 
-  @IsString()
-  @IsOptional()
-  interestRate?: string;
+   @IsString()
+   @IsOptional()
+   healthFactor?: string;
 
-  @IsString()
-  @IsOptional()
-  initialThreshold?: string;
+   @IsString()
+   @IsOptional()
+   interestRate?: string;
 
-  @IsString()
-  @IsOptional()
-  liquidationThreshold?: string;
+   @IsString()
+   @IsOptional()
+   initialThreshold?: string;
 
-  @IsString()
-  @IsOptional()
-  nftManager?: string;
+   @IsString()
+   @IsOptional()
+   liquidationThreshold?: string;
 
-  @IsString()
-  @IsOptional()
-  nftVersion?: string;
+   @IsString()
+   @IsOptional()
+   nftManager?: string;
 
-  @IsEnum(BorrowedStatus)
-  @IsOptional()
-  borrowedStatus?: BorrowedStatus;
+   @IsString()
+   @IsOptional()
+   nftVersion?: string;
 
-  @IsString()
-  @IsOptional()
-  investorAddress?: string;
+   @IsEnum(BorrowedStatus)
+   @IsOptional()
+   borrowedStatus?: BorrowedStatus;
 
-  @IsOptional()
-  @IsString()
-  name: string;
+   @IsString()
+   @IsOptional()
+   investorAddress?: string;
+
+   @IsOptional()
+   @IsString()
+   name: string;
 }

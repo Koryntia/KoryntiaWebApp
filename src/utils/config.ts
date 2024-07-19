@@ -1,5 +1,8 @@
 const config = {
-  MONGODB_URI: process.env.NEXT_PUBLIC_TEST_MONGODB_URI,
+   MONGODB_URI: process.env.NEXT_PUBLIC_TEST_MONGODB_URI,
+   ORACLE_CONTRACT_ADDRESS: process.env.NEXT_PUBLIC_TEST_ORACLE_CONTRACT_ADDRESS,
+   RPC_URL: process.env.NEXT_PUBLIC_TEST_RPC_URL,
+   NETWORK_ID: process.env.NEXT_PUBLIC_NETWORK_ID,
 };
-    
+
 export default config;

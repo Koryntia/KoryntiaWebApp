@@ -11,7 +11,6 @@ import config from "@/utils/config";
 describe("PUT /api/loan", () => {
   beforeAll(async () => {
     const MongoURI = config.MONGODB_URI;
-    if (!MongoURI) throw new Error("MongoURI is not defined");
     console.log(`Connecting to ${MongoURI}`);
     await mongoose.connect(MongoURI);
   }, 1000000);
@@ -65,8 +64,8 @@ describe("PUT /api/loan", () => {
         const json = await response.json();
 
         expect(response.status).toBe(200);
-        expect(json.borrowedStatus).toBe("invested");
-        expect(json.investorAddress).toBe("0x456");
+        expect(json.borrowedStatus).toBe('invested');
+        expect(json.investorAddress).toBe('0x456');
       },
     });
   });

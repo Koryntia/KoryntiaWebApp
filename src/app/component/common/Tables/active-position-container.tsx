@@ -5,10 +5,11 @@ import ActivePositionsTable from "./active-positions-table";
 import { useTranslations } from "next-intl";
 import { LoanData, getMyLoan } from "@/services/api/my-position";
 import { useAccount } from "wagmi";
+import { ILoanRequest } from "@/interfaces/loan-interface";
 
 const ActivePositions = () => {
    const t = useTranslations("ActivePositions");
-   const [loanData, setLoanData] = useState<LoanData[]>();
+   const [loanData, setLoanData] = useState<ILoanRequest[]>();
    const [active, setActive] = useState(true);
    const { address } = useAccount();
 

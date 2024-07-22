@@ -78,5 +78,17 @@ export class LoanRequestDto implements ILoanRequest {
 
    @IsOptional()
    @IsString()
+   _id: string;
+
+   @IsOptional()
+   @IsDateString()
+   createdAt: Date;
+
+   @IsOptional()
+   @IsDateString()
+   updatedAt: Date;
+
+   @IsOptional()
+   @IsString()
    name: string;
 }

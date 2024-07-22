@@ -1,4 +1,5 @@
 "use client";
+import { ILoanRequest } from "@/interfaces/loan-interface";
 import { LoanData } from "@/services/api/my-position";
 import Image from "next/image";
 import { FC } from "react";
@@ -6,7 +7,7 @@ import { FC } from "react";
 import { TbCurrencyEthereum } from "react-icons/tb";
 
 interface TablePorp {
-   data: LoanData[];
+   data: ILoanRequest[];
 }
 const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
    // const keys = Object.values(data);

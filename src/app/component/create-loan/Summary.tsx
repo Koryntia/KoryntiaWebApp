@@ -28,7 +28,6 @@ We do not have the criteria to use to make these calculations.
    // const collateralRate = 1.2;
    // const collateral = borrow * collateralRate;
    // const months = 12;
-
    return (
       <div className="py-3">
          <LoanSummaryContainer title="Summary">

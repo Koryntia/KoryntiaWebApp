@@ -101,7 +101,6 @@ export const PositionCards = ({ isDashBoard }: PositionCardsProps) => {
                      />
                   </div>
                ))} */}
-
             {loanData &&
                loanData.map((item, index) => (
                   <div key={index} className="max-w-xs px-2 rounded-[15px] shadow">

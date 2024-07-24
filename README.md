@@ -112,5 +112,3 @@ Components
 ### Application state
 
 N/A
-
-all git commit resolved

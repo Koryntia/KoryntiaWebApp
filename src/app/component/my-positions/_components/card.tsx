@@ -26,6 +26,7 @@ export type CardProps = {
 const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, isLliquidation }) => {
    const router = useRouter();
 
+<!-- <<<<<<< api-integuration -->
    return (
       <Link
          href={{

@@ -1,11 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Summary from "./Summary";
 import { createNewLoan } from "@/services/api/loan-service";
-import { calculatePeriodTimestamp } from "@/utils/helper";
 import Button from "../elements/button/Button";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { useAccount } from "wagmi";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import init from "module-alias";
 import { platform } from "os";
 import { getPriceApi } from "@/services/api/getPrice";
@@ -13,6 +12,7 @@ import { getPriceApi } from "@/services/api/getPrice";
 const INITIAL_THRESHOLD_PERCENTAGE = 15;
 const PLATFORM_FEE = 12;
 const INTEREST_PRECISION = 10 ** 18;
+import toast from "react-hot-toast";
 
 interface FormValues {
    name: string;

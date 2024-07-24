@@ -5,7 +5,7 @@ interface ButtonProps {
   variant: "solid-purple" | "solid-white" | "outlined" | string;
   styling?: string;
   isDisabled?: boolean;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Button: React.FC<ButtonProps> = ({

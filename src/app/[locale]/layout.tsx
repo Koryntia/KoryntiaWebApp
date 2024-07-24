@@ -10,7 +10,7 @@ import LoadingWrapper from "../component/common/loading-wrapper";
 import { ReduxProvider } from "@/redux/provider";
 import { WagmiWrapper } from "@/wagmi/WagmiWrapper";
 import MainContentWrapper from "../component/main-content-wrapper";
-import { ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import { cookieToInitialState } from 'wagmi'
 import { getConfig } from "@/wagmi/wagmi";
@@ -58,7 +58,7 @@ export default async function RootLayout({
             <div className="">
               <WagmiWrapper initialState={initialState}>
                 <LoadingWrapper>
-                  <ToastContainer />
+                  <Toaster />
                   <MainContentWrapper>{children}</MainContentWrapper>
                 </LoadingWrapper>
               </WagmiWrapper>

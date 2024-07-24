@@ -88,25 +88,31 @@ const SelectWalletModal = ({}) => {
                   p-[40px] h-[339px] lg:rounded-tr-3xl lg:rounded-br-2xl shadow-lg`}
           >
             <div>
-              {connectors.slice(0, 4).map((connector) => (
-                <button
-                  onClick={() => handleConnection(connector)}
-                  key={connector.uid}
-                  className="flex cursor-pointer items-center w-full mb-2 bg-white text-black rounded-lg flex-row  hover:bg-gray-100"
-                >
-                  <div className="rounded-l-lg px-3 py-2 bg-appColor1">
-                    {connector.name === "MetaMask" && <MetaMask />}
-                    {connector.name === "Safe" && <CoinBase />}
-                    {connector.name === "WalletConnect" && <WalletConnect />}
-                    {connector.name === "Injected" && <WalletConnect />}
-                  </div>
-                  <div className="flex flex-col justify-between p-4 leading-normal">
-                    <span className="text-lg font-medium tracking-tight text-gray-900 ">
-                      {connector.name}
-                    </span>
-                  </div>
-                </button>
-              ))}
+              {connectors
+                .slice(0, 4)
+                .filter(
+                  (connector, index, self) =>
+                    self.findIndex((c) => c.name === connector.name) === index
+                )
+                .map((connector) => (
+                  <button
+                    onClick={() => handleConnection(connector)}
+                    key={connector.uid}
+                    className="flex cursor-pointer items-center w-full mb-2 bg-white text-black rounded-lg flex-row  hover:bg-gray-100"
+                  >
+                    <div className="rounded-l-lg px-3 py-2 bg-appColor1">
+                      {connector.name === "MetaMask" && <MetaMask />}
+                      {connector.name === "Safe" && <CoinBase />}
+                      {connector.name === "WalletConnect" && <WalletConnect />}
+                      {connector.name === "Injected" && <WalletConnect />}
+                    </div>
+                    <div className="flex flex-col justify-between p-4 leading-normal">
+                      <span className="text-lg font-medium tracking-tight text-gray-900 ">
+                        {connector.name}
+                      </span>
+                    </div>
+                  </button>
+                ))}
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { AiOutlineHeart } from "react-icons/ai";
 import { TbCurrencyEthereum } from "react-icons/tb";
 import Button from "../../elements/button/Button";
+import { MouseEvent } from "react";
 
 export type CardProps = {
   image: string;
@@ -21,6 +22,7 @@ export type CardProps = {
   isLliquidation?: boolean;
   isCurrentBid?: boolean;
   onButtonClick?: () => void;
+  onCardClick?: () => void;
 };
 
 const Card = ({
@@ -34,9 +36,20 @@ const Card = ({
   buttonText,
   isCurrentBid,
   onButtonClick,
+  onCardClick,
 }: CardProps) => {
+  const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    onButtonClick && onButtonClick();
+  };
+
   return (
-    <article className="bg-gray-50 rounded-lg cursor-pointer shadow-sm">
+    <article
+      className="bg-gray-50 rounded-lg cursor-pointer shadow-sm"
+      onClick={(event) => {
+        event.stopPropagation(), onCardClick && onCardClick();
+      }}
+    >
       <header className="max-w-xs relative">
         <Image
           src={image}
@@ -86,7 +99,7 @@ const Card = ({
             <Button
               styling="text-xs px-6 py-2"
               variant="solid-purple"
-              onClick={onButtonClick}
+              onClick={(event) => handleButtonClick(event)}
             >
               {isLliquidation
                 ? "Liquidate"

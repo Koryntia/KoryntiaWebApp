@@ -6,47 +6,45 @@ import { plainToInstance } from "class-transformer";
 import { validateOrReject } from "class-validator";
 
 export async function POST(req: Request) {
-    try {
-        const data: ILoanRequest = await req.json();
+   try {
+      const data: ILoanRequest = await req.json();
 
-        try {
-            const loanRequestDto = plainToInstance(LoanRequestDto, data);
-            await validateOrReject(loanRequestDto);
-        } catch (error) {
-            console.error("Validation error", error);
-            return NextResponse.json({ error }, { status: 422 });
-        }
+      try {
+         const loanRequestDto = plainToInstance(LoanRequestDto, data);
+         await validateOrReject(loanRequestDto);
+      } catch (error) {
+         console.error("Validation error", error);
+         return NextResponse.json({ error }, { status: 422 });
+      }
 
-        const formattedLoanPeriod: Date = new Date(data.loanPeriod);
-        const formattedLoanRequestPeriod: Date = new Date(
-            data.loanRequestPeriod,
-        );
+      const existingLoan = await LoanModel.findOne({ loanToken: data.loanToken });
+      if (existingLoan) {
+         return NextResponse.json({
+            status: 409,
+            message: "Loan with the provided loanToken already exists.",
+         });
+      }
 
-        const imageUrl =
-            data.imageUrl ||
-            `https://api.dicebear.com/6.x/identicon/svg?seed=${encodeURIComponent(data.loanToken)}`;
-        const newLoan = new LoanModel({
-            ...data,
-            loanPeriod: formattedLoanPeriod,
-            loanRequestPeriod: formattedLoanRequestPeriod,
-            imageUrl,
-        });
+      const formattedLoanPeriod: Date = new Date(data.loanPeriod);
+      const formattedLoanRequestPeriod: Date = new Date(data.loanRequestPeriod);
 
-        const result = await newLoan.save();
-        return NextResponse.json(
-            {
-                message: "Loan created successfully.",
-                data: result,
-            },
-            { status: 201 },
-        );
-    } catch (error) {
-        console.error("Error:", error);
-        return NextResponse.json(
-            {
-                message: "Internal server error.",
-            },
-            { status: 500 },
-        );
-    }
+      const newLoan = new LoanModel({
+         ...data,
+         loanPeriod: formattedLoanPeriod,
+         loanRequestPeriod: formattedLoanRequestPeriod,
+      });
+
+      const result = await newLoan.save();
+      return NextResponse.json({
+         status: 201,
+         message: "Loan created successfully.",
+         data: result,
+      });
+   } catch (error) {
+      console.error("Error:", error);
+      return NextResponse.json({
+         status: 500,
+         message: "Internal server error.",
+      });
+   }
 }

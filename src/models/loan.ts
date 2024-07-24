@@ -4,15 +4,15 @@ import {
 	post,
 	ModelOptions,
 	Severity,
-} from "@typegoose/typegoose";
-import { FilterOutFunctionKeys } from "@typegoose/typegoose/lib/types";
-import mongoose from "mongoose";
+} from '@typegoose/typegoose';
+import { FilterOutFunctionKeys } from '@typegoose/typegoose/lib/types';
+import mongoose from 'mongoose';
 
 /**
  * We use the @post hook to convert the _id field to id of each document returned by the database.
  * This conversion is necessary because we will be sending these documents from the server to the client through Next.js Server Actions and Functions. The requirement is that the data transferred between the server and client should be serializable, and the ObjectId type is not serializable.
  */
-@post<LoanClass>("save", function (doc) {
+@post<LoanClass>('save', function (doc) {
 	if (doc) {
 		doc.id = doc._id.toString();
 		doc._id = doc.id;
@@ -20,7 +20,7 @@ import mongoose from "mongoose";
 })
 @post<LoanClass[]>(/^find/, function (docs) {
 	// @ts-ignore
-	if (this.op === "find") {
+	if (this.op === 'find') {
 		docs.forEach((doc) => {
 			doc.id = doc._id.toString();
 			doc._id = doc.id;
@@ -30,7 +30,7 @@ import mongoose from "mongoose";
 @ModelOptions({
 	schemaOptions: {
 		timestamps: true,
-		collection: "loans",
+		collection: 'loans',
 	},
 })
 class LoanClass {
@@ -70,14 +70,8 @@ class LoanClass {
 	@prop({ required: true })
 	managerNFT: string;
 
-	@prop({ default: "v1" })
+	@prop({ default: 'v1' })
 	managerNFTVersion: string;
-
-	@prop({ required: false })
-	name: string;
-
-	@prop({ required: false })
-	imageUrl: string;
 
 	_id: mongoose.Types.ObjectId | string;
 
@@ -95,6 +89,6 @@ export type _TLoan = FilterOutFunctionKeys<LoanClass>;
  * `TLoan`, is useful when interacting with the client, for example, when sending data from the server to the client.
  * We use Omit to remove the id and _id fields from the `_TLoan` type.
  */
-export type TLoan = Omit<_TLoan, "id" | "_id">;
+export type TLoan = Omit<_TLoan, 'id' | '_id'>;
 
 export { Loan, LoanClass };

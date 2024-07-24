@@ -30,8 +30,8 @@ const RecentLoans: FC<RecentLoansProps> = ({ data }) => {
                      </div>
                      <div>
                         <div className="font-semibold tracking-wider font-inter text-base">
-                           {/* {key._id} */}
-                           <span>Uzachi #4390</span>
+                           <span>{key._id}</span>
+                           {/* <span>Uzachi #4390</span> */}
                         </div>
                         <div className="font-normal font-inter text-slate-400 text-xs">
                            {/* {key.collateralAmount} */}

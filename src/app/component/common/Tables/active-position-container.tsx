@@ -1,11 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
-import positionsInfo from "@/app/data/carddata";
+import { useCallback, useEffect, useState } from "react";
 import ActivePositionsTable from "./active-positions-table";
 import { useTranslations } from "next-intl";
-import { LoanData, getMyLoan } from "@/services/api/my-position";
+import { getMyLoansByStatus, getMySuppliedLoan } from "@/services/api/my-position";
 import { useAccount } from "wagmi";
-import { ILoanRequest } from "@/interfaces/loan-interface";
+import { ILoanRequest, STATUS } from "@/interfaces/loan-interface";
 
 const ActivePositions = () => {
    const t = useTranslations("ActivePositions");
@@ -13,12 +12,12 @@ const ActivePositions = () => {
    const [active, setActive] = useState(true);
    const { address } = useAccount();
 
-   const handleGetMyLoanAPI = () => {
+   const handleGetMyLoanAPI = useCallback(() => {
       if (!address) return;
-      getMyLoan(address).then((data) => setLoanData(data));
-   };
+      getMyLoansByStatus(address, STATUS.SUPPLIED).then((data) => setLoanData(data));
+   }, [address]);
 
-   useEffect(() => handleGetMyLoanAPI(), []);
+   useEffect(() => handleGetMyLoanAPI(), [handleGetMyLoanAPI]);
 
    let activePositionsTableData = active ? loanData?.slice(0, 2) : loanData;
 

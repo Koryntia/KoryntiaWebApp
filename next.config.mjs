@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: "",
   experimental: {
-    typedRoutes: true,
-    serverActions: true,
     serverComponentsExternalPackages: ["mongoose", "@typegoose/typegoose"],
   },
   images: {
@@ -19,4 +16,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

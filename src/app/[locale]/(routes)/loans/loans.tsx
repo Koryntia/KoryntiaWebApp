@@ -1,7 +1,7 @@
-"use server";
+"use client";
 import React, { FC } from "react";
 import { _TLoan } from "@/models/loan";
-import { deleteLoanAction } from "@/app/_action";
+// import { deleteLoanAction } from "@/app/_action";
 
 type Props = {
   loans: _TLoan[];
@@ -16,7 +16,7 @@ const Loans: FC<Props> = ({ loans, results }) => {
     }
 
     // Invoke server action to delete loan
-    await deleteLoanAction({ id, path: "/loans" });
+    // await deleteLoanAction({ id, path: "/loans" });
   }
 
   return (

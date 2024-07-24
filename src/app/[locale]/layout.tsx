@@ -4,12 +4,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import { createTranslator, NextIntlClientProvider } from "next-intl";
+import { headers } from 'next/headers'
 import { notFound } from "next/navigation";
 import LoadingWrapper from "../component/common/loading-wrapper";
 import { ReduxProvider } from "@/redux/provider";
-import WagmiWrapper from "@/wagmi/WagmiWrapper";
+import { WagmiWrapper } from "@/wagmi/WagmiWrapper";
 import MainContentWrapper from "../component/main-content-wrapper";
 import { Toaster } from "react-hot-toast";
+import "react-toastify/dist/ReactToastify.css";
+import { cookieToInitialState } from 'wagmi'
+import { getConfig } from "@/wagmi/wagmi";
 
 type Props = {
   children: ReactNode;
@@ -41,6 +45,10 @@ export default async function RootLayout({
   params: { locale },
 }: Props) {
   const messages = await getMessages(locale);
+  const initialState = cookieToInitialState(
+    getConfig(),
+    headers().get('cookie'),
+  )
 
   return (
     <html lang={locale}>
@@ -48,7 +56,7 @@ export default async function RootLayout({
         <ReduxProvider>
           <NextIntlClientProvider locale={locale} messages={messages}>
             <div className="">
-              <WagmiWrapper>
+              <WagmiWrapper initialState={initialState}>
                 <LoadingWrapper>
                   <Toaster />
                   <MainContentWrapper>{children}</MainContentWrapper>

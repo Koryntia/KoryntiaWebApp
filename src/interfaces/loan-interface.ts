@@ -23,9 +23,9 @@ export interface ILoanRequest {
 }
 
 export enum STATUS {
-  "PENDING" = "PENDING",
-  "SUPPLIED" = "SUPPLIED",
-  "EXPIRED" = "EXPIRED",
-  "LIQUIDATED" = "LIQUIDATED",
-  "REFUNDED" = "REFUNDED",
+  "pending" = "pending",
+  "borrowed" = "borrowed",
+  "expired" = "expired",
+  "liquidated" = "liquidated",
+  "refunded" = "refunded",
 }

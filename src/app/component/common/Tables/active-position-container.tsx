@@ -14,7 +14,7 @@ const ActivePositions = () => {
 
    const handleGetMyLoanAPI = useCallback(() => {
       if (!address) return;
-      getMyLoansByStatus(address, STATUS.SUPPLIED).then((data) => setLoanData(data));
+      getMyLoansByStatus(address, STATUS.borrowed).then((data) => setLoanData(data));
    }, [address]);
 
    useEffect(() => handleGetMyLoanAPI(), [handleGetMyLoanAPI]);

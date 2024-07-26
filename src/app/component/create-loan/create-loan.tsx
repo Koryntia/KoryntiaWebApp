@@ -145,6 +145,7 @@ const CreateLoan = () => {
                     id="requestAmount"
                     options={collateralAmountOptions}
                     onChange={handleCollateralOptionChange}
+                    className="w-full"
                   />
                 </div>
               </div>

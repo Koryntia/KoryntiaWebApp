@@ -14,11 +14,13 @@ const page: FC<pageProps> = () => {
       <PositionCards
         suppliedLoans={false}
         gridStyle="lg:grid-cols-4"
+        description="No Positions"
       />
       <PageTitle title="Supplied" />
       <PositionCards
         suppliedLoans={true}
         gridStyle="lg:grid-cols-4"
+        description="No Positions"
       />
     </section>
   );

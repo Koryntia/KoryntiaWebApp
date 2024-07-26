@@ -1,9 +1,5 @@
-import { IsString, IsOptional, IsEnum } from 'class-validator';
-
-enum BorrowedStatus {
-  Pending = 'pending',
-  Borrowed = 'borrowed'
-}
+import { STATUS } from "@/interfaces/loan-interface";
+import { IsString, IsOptional, IsEnum } from "class-validator";
 
 export class GetLoanDto {
   @IsString()
@@ -18,7 +14,7 @@ export class GetLoanDto {
   @IsOptional()
   loanToken?: string;
 
-  @IsEnum(BorrowedStatus)
+  @IsEnum(STATUS)
   @IsOptional()
-  status?: BorrowedStatus;
+  status?: STATUS;
 }

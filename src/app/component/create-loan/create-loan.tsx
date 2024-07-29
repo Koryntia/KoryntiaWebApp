@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import toast from "react-hot-toast";
 import Button from "../elements/button/Button";
 import CreateLoanForm from "./create-loan-form";
 import { RoundedInput } from "../elements/Input";
 import Select from "../elements/select";
+import { Select as SelectComponent } from 'antd'
 import { AiOutlineDollarCircle } from "react-icons/ai";
+import { collateralAmountOptions, requestAmountOptions } from "@/app/data/currency";
+import { getPriceApi } from "@/services/api/getPrice";
 
 type LoanFormProps = {
   name: string;
@@ -18,24 +21,6 @@ type CurrencyOption = {
 };
 
 const CreateLoan = () => {
-  const requestAmountOptions: CurrencyOption[] = [
-    { name: "USDT", value: "usdt" },
-    { name: "BTC", value: "btc" },
-    { name: "USDC", value: "usdc" },
-    { name: "ETH", value: "eth" },
-    { name: "MATIC", value: "matic" },
-    { name: "SOL", value: "sol" },
-  ];
-
-  const collateralAmountOptions: CurrencyOption[] = [
-    { name: "USDT", value: "usdt" },
-    { name: "BTC", value: "btc" },
-    { name: "USDC", value: "usdc" },
-    { name: "ETH", value: "eth" },
-    { name: "MATIC", value: "matic" },
-    { name: "SOL", value: "sol" },
-  ];
-
   const loanPeriodValue: LoanFormProps[] = [
     { name: "1 Year", value: "1" },
     { name: "2 Years", value: "2" },
@@ -51,7 +36,7 @@ const CreateLoan = () => {
     collateralAmountOptions[0]
   );
   const [requestAmount, setRequestAmount] = useState("");
-  const [collateralAmount, setCollateralAmount] = useState("");
+  const [collateralAmount, setCollateralAmount] = useState(0);
   const [loanPeriod, setLoanPeriod] = useState("1");
   const [liquidationThreshold, setLiquidationThreshold] = useState("");
   const [interestRate, setInterestRate] = useState("");
@@ -92,6 +77,35 @@ const CreateLoan = () => {
     setSelectedCollateralAmountOption(selectedOption);
   };
 
+  const calculateMaxThreshold = () => {
+    if (!interestRate) return 0;
+    return Math.round((10000 * 10000 / (10000 + (Number(interestRate) * 100))) / 100)
+  }
+
+  const handlePeriodChange = (value: string[]) => {
+    console.log(`selected ${value}`);
+    setLoanPeriod(value[0])
+  };
+
+  const calculateRequestAmount = useCallback(async () => {
+    // get usd price of request token
+    // get total usdAmount
+    // get price of collateral token
+    // use total usdAmount to determine expected collateral amount
+    const requestToken = `${selectedRequestAmountOption.name}/USD`
+    const collateralToken = `${selectedCollateralAmountOptions.name}/USD`
+    const requestTokenPrice = await getPriceApi(requestToken)
+    const collateralTokenPrice = await getPriceApi(collateralToken);
+    if (requestTokenPrice && collateralTokenPrice) {
+      setCollateralAmount(requestTokenPrice?.price * Number(requestAmount) / collateralTokenPrice.price)
+    }
+  }, [requestAmount, selectedCollateralAmountOptions, selectedRequestAmountOption])
+
+  useEffect(() => {
+    if (Number(requestAmount) > 0 && selectedRequestAmountOption.value && selectedCollateralAmountOptions.value) {
+      calculateRequestAmount()
+    }
+  }, [calculateRequestAmount, requestAmount, selectedRequestAmountOption, selectedCollateralAmountOptions])
 
   return (
     <section className="">
@@ -114,7 +128,8 @@ const CreateLoan = () => {
               <div className="w-[45%] flex gap-4 justify-end self-center relative">
                 <span className="h-full text-[#C3C8CA]">{"|"}</span>
                 <div className="flex justify-center gap-2 items-center relative">
-                  <AiOutlineDollarCircle className="h-6 w-6 inline text-appColor1" />
+                  {/* <AiOutlineDollarCircle className="h-6 w-6 inline text-appColor1" />
+                   */}
                   <Select
                     name="requestToken"
                     id="requestToken"
@@ -134,35 +149,21 @@ const CreateLoan = () => {
                 placeholder="3,000.04"
                 type="number"
                 value={collateralAmount}
-                onChange={(e) => setCollateralAmount(e.target.value)}
+                onChange={(e) => setCollateralAmount(Number(e.target.value))}
+                disabled={true}
               />
+              {/* <span></span> */}
               <div className="w-[45%] flex gap-4 justify-end self-center relative">
                 <span className="h-full text-[#C3C8CA]">{"|"}</span>
                 <div className="flex justify-center gap-2 items-center relative">
-                  <AiOutlineDollarCircle className="h-6 w-6 inline text-appColor1" />
                   <Select
                     name="requestAmount"
                     id="requestAmount"
                     options={collateralAmountOptions}
                     onChange={handleCollateralOptionChange}
-                    className="w-full"
                   />
                 </div>
               </div>
-            </div>
-          </div>
-          <div className="loan-period flex flex-col gap-2">
-            <h4 className="text-textBlack text-[16px] tracking-[0.16px] leading-[20.08px] font-inter font-medium my-1">
-              Liquidation Threshold
-            </h4>
-            <div className="bg-gray-100 px-2 rounded-2xl cursor-pointer">
-              <input
-                className="block px-2 py-4 w-full text-sm bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
-                type="number"
-                placeholder="3,000.04"
-                value={liquidationThreshold}
-                onChange={(e) => setLiquidationThreshold(e.target.value)}
-              />
             </div>
           </div>
           <div className="loan-period flex flex-col gap-2">
@@ -173,9 +174,27 @@ const CreateLoan = () => {
               <input
                 className="block px-2 py-4 w-full text-sm bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
                 type="number"
-                placeholder="15"
+                placeholder="15%"
                 value={interestRate}
                 onChange={(e) => setInterestRate(e.target.value)}
+                min={0}
+                max={100}
+              />
+            </div>
+          </div>
+          <div className="loan-period flex flex-col gap-2">
+            <h4 className="text-textBlack text-[16px] tracking-[0.16px] leading-[20.08px] font-inter font-medium my-1">
+              Liquidation Threshold (Max {calculateMaxThreshold()}%)
+            </h4>
+            <div className="bg-gray-100 px-2 rounded-2xl cursor-pointer">
+              <input
+                className="block px-2 py-4 w-full text-sm bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
+                type="number"
+                placeholder="90%"
+                value={liquidationThreshold}
+                min={0}
+                max={calculateMaxThreshold()}
+                onChange={(e) => setLiquidationThreshold(e.target.value)}
               />
             </div>
           </div>
@@ -183,20 +202,22 @@ const CreateLoan = () => {
             <h4 className="text-textBlack text-[16px] tracking-[0.16px] leading-[20.08px] font-inter font-medium my-1">
               Loan Period
             </h4>
-            <div className="bg-gray-100 px-2 rounded-2xl cursor-pointer">
-              <select
-                name="loanPeriod"
+            <div className="cursor-pointer bg-gray-100">
+              <SelectComponent
                 id="loanPeriod"
-                className="block px-2 py-4 w-full text-sm bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
-                value={loanPeriod}
-                onChange={(e) => setLoanPeriod(e.target.value)}
+                size="large"
+                className="w-full text-sm bg-transparent rounded-2xl focus:outline-none focus:ring-0 bg-gray-100"
+                onChange={handlePeriodChange}
               >
-                {loanPeriodValue.map((period, idx) => (
-                  <option key={idx} value={period.value}>
-                    {period.name}
-                  </option>
-                ))}
-              </select>
+                {name}
+                {loanPeriodValue.map((period, index) => {
+                  return (
+                    <SelectComponent.Option key={index} value={period.value}>
+                      <p className="capitalize">{period.name}</p>
+                    </SelectComponent.Option>
+                  )
+                })}
+              </SelectComponent>
             </div>
           </div>
           <div className="loan-period flex flex-col gap-2">

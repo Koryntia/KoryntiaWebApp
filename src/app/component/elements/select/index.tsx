@@ -1,11 +1,12 @@
 import React from "react";
 import { SelectProps } from "@/types/select";
 import { Select as SelectComponent } from "antd";
+import Image from "next/image";
 
 function Select({ name, id, className, options, onChange }: SelectProps) {
-  const handleChange = (value: string[]) => {
+  const handleChange = (value: string) => {
     console.log(`selected ${value}`);
-    onChange(value[0]);
+    onChange(value);
   };
   return (
     <SelectComponent
@@ -19,6 +20,13 @@ function Select({ name, id, className, options, onChange }: SelectProps) {
         return (
           <SelectComponent.Option key={index} value={item.value}>
             <div key={index} className="flex gap-2 items-center">
+              <Image
+                src={item.image ? item.image : "/tokens/usdt.svg"}
+                alt="koryntia logo"
+                className=""
+                width={20}
+                height={20}
+              />
               <p className="capitalize">{item.name}</p>
             </div>
           </SelectComponent.Option>

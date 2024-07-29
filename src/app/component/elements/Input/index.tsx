@@ -17,6 +17,7 @@ export const RoundedInput = ({
   placeholder,
   className,
   value,
+  disabled,
   onChange,
 }: InputProps) => {
   return (
@@ -27,6 +28,7 @@ export const RoundedInput = ({
       className={`text-textBlack bg-transparent border border-transparent w-[55%] focus:outline-none ${className}`}
       value={value || ""}
       onChange={onChange}
+      disabled={disabled}
     />
   );
 };

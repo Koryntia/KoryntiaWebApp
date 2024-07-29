@@ -18,9 +18,9 @@ interface FormValues {
    name: string;
    userAddress: string;
    loanAmount: string;
-   loanToken?: string;
+   loanToken: string;
    collateralAmount: string;
-   collateralToken?: string;
+   collateralToken: string;
    loanPeriod: string;
    healthFactor: string;
    platformFee: string;
@@ -110,7 +110,7 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
             .toFixed(2)
             .toString(),
       }));
-   }, [formValues.loanAmount, formValues.collateralAmount, loanTokenPrice, collateralTokenPrice]);
+   }, [formValues.loanAmount, formValues.collateralAmount, loanTokenPrice, collateralTokenPrice, formValues.liquidationThreshold, formValues.interestRate]);
 
    useEffect(() => {
       const { loanAmount, collateralAmount, healthFactor } = formValues;
@@ -282,6 +282,8 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
                platformFee={formValues.platformFee}
                period={formValues.loanPeriod}
                healthFactor={formValues.healthFactor}
+               loanToken={formValues.loanToken}
+               collateralToken={formValues.collateralToken}
             />
          </div>
          <div className="flex gap-3" onClick={handleCreateLoanSubmit}>

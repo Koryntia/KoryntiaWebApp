@@ -4,15 +4,13 @@ import { createNewLoan } from "@/services/api/loan-service";
 import Button from "../elements/button/Button";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { useAccount } from "wagmi";
-// import { toast } from "react-toastify";
-import init from "module-alias";
-import { platform } from "os";
 import { getPriceApi } from "@/services/api/getPrice";
 
 const INITIAL_THRESHOLD_PERCENTAGE = 15;
 const PLATFORM_FEE = 12;
 const INTEREST_PRECISION = 10 ** 18;
 import toast from "react-hot-toast";
+import { STATUS } from "@/interfaces/loan-interface";
 
 interface FormValues {
    name: string;
@@ -21,19 +19,18 @@ interface FormValues {
    loanToken: string;
    collateralAmount: string;
    collateralToken: string;
-   loanPeriod: string;
+   loanPeriod: Date;
+   loanRequestPeriod: Date;
    healthFactor: string;
-   platformFee: string;
    interestRate: string;
    investorAddress: string;
-   borrowedStatus: string;
+   loanStatus: STATUS;
    nftManager: string;
    nftVersion: string;
    liquidationThreshold: string;
    initialThreshold: string;
-   loanRequestPeriod: string;
-   creationDate: string;
-   updatedDate: string;
+   creationDate: Date;
+   updatedDate: Date;
 }
 
 interface CreateLoanFormProps {
@@ -42,6 +39,7 @@ interface CreateLoanFormProps {
    collateralAmount: number;
    requestToken: string;
    collateralToken: string;
+   initialThreshold: number;
    liquidationThreshold: number;
    interestRate: number;
    name: string;
@@ -54,6 +52,7 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
    requestToken,
    collateralToken,
    liquidationThreshold,
+   initialThreshold,
    interestRate,
    name,
 }) => {
@@ -61,6 +60,7 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
    const [connectedAccount, setConnectedAccount] = useState<string>(account?.address || "");
    const [loanTokenPrice, setLoanTokenPrice] = useState<number>(0);
    const [collateralTokenPrice, setCollateralTokenPrice] = useState<number>(0);
+   const platformFee = ((requestAmount * PLATFORM_FEE) / 100).toFixed(4).toString();
 
    const initialState: FormValues = {
       name: name,
@@ -69,19 +69,18 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
       loanToken: requestToken,
       collateralAmount: collateralAmount.toString(),
       collateralToken: collateralToken,
-      loanPeriod: loanPeriod.toString(),
+      loanPeriod: convertYearsToDateFormat(loanPeriod.toString()),
       healthFactor: "to_be_made_dynamic",
-      platformFee: ((requestAmount * PLATFORM_FEE) / 100).toFixed(4).toString(),
       investorAddress: "0x0000000000000000000000000000000000000000",
-      borrowedStatus: "new",
+      loanStatus: STATUS.pending,
       nftManager: "0x0000000000000000000000000000000000000000",
       nftVersion: "to_be_made_dynamic",
       liquidationThreshold: liquidationThreshold.toString(),
       interestRate: interestRate.toString(),
-      initialThreshold: ((collateralAmount * INITIAL_THRESHOLD_PERCENTAGE) / requestAmount).toFixed(4).toString(),
-      loanRequestPeriod: "2",
-      updatedDate: new Date().toISOString(),
-      creationDate: new Date().toISOString(),
+      initialThreshold: initialThreshold.toString(),
+      loanRequestPeriod: convertDaysToDateFormat("30"),
+      updatedDate: new Date(),
+      creationDate: new Date(),
    };
 
    const [formValues, setFormValues] = useState<FormValues>(initialState);
@@ -96,9 +95,6 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
       setFormValues((prevValues) => ({
          ...prevValues,
          platformFee: ((+formValues.loanAmount * PLATFORM_FEE) / 100).toFixed(4).toString(),
-         initialThreshold: ((+formValues.collateralAmount * INITIAL_THRESHOLD_PERCENTAGE) / +formValues.loanAmount)
-            .toFixed(4)
-            .toString(),
          healthFactor: calculateHealthFactor(
             +formValues.loanAmount,
             +formValues.collateralAmount,
@@ -138,6 +134,8 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
             return;
          }
 
+         console.log(formValues)
+
          if (formInvalid) {
             toast.error("Please fill all the required fields");
             return;
@@ -145,31 +143,37 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
 
          const data = {
             ...formValues,
-            loanPeriod: convertYearsToISOFormat(formValues.loanPeriod),
-            loanRequestPeriod: convertYearsToISOFormat(formValues.loanRequestPeriod),
          };
 
          const response: any = await createNewLoan(data);
+         console.log(response)
 
-         if (response.status === 201) {
-            toast.success(response.message || "Successfully created a Loan");
-         } else if (response.status === 400) {
-            toast.error(response.message || "Failed to create loan");
+         if (response.data.status === 201) {
+            toast.success(response.data.message || "Successfully created a Loan");
+         } else if (response.data.status === 400) {
+            toast.error(response.data.message || "Failed to create loan");
          } else {
-            toast.error(response.message || "Server Error: Failed to create Loan");
+            toast.error(response.data.message || "Server Error: Failed to create Loan");
          }
-
          setIsSubmitting(false);
       } catch (error) {
+         console.log(error)
          toast.error("An error occurred while creating the loan. Please try again.");
          setIsSubmitting(false);
       }
    }
 
-   function convertYearsToISOFormat(years: string): string {
+   function convertYearsToDateFormat(years: string): Date {
       const loanPeriodInYears = Number(years);
       const loanPeriodInSeconds = loanPeriodInYears * 365 * 24 * 60 * 60;
-      const loanPeriodInISOFormat = new Date(Date.now() + loanPeriodInSeconds * 1000).toISOString();
+      const loanPeriodInISOFormat = new Date(Date.now() + loanPeriodInSeconds * 1000);
+      return loanPeriodInISOFormat;
+   }
+
+   function convertDaysToDateFormat(days: string): Date {
+      const loanPeriodInDays = Number(days);
+      const loanPeriodInSeconds = loanPeriodInDays * 24 * 60 * 60;
+      const loanPeriodInISOFormat = new Date(Date.now() + loanPeriodInSeconds * 1000);
       return loanPeriodInISOFormat;
    }
 
@@ -199,7 +203,7 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
    useEffect(() => {
       getCollateralTokenPrice(formValues.collateralToken || "");
       getLoanTokenPrice(formValues.loanToken || "");
-   }, []);
+   }, [formValues.collateralToken, formValues.loanToken]);
 
    return (
       <section className="w-full flex flex-col gap-2">
@@ -261,14 +265,13 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
                      Loan Period
                   </h4>
                   <div className="bg-gray-100 px-2 py-4 rounded-2xl cursor-pointer">
-                     <select
-                        name="loanPeriod"
+                     <span
                         id="loanPeriod"
                         className="bg-transparent w-full focus:border-transparent outline-none cursor-pointer"
-                        defaultValue={formValues.loanPeriod}
+                        defaultValue={loanPeriod}
                      >
-                        <option>{formValues.loanPeriod} Year</option>
-                     </select>
+                        {loanPeriod} Year
+                     </span>
                   </div>
                </div>
             </form>
@@ -279,8 +282,8 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
                borrowingAmount={formValues.loanAmount}
                collateral={formValues?.collateralAmount}
                collateralRate={formValues.interestRate}
-               platformFee={formValues.platformFee}
-               period={formValues.loanPeriod}
+               platformFee={platformFee}
+               period={loanPeriod.toString()}
                healthFactor={formValues.healthFactor}
                loanToken={formValues.loanToken}
                collateralToken={formValues.collateralToken}

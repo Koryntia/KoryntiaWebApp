@@ -23,6 +23,7 @@
     "apexcharts": "^3.41.1",
     "autoprefixer": "10.4.15",
     "axios": "^1.6.7",
+    "blo": "^1.2.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cron": "^3.1.7",

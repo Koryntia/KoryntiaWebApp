@@ -47,3 +47,11 @@ export const calculateTPass = (startDate: any) => {
 
   return { hours, minutes, seconds };
 };
+
+export const truncateAddress = (address: string) => {
+  return (
+    address.slice(0, 5) +
+    "..." +
+    address.slice(address.length - 5, address.length)
+  );
+};

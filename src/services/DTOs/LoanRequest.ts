@@ -7,12 +7,6 @@ import {
 } from "class-validator";
 import { ILoanRequest, STATUS } from "@/interfaces/loan-interface";
 
-enum BorrowedStatus {
-  new = "new",
-  invested = "invested",
-  closed = "closed",
-}
-
 export class LoanRequestDto implements ILoanRequest {
   @IsNotEmpty({ message: "User address is required." })
   @IsString()
@@ -84,15 +78,15 @@ export class LoanRequestDto implements ILoanRequest {
 
   @IsOptional()
   @IsString()
-  _id: string;
+  _id?: string;
 
   @IsOptional()
   @IsDateString()
-  createdAt: Date;
+  createdAt?: Date;
 
   @IsOptional()
   @IsDateString()
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @IsOptional()
   @IsString()

@@ -4,6 +4,7 @@ export type LoanData = {
   _id: string;
   userAddress: string;
   loanToken: string;
+  loanAmount: string;
   collateralToken: string;
   collateralAmount: number;
   liquidationThreshold: number;

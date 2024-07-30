@@ -24,9 +24,7 @@ export async function GET(req: Request) {
       console.error("Validation error", error);
       return NextResponse.json({ error }, { status: 422 });
     }
-
     const filter: any = {};
-
     if (query.borrowerID) {
       filter.userAddress = query.borrowerID;
     }
@@ -39,7 +37,6 @@ export async function GET(req: Request) {
     if (query.status) {
       filter.loanStatus = query.status;
     }
-
     const loans = await LoanModel.find(filter);
     return NextResponse.json(loans, { status: 200 });
   } catch (errors) {

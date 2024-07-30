@@ -38,7 +38,7 @@ const CreateLoan = () => {
   const [requestAmount, setRequestAmount] = useState("");
   const [collateralAmount, setCollateralAmount] = useState(0);
   const [loanPeriod, setLoanPeriod] = useState("1");
-  const [liquidationThreshold, setLiquidationThreshold] = useState("");
+  const [initialThreshold, setInitialThreshold] = useState("");
   const [interestRate, setInterestRate] = useState("");
   const [name, setName] = useState("");
   const [formInvalid, setFormInvalid] = useState(false);
@@ -57,13 +57,13 @@ const CreateLoan = () => {
       +requestAmount === 0 ||
       +collateralAmount === 0 ||
       +loanPeriod === 0 ||
-      +liquidationThreshold === 0 ||
+      +initialThreshold === 0 ||
       +interestRate === 0 ||
       name === "";
 
     // Set formInvalid state based on validation result
     setFormInvalid(isFormInvalid);
-  }, [requestAmount, collateralAmount, loanPeriod, liquidationThreshold, interestRate, name]);
+  }, [requestAmount, collateralAmount, loanPeriod, initialThreshold, interestRate, name]);
 
   const handleRequestAmountOptionChange = (selectedValue: string) => {
     const selectedOption = requestAmountOptions.find((option) => option.value === selectedValue);
@@ -191,10 +191,10 @@ const CreateLoan = () => {
                 className="block px-2 py-4 w-full text-sm bg-transparent appearance-none focus:outline-none focus:ring-0 peer"
                 type="number"
                 placeholder="90%"
-                value={liquidationThreshold}
+                value={initialThreshold}
                 min={0}
                 max={calculateMaxThreshold()}
-                onChange={(e) => setLiquidationThreshold(e.target.value)}
+                onChange={(e) => setInitialThreshold(e.target.value)}
               />
             </div>
           </div>
@@ -268,7 +268,8 @@ const CreateLoan = () => {
                     collateralToken={selectedCollateralAmountOptions?.name}
                     loanPeriod={+loanPeriod}
                     collateralAmount={+collateralAmount}
-                    liquidationThreshold={+liquidationThreshold}
+                    liquidationThreshold={calculateMaxThreshold()}
+                    initialThreshold={+initialThreshold}
                     interestRate={+interestRate}
                     name={name}
                   />

@@ -9,9 +9,6 @@ export type LiquidationModalProps = {
 export type CurrencyOption = {
   name: string;
   value: string;
-};
-
-export type CurrencyInfo = {
   address: string;
   image: string;
 };

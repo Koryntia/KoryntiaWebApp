@@ -36,9 +36,8 @@ export const AvailablePositions = () => {
    function calculateCountdown(date: string) {
       const targetDate = DateTime.fromISO(date);
       const now = DateTime.now();
-      const diff = targetDate.diff(now, ["hours", "minutes", "seconds"]);
-
-      const countdown = `${Math.floor(diff.hours)}h ${Math.floor(diff.minutes)}m ${Math.floor(diff.seconds)}s`;
+      const diff = targetDate.diff(now, ["days", "hours", "minutes", "seconds"]);
+      const countdown = `${Math.floor(diff.days)}d ${Math.floor(diff.hours)}h ${Math.floor(diff.minutes)}m ${Math.floor(diff.seconds)}s`;
       return countdown;
    }
    return (

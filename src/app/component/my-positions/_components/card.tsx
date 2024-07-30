@@ -6,6 +6,7 @@ import { TbCurrencyEthereum } from "react-icons/tb";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Button from "../../elements/button/Button";
+import { getImage } from "@/shared/constant";
 
 export type CardProps = {
    image: string;
@@ -14,6 +15,7 @@ export type CardProps = {
    description: {
       by: string;
       collateral: string;
+      collateralToken: string;
    };
    bid: {
       amount: string | number;
@@ -59,7 +61,17 @@ const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, isLl
                   <h1 className="scroll-m-20 text-[16px] font-inter font-semibold tracking-tight">{title}</h1>
                   <p className="text-xs font-inter text-gray-500 flex items-center gap-3 leading-[15.6px] tracking-[0.12px] ">
                      <span>By {description.by}</span>
-                     <span>Collateral {description.collateral}</span>
+                  </p>
+                  <p className="text-xs flex items-center gap-3 leading-[15.6px] tracking-[0.12px] mt-2 ">
+                     Collateral:<span className="flex items-center justify-center gap-1">
+                        <Image
+                           src={getImage(description.collateralToken)}
+                           alt="koryntia logo"
+                           className=""
+                           width={15}
+                           height={15}
+                        />
+                        <span>{Number(description.collateral).toFixed(3)} {description.collateralToken}</span></span>
                   </p>
                </main>
                <footer className="flex items-center justify-between">
@@ -67,7 +79,13 @@ const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, isLl
                      <p className="flex flex-col gap-1">
                         <span className="text-[10px] font-outfit text-gray-500">Your Bid</span>
                         <span className="flex font-inter gap-1 justify-between items-center">
-                           <TbCurrencyEthereum className="w-5 h-5 text-purple-500" />{" "}
+                           <Image
+                              src={getImage(bid.currency)}
+                              alt="koryntia logo"
+                              className=""
+                              width={20}
+                              height={20}
+                           />
                            <span className="text-[14px] text-black222">
                               {bid.amount} {bid.currency}
                            </span>

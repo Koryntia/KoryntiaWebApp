@@ -91,9 +91,8 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
    function calculateCountdown(date: string) {
       const targetDate = DateTime.fromISO(date);
       const now = DateTime.now();
-      const diff = targetDate.diff(now, ["hours", "minutes", "seconds"]);
-
-      const countdown = `${Math.floor(diff.hours)}h ${Math.floor(diff.minutes)}m ${Math.floor(diff.seconds)}s`;
+      const diff = targetDate.diff(now, ["days", "hours", "minutes", "seconds"]);
+      const countdown = `${Math.floor(diff.days)}d ${Math.floor(diff.hours)}h ${Math.floor(diff.minutes)}m ${Math.floor(diff.seconds)}s`;
       return countdown;
    }
 
@@ -106,7 +105,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
                      <Card
                         title={item.name || "Title"}
                         bid={{ amount: item.loanAmount, currency: item.loanToken }}
-                        description={{ by: "Static", collateral: item.collateralAmount + "%" }}
+                        description={{ by: "Static", collateral: item.collateralAmount, collateralToken: item.collateralToken }}
                         image={positionCardsData[0].image}
                         time={calculateCountdown(item.loanPeriod.toString())}
                      />

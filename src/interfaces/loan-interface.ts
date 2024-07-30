@@ -1,5 +1,5 @@
 export interface ILoanRequest {
-  _id: string;
+  _id?: string;
   userAddress: string;
   loanAmount: string;
   loanToken: string;
@@ -17,8 +17,8 @@ export interface ILoanRequest {
   loanStatus: string;
   investorAddress: string;
   updatedDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   name: string;
 }
 

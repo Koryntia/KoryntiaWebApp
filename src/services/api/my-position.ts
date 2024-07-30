@@ -30,9 +30,9 @@ export type LoanData = {
 type GetMyLoanResponse = ILoanRequest[];
 
 export const getMyLoan = async (walletAddress: String) => {
-  return get<GetMyLoanResponse>("/loan?borrowerID=" + walletAddress).then(
-    (data) => data.data
-  );
+  return get<GetMyLoanResponse>(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/loan?borrowerID=` + walletAddress
+  ).then((data) => data.data);
 };
 
 export const getMySuppliedLoan = async (walletAddress: String) => {

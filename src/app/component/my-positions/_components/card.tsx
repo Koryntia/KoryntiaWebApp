@@ -15,7 +15,7 @@ export type CardProps = {
    description: {
       by: string;
       collateral: string;
-      collateralToken: string;
+      collateralToken?: string;
    };
    bid: {
       amount: string | number;
@@ -64,13 +64,14 @@ const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, isLl
                   </p>
                   <p className="text-xs flex items-center gap-3 leading-[15.6px] tracking-[0.12px] mt-2 ">
                      Collateral:<span className="flex items-center justify-center gap-1">
-                        <Image
+                        {description.collateralToken && <Image
                            src={getImage(description.collateralToken)}
                            alt="koryntia logo"
                            className=""
                            width={15}
                            height={15}
-                        />
+                        />}
+
                         <span>{Number(description.collateral).toFixed(3)} {description.collateralToken}</span></span>
                   </p>
                </main>

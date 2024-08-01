@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Card, { CardProps } from "@/app/component/common/Card";
 import useAuth from "@/hooks/useAuth";
-import { LoanData, getMyLoan } from "@/services/api/my-position";
+import { getMyLoan } from "@/services/api/my-position";
 import LiquidationModal from "./LiquidationModal";
 import { getLiquidationLoans } from "@/services/api/liquidation-loans";
 import { ILoanRequest } from "@/interfaces/loan-interface";
@@ -51,7 +51,8 @@ export const LliquidationCards = ({ positionCardsData }: PositionCardsProps) => 
                         amount: item.loanAmount,
                         currency: item.loanToken,
                      }}
-                     description={{ by: "12%", collateral: item.collateralAmount + "%" }}
+                     interestRate="10"
+                     // description={{ by: "12%", collateral: item.collateralAmount + "%" }}
                      image={"/assets/placeholder/cover.png"}
                      time={calculateCountdown(item.loanPeriod.toString())}
                      isLliquidation={true}

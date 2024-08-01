@@ -12,6 +12,7 @@ export async function GET(req: Request) {
     investorAddress: url.searchParams.get("investorAddress"),
     loanToken: url.searchParams.get("loanToken"),
     status: url.searchParams.get("status"),
+    name: url.searchParams.get("name"),
   };
 
   try {
@@ -36,6 +37,11 @@ export async function GET(req: Request) {
     }
     if (query.status) {
       filter.loanStatus = query.status;
+    }
+    if (query.name) {
+      filter.name = query.name;
+      const loan = await LoanModel.findOne(filter);
+      return NextResponse.json(loan, { status: 200 });
     }
     const loans = await LoanModel.find(filter);
     return NextResponse.json(loans, { status: 200 });

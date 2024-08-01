@@ -5,6 +5,9 @@ import NoteIcon from "../../../../public/icons/noteIcon.svg";
 import dollarIcon from "../../../../public/icons/dollar.svg";
 import categoryIcon from "../../../../public/icons/category.svg";
 import { AvailablePositions } from "./positions";
+import { ILoanRequest } from "@/interfaces/loan-interface";
+import { getMarketLoans } from "@/services/api/market-loans";
+import { useState, useEffect } from "react";
 
 type Tab = {
    label: string;
@@ -27,6 +30,20 @@ const tabs: Tab[] = [
 ];
 
 export default function Market() {
+   const [loanData, setLoanData] = useState<ILoanRequest[]>();
+   const [isLoading, setIsLoading] = useState(false);
+
+   const handleGetMarketLoans = () => {
+      setIsLoading(true);
+      getMarketLoans()
+         .then((data) => setLoanData(data))
+         .finally(() => setIsLoading(false));
+   };
+
+   useEffect(() => handleGetMarketLoans(), []);
+
+   if (isLoading) return <div>Loading...</div>;
+
    return (
       <section className="w-full h-full p-8">
          <div>
@@ -55,7 +72,7 @@ export default function Market() {
                Filter & Sort
             </button>
          </div>
-         <AvailablePositions />
+         <AvailablePositions loanData={loanData || []} />
       </section>
    );
 }

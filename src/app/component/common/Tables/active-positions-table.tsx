@@ -1,6 +1,5 @@
 "use client";
 import { ILoanRequest } from "@/interfaces/loan-interface";
-import { LoanData } from "@/services/api/my-position";
 import Image from "next/image";
 import { FC } from "react";
 

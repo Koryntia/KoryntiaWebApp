@@ -9,10 +9,11 @@ export type CardProps = {
   image: string;
   title: string;
   time: string;
-  description: {
-    by: string;
-    collateral: string;
-  };
+  // description: {
+  //   by: string;
+  //   collateral: string;
+  // };
+  interestRate: string,
   bid: {
     amount: string | number;
     currency: string;
@@ -21,7 +22,7 @@ export type CardProps = {
   buttonText?: string;
   isLliquidation?: boolean;
   isCurrentBid?: boolean;
-  onButtonClick?: () => void;
+  onButtonClick?: (title: string) => void;
   onCardClick?: () => void;
 };
 
@@ -29,7 +30,7 @@ const Card = ({
   image,
   time,
   title,
-  description,
+  interestRate,
   bid,
   liked,
   isLliquidation,
@@ -40,7 +41,7 @@ const Card = ({
 }: CardProps) => {
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    onButtonClick && onButtonClick();
+    onButtonClick && onButtonClick(title);
   };
 
   return (
@@ -77,15 +78,15 @@ const Card = ({
             {title}
           </h1>
           <p className="text-xs font-inter text-gray-500 flex items-center gap-3 leading-[15.6px] tracking-[0.12px] ">
-            <span>By {description.by}</span>
-            <span>Collateral {description.collateral}</span>
+            <span>Interest Rate</span>
+            <span>{interestRate}%</span>
           </p>
         </main>
         <footer className="flex items-center justify-between">
           <div>
             <p className="flex flex-col gap-1">
               <span className="text-[10px] font-outfit text-gray-500">
-                {isCurrentBid ? "Current Bid" : "Your Bid"}
+                Amount
               </span>
               <span className="flex font-inter gap-1 justify-between items-center">
                 <TbCurrencyEthereum className="w-5 h-5 text-purple-500" />{" "}
@@ -104,8 +105,8 @@ const Card = ({
               {isLliquidation
                 ? "Liquidate"
                 : buttonText
-                ? buttonText
-                : "Supply"}
+                  ? buttonText
+                  : "Supply"}
             </Button>
           </div>
         </footer>

@@ -6,3 +6,9 @@ export const getMarketLoans = async () => {
     (data) => data.data
   );
 };
+
+export const getMarketLoan = async (loanName: String) => {
+  return get<ILoanRequest>(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/loan?name=` + loanName
+  ).then((data) => data.data);
+};

@@ -1,37 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Card from "@/app/component/common/Card";
-import useAuth from "@/hooks/useAuth";
 import useElementWidth from "@/hooks/useElementWidth";
 import { useRouter } from "next/navigation";
 import { Route } from "next";
 import { DateTime } from "luxon";
-import { getMarketLoans } from "@/services/api/market-loans";
 import { ILoanRequest } from "@/interfaces/loan-interface";
 // import LiquidationModal from "./LiquidationModal";
 
-export const AvailablePositions = () => {
+export const AvailablePositions = ({ loanData }: { loanData: ILoanRequest[] }) => {
    const router = useRouter();
-   const routePath = 254;
-   // const { address, logout, addressBalance } = useAuth();
-   const [loanData, setLoanData] = useState<ILoanRequest[]>();
    // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-   const [isLoading, setIsLoading] = useState(false);
 
    const [sectionWidth, sectionRef] = useElementWidth<HTMLDivElement>();
 
-   const handleGetMarketLoans = () => {
-      setIsLoading(true);
-      getMarketLoans()
-         .then((data) => setLoanData(data))
-         .finally(() => setIsLoading(false));
-   };
-
-   useEffect(() => handleGetMarketLoans(), []);
-
-   const handleButtonClick = () => router.push(`/market/${routePath}/details` as Route);
-
-   if (isLoading) return <div>Loading...</div>;
+   const handleButtonClick = (title: string) => router.push(`/market/${title}/details` as Route);
 
    function calculateCountdown(date: string) {
       const targetDate = DateTime.fromISO(date);
@@ -40,6 +23,7 @@ export const AvailablePositions = () => {
       const countdown = `${Math.floor(diff.days)}d ${Math.floor(diff.hours)}h ${Math.floor(diff.minutes)}m ${Math.floor(diff.seconds)}s`;
       return countdown;
    }
+
    return (
       <section
          ref={sectionRef}
@@ -58,9 +42,9 @@ export const AvailablePositions = () => {
                   key={index}
                   title={item.name || "title"}
                   bid={{ amount: item.loanAmount, currency: item.loanToken }}
-                  description={{ by: "static", collateral: item.collateralAmount + "%" }}
+                  interestRate={item.interestRate}
                   image={"/assets/placeholder/cover.png"}
-                  time={calculateCountdown(item.loanPeriod.toString())}
+                  time={calculateCountdown(item.loanRequestPeriod.toString())}
                   onButtonClick={handleButtonClick}
                />
             ))}

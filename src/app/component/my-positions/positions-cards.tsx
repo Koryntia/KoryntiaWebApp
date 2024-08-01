@@ -106,7 +106,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
                         title={item.name || "Title"}
                         bid={{ amount: item.loanAmount, currency: item.loanToken }}
                         description={{ by: "Static", collateral: item.collateralAmount, collateralToken: item.collateralToken }}
-                        image={positionCardsData[0].image}
+                        image={"/koryntia-logo.png"}
                         time={calculateCountdown(item.loanPeriod.toString())}
                      />
                   </div>

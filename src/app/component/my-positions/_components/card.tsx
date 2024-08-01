@@ -26,7 +26,6 @@ export type CardProps = {
 };
 
 const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, isLliquidation }) => {
-   const router = useRouter();
    return (
       <Link
          href={{
@@ -78,7 +77,7 @@ const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, isLl
                <footer className="flex items-center justify-between">
                   <div>
                      <p className="flex flex-col gap-1">
-                        <span className="text-[10px] font-outfit text-gray-500">Your Bid</span>
+                        <span className="text-[10px] font-outfit text-gray-500">Amount</span>
                         <span className="flex font-inter gap-1 justify-between items-center">
                            <Image
                               src={getImage(bid.currency)}

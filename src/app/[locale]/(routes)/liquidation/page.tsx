@@ -4,13 +4,13 @@ import PageTitle from "@/app/component/common/page-title";
 import { positionCardsData } from "@/data";
 import { LliquidationCards } from "@/app/component/liquidation";
 
-interface pageProps {}
+interface pageProps { }
 
 const page: FC<pageProps> = () => {
    return (
       <section className="p-8">
          <PageTitle title="Available liquidation" />
-         <LliquidationCards positionCardsData={positionCardsData} />
+         {/* <LliquidationCards positionCardsData={positionCardsData} /> */}
       </section>
    );
 };

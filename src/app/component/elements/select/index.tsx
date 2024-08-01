@@ -1,24 +1,38 @@
 import React from "react";
 import { SelectProps } from "@/types/select";
+import { Select as SelectComponent } from "antd";
+import Image from "next/image";
 
 function Select({ name, id, className, options, onChange }: SelectProps) {
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(e.target.value);
+  const handleChange = (value: string) => {
+    console.log(`selected ${value}`);
+    onChange(value);
   };
-
   return (
-    <select
-      name={name}
+    <SelectComponent
       id={id}
-      className={`block w-full text-sm bg-transparent appearance-none  focus:outline-none focus:ring-0 peer ${className}`}
+      size="large"
+      className={`block w-[100px] text-sm bg-transparent appearance-none focus:outline-none focus:ring-0 peer ${className}`}
       onChange={handleChange}
     >
-      {options.map((opt, idx) => (
-        <option key={idx} value={opt.value}>
-          {opt.name}
-        </option>
-      ))}
-    </select>
+      {name}
+      {options.map((item, index) => {
+        return (
+          <SelectComponent.Option key={index} value={item.value}>
+            <div key={index} className="flex gap-2 items-center">
+              <Image
+                src={item.image ? item.image : "/tokens/usdt.svg"}
+                alt="koryntia logo"
+                className=""
+                width={20}
+                height={20}
+              />
+              <p className="capitalize">{item.name}</p>
+            </div>
+          </SelectComponent.Option>
+        )
+      })}
+    </SelectComponent>
   );
 }
 

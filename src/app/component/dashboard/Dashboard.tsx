@@ -6,8 +6,6 @@ import ActivePositions from "../common/Tables/active-position-container";
 import Link from "next/link";
 
 const Dashboard = () => {
-   const firstThreePositionData = positionCardsData.slice(0, 3);
-
    return (
       <div className="">
          <div className="dashboard-banner">
@@ -23,7 +21,7 @@ const Dashboard = () => {
                </Link>
             </div>
             <div className="flex">
-               <PositionCards positionCardsData={firstThreePositionData} isDashBoard />
+               <PositionCards suppliedLoans={false} description="No Loans" />
             </div>
          </div>
          <div className="dashboard-user-active-position">

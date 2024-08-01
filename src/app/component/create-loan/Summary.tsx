@@ -9,9 +9,11 @@ interface ISummary {
    platformFee: string;
    period: string;
    healthFactor: string;
+   loanToken: string;
+   collateralToken: string;
 }
 
-const Summary = ({ borrowingAmount, collateral, collateralRate, platformFee, period, healthFactor }: ISummary) => {
+const Summary = ({ borrowingAmount, collateral, collateralRate, platformFee, period, healthFactor, loanToken, collateralToken }: ISummary) => {
    // the inputs are from create loan forms
    //is needed to call the contract for this step
    /*function calculateDebtAmount(
@@ -24,17 +26,22 @@ We do not have the criteria to use to make these calculations.
     */
 
    const currency = "USDC";
-   const borrow = 11;
-   // const collateralRate = 1.2;
-   // const collateral = borrow * collateralRate;
-   // const months = 12;
+
+   const calculateHealth = () => {
+      // uint256 collateralAdjustedThreshold = (collateralValueUsd *
+      // 	liquidationThreshold) / INTEREST_PRECISION;
+      // return (collateralAdjustedThreshold * PRECISION) / loanValueUsd;
+
+      return 100;
+   }
+
    return (
       <div className="py-3">
          <LoanSummaryContainer title="Summary">
             <LoanSummary title="Health Factor" amount={`${healthFactor.toString() || 0} ${"%"}`} />
-            <LoanSummary title="Borrowing amount" amount={`${borrowingAmount.toString() || 0} ${currency}`} />
-            <LoanSummary title="Your collateral" amount={`${collateral?.toString() || 0} ${currency}`} />
-            <LoanSummary title="Colateral rate" amount={`${3}%`} />
+            <LoanSummary title="Borrowing amount" amount={`${borrowingAmount.toString() || 0} ${loanToken.toUpperCase()}`} />
+            <LoanSummary title="Your collateral" amount={`${Number(collateral).toFixed(4) || 0} ${collateralToken.toUpperCase()}`} />
+            <LoanSummary title="Interest rate" amount={`${collateralRate.toString()}%`} />
             <LoanSummary title="Platform Fee" amount={`${platformFee.toString() || 0} ${currency}`} />
             <LoanSummary title="Period" amount={`${period.toString() || 0} ${"Year(s)"}`} />
          </LoanSummaryContainer>

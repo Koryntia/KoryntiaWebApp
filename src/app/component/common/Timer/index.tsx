@@ -20,12 +20,17 @@ const Timer = ({ endTime }: TimerProps) => {
   };
 
   const timeDifference = Math.max(0, endTime.getTime() - currentTime.getTime());
-  const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+  const days = Math.floor(timeDifference / (1000 * 24 * 60 * 60))
+  const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
   return (
     <>
+      <button className="text-[16px] mr-1 not-italic font-semibold leading-[26px] tracking-[0.2px] bg-gray-200 px-1 rounded-md">
+        {formatTime(days)}
+      </button>
+      {":"}
       <button className="text-[16px] mr-1 not-italic font-semibold leading-[26px] tracking-[0.2px] bg-gray-200 px-1 rounded-md">
         {formatTime(hours)}
       </button>

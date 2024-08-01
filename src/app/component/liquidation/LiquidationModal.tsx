@@ -4,10 +4,8 @@ import { useState } from "react";
 import LoanSummaryContainer from "../create-loan/LoanSummaryContainer";
 import LoanSummary from "../create-loan/LoanSummary";
 import Button from "../elements/button/Button";
-
-import { collateralAmountOptions } from "@/constant/liquidation";
 import { CurrencyOption, LiquidationModalProps } from "@/types/liquidation";
-
+import { collateralAmountOptions } from "@/app/data/currency";
 const LiquidationModal = (props: LiquidationModalProps) => {
    const { open, handleClose, data } = props;
    const [selectedCollateralAmountOptions, setSelectedCollateralAmountOption] = useState<CurrencyOption | null>(null);

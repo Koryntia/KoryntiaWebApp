@@ -4,34 +4,46 @@ import Image from "next/image";
 import NoteIcon from "../../../../public/icons/noteIcon.svg";
 import dollarIcon from "../../../../public/icons/dollar.svg";
 import categoryIcon from "../../../../public/icons/category.svg";
-import { positionCardsData } from "@/data";
 import { AvailablePositions } from "./positions";
+import { ILoanRequest } from "@/interfaces/loan-interface";
+import { getMarketLoans } from "@/services/api/market-loans";
+import { useState, useEffect } from "react";
 
 type Tab = {
    label: string;
-   href: string;
    icon: any;
 };
 
 const tabs: Tab[] = [
    {
       label: "Category",
-      href: "/mypositions/created",
       icon: categoryIcon,
    },
    {
       label: "Collections",
-      href: "/mypositions/invested",
       icon: NoteIcon,
    },
    {
       label: "Price Range",
-      href: "/mypositions/pending-action",
       icon: dollarIcon,
    },
 ];
 
 export default function Market() {
+   const [loanData, setLoanData] = useState<ILoanRequest[]>();
+   const [isLoading, setIsLoading] = useState(false);
+
+   const handleGetMarketLoans = () => {
+      setIsLoading(true);
+      getMarketLoans()
+         .then((data) => setLoanData(data))
+         .finally(() => setIsLoading(false));
+   };
+
+   useEffect(() => handleGetMarketLoans(), []);
+
+   if (isLoading) return <div>Loading...</div>;
+
    return (
       <section className="w-full h-full p-8">
          <div>
@@ -43,13 +55,12 @@ export default function Market() {
             <ol className="flex-1 flex flex-wrap gap-4 items-center justify-start">
                {tabs.map((tab) => (
                   <li key={tab.label}>
-                     <a
-                        href={tab.href}
+                     <div
                         className="inline-flex items-center justify-center rounded-xl border border-neutral-200 text-sm font-medium px-4 py-2 gap-2"
                      >
                         <Image src={tab.icon} alt="icon image" height={20} width={20} />
                         {tab.label}
-                     </a>
+                     </div>
                   </li>
                ))}
             </ol>
@@ -61,7 +72,7 @@ export default function Market() {
                Filter & Sort
             </button>
          </div>
-         <AvailablePositions positionCardsData={positionCardsData} />
+         <AvailablePositions loanData={loanData || []} />
       </section>
    );
 }

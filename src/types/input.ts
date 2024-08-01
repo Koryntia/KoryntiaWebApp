@@ -5,4 +5,5 @@ export type InputProps = {
   className?: string;
   value?: string | number | Date | any | null;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 };

@@ -4,7 +4,7 @@ import PageTitle from "@/app/component/common/page-title";
 import { PositionTabs, PositionCards } from "@/app/component/my-positions";
 import { positionCardsData } from "@/data";
 
-interface pageProps {}
+interface pageProps { }
 
 const page: FC<pageProps> = () => {
   return (
@@ -12,13 +12,15 @@ const page: FC<pageProps> = () => {
       <PageTitle title="My Positions" />
       <PositionTabs />
       <PositionCards
-        positionCardsData={positionCardsData}
+        suppliedLoans={false}
         gridStyle="lg:grid-cols-4"
+        description="No Positions"
       />
       <PageTitle title="Supplied" />
       <PositionCards
-        positionCardsData={positionCardsData}
+        suppliedLoans={true}
         gridStyle="lg:grid-cols-4"
+        description="No Positions"
       />
     </section>
   );

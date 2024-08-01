@@ -4,6 +4,7 @@ import RecentLoans from "./recent-loans";
 import { useTranslations } from "next-intl";
 import { LoanData, getRecentLoan } from "@/services/api/dashboard";
 import { useAccount } from "wagmi";
+import EmptyComponent from "../Empty";
 
 const RecentPositionsList: FC = () => {
    const t = useTranslations("RecentLoans");
@@ -33,7 +34,7 @@ const RecentPositionsList: FC = () => {
    useEffect(() => {
       if (!address) return;
       _getRecentLoadAPI(address);
-   }, [active]);
+   }, [active, address]);
 
    const sortedData = recentLoan?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
    const data = active ? sortedData?.slice(0, 3) : sortedData;
@@ -46,7 +47,7 @@ const RecentPositionsList: FC = () => {
                {tableButtonInfo}
             </button>
          </div>
-         <RecentLoans data={data} />
+         {data && data.length > 0 ? <RecentLoans data={data} /> : <EmptyComponent description="No Loans" />}
       </div>
    );
 };

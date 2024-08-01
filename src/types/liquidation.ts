@@ -1,12 +1,14 @@
 import { ILoanRequest } from "@/interfaces/loan-interface";
 
 export type LiquidationModalProps = {
-   open: boolean;
-   handleClose: () => void;
-   data: ILoanRequest;
+  open: boolean;
+  handleClose: () => void;
+  data: ILoanRequest;
 };
 
 export type CurrencyOption = {
-   name: string;
-   value: string;
+  name: string;
+  value: string;
+  address: string;
+  image: string;
 };

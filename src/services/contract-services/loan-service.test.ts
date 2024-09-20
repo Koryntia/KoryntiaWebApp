@@ -46,7 +46,7 @@ describe('BlockchainService Integration Tests', () => {
   it('Service connects to LoanPositionNFT contract', async () => {
     const tokenId = 1; // Assuming this is the ID of the loan we just created
 
-    const loanDetails = await service.healthFactor(tokenId);
+    const loanDetails = await service.getLoanNFTDetails(tokenId);
     console.log(loanDetails);
     expect(loanDetails).toBeDefined();
   });

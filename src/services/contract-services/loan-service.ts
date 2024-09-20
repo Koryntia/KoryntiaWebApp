@@ -48,28 +48,30 @@ class BlockchainService {
     loanToken: string,
     collateralToken: string,
     amount: ethers.BigNumberish,
-    collateralAmount: ethers.BigNumberish, 
-    interestRate: ethers.BigNumberish,
+    collateralAmount: ethers.BigNumberish,
     liquidationThreshold: ethers.BigNumberish,
     initialThreshold: ethers.BigNumberish,
     loanRepayDeadline: ethers.BigNumberish,
     loanRequestDeadline: ethers.BigNumberish,
-    ): Promise<void> {
+    interestRate: ethers.BigNumberish,
+    ): Promise<number | null> {
     try {
-      const tx = await this.loanPositionManagerContract.createLoanPosition(
+      const loanId = await this.loanPositionManagerContract.createLoanPosition(
         loanToken,
         collateralToken,
         collateralAmount,
-        interestRate,
         liquidationThreshold,
         initialThreshold,
         loanRepayDeadline,
         loanRequestDeadline,
+        interestRate
       );
-      await tx.wait();
-      console.log('Loan created successfully');
+
+      console.log('Loan created successfully: ', loanId);
+      return loanId;
     } catch (error) {
       console.error('Error creating loan:', error);
+      return null;
     }
   }
 
@@ -78,7 +80,6 @@ class BlockchainService {
     try {
       const loanPosition = await this.loanPositionManagerContract.getLoanPositions(tokenId);
       
-      console.log(loanPosition);
       // Parse the returned data into a more readable format
       return {
         borrowerAddress: loanPosition.borrowerAddress,

@@ -24,23 +24,25 @@ describe('BlockchainService Integration Tests', () => {
     const collateralAmount = 2;
     const interestRate = 500;
     const liquidationThreshold = 9000;
-    const initialThreshold = 9000;
-    const loanRepayDeadline = 12345;
-    const loanRequestDeadline = 12345;
+    const initialThreshold = 5000;
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const loanRequestDeadline = currentTimestamp + 3600;
+    const loanRepayDeadline = currentTimestamp + 86400;
 
-    await expect(service.createLoan(
+    const loanId = await service.createLoan(
       loanToken,
       collateralToken,
       amount,
       collateralAmount,
-      interestRate,
       liquidationThreshold,
       initialThreshold,
       loanRepayDeadline,
-      loanRequestDeadline, 
-    ))
-      .resolves
-      .not.toThrow();
+      loanRequestDeadline,
+      interestRate,
+    );
+
+    console.log(loanId);
+    expect(loanId).not.toBeNull();
   });
 
   it('Service connects to LoanPositionNFT contract', async () => {

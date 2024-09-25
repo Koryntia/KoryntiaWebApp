@@ -8,12 +8,7 @@ describe('BlockchainService Integration Tests', () => {
   let service: BlockchainService;
 
   beforeAll(async () => {
-    // Connect to the local network
-    provider = new ethers.JsonRpcProvider('http://localhost:8545');
-    signer = await provider.getSigner(0);
-    
-    // Create the BlockchainService instance
-    service = new BlockchainService(provider, await signer.getAddress());
+    service = new BlockchainService("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80");
     await service.init();
   });
 

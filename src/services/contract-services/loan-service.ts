@@ -5,44 +5,34 @@ import OracleABI from '@/abis/Oracle.json';
 import config from "@/utils/config";
 
 class BlockchainService {
-  private provider: Provider;
-  private signer: Signer;
+  private provider: ethers.JsonRpcProvider;
+  private signer: ethers.JsonRpcSigner;
   private userAddress: string;
 
   private loanPositionManagerContract: ethers.Contract;
-  private loanPositionNFTContract: ethers.Contract;
-  private oracleContract: ethers.Contract;
 
-  constructor(provider: ethers.Provider, userAddress: string) {
-    this.provider = provider;
+  constructor(userAddress: string) {
+    this.provider = new ethers.JsonRpcProvider("http://localhost:8545");
     this.userAddress = userAddress;
 
-    // Load contract addresses from environment variables
     const loanPositionManagerAddress = config.LOAN_POSITION_MANAGER_ADDRESS;
-    const loanPositionNFTAddress = config.LOAN_POSITION_NFT_ADDRESS;
-    const oracleAddress = config.ORACLE_CONTRACT_ADDRESS;
-
-    if (!(loanPositionManagerAddress && loanPositionNFTAddress && oracleAddress)) {
+    if (!(loanPositionManagerAddress)) {
       throw new Error("Missing contract addresses in environment variables.");
     }
   }
 
   async init() {
+    const loanPositionManagerAddress = config.LOAN_POSITION_MANAGER_ADDRESS as string;
+
+    this.signer = await this.provider.getSigner();
+    this.loanPositionManagerContract = new ethers.Contract(loanPositionManagerAddress, LoanPositionManagerABI, this.signer);
     try {
-      this.signer = await (this.provider as ethers.JsonRpcProvider).getSigner();
-
-      const loanPositionManagerAddress = config.LOAN_POSITION_MANAGER_ADDRESS || "";
-      const loanPositionNFTAddress = config.LOAN_POSITION_NFT_ADDRESS || "";
-      const oracleAddress = config.ORACLE_CONTRACT_ADDRESS || "";
-
-      // Initialize contracts
-      this.loanPositionManagerContract = new ethers.Contract(loanPositionManagerAddress, LoanPositionManagerABI, this.signer);
-      // this.loanPositionNFTContract = new ethers.Contract(loanPositionNFTAddress, LoanPositionNFTABI, this.signer);
-      this.oracleContract = new ethers.Contract(oracleAddress, OracleABI, this.signer);
+      const wallet = new ethers.Wallet(this.userAddress, this.provider);
+      this.loanPositionManagerContract.connect(wallet);
     } catch (error) {
-      console.error("Error initializing contracts:", error);
+      console.log(error);
     }
-  }
+  };
 
   async createLoan(
     loanToken: string,
@@ -132,11 +122,6 @@ class BlockchainService {
   // Check Health Factor
   async healthFactor(loanId: number): Promise<ethers.BigNumberish> {
     return this.loanPositionManagerContract.healthFactor(loanId);
-  }
-
-  // Get Token Price from Oracle
-  async getTokenPrice(tokenAddress: string): Promise<ethers.BigNumberish> {
-    return this.oracleContract.getPrice(tokenAddress);
   }
 
 }

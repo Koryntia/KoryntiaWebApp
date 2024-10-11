@@ -8,18 +8,20 @@ import { ILoanRequest, STATUS } from "@/interfaces/loan-interface";
 
 const ActivePositions = () => {
    const t = useTranslations("ActivePositions");
-   const [loanData, setLoanData] = useState<ILoanRequest[]>();
+   const [loanData, setLoanData] = useState<ILoanRequest[]>([]);
    const [active, setActive] = useState(true);
    const { address } = useAccount();
 
    const handleGetMyLoanAPI = useCallback(() => {
       if (!address) return;
-      getMyLoansByStatus(address, STATUS.borrowed).then((data) => setLoanData(data));
+      getMyLoansByStatus(address, STATUS.borrowed).then((data) => {
+         setLoanData( data != null ? data : [] )
+   });
    }, [address]);
 
    useEffect(() => handleGetMyLoanAPI(), [handleGetMyLoanAPI]);
 
-   let activePositionsTableData = active ? loanData?.slice(0, 2) : loanData;
+   let activePositionsTableData = active ? (loanData as ILoanRequest[])?.slice(0, 2) : loanData;
 
    const tableButtonInfo: string = active ? "View All" : "View Less";
 

@@ -65,7 +65,7 @@ const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
                </tr>
             </thead>
             <tbody>
-               {data.map((key, index) => (
+               {data && data.map((key, index) => (
                   <tr key={index} className="bg-white border-b-2  border-zinc-50">
                      <th scope="row" className="flex items-center py-2 w-[20%]  text-gray-900 whitespace-nowrap text">
                         <Image

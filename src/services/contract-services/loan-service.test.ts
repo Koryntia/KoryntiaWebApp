@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
-import { waitFor } from "@testing-library/react";
 import BlockchainService from './loan-service';
-import { test_config } from "@/utils/config";
-import MessageHandler from '@/services/message-handler';
+import config, { test_config } from "@/utils/config";
+import MessageHandler from '@/utils/message-handler';
+import { getPriceApi } from '@/services/api/getPrice';
 
 jest.mock('@/services/message-handler', () => {
   return {
@@ -22,8 +22,13 @@ describe('Integration Tests', () => {
   let user2_service: BlockchainService;
 
   beforeAll(async () => {
-    user1_service = new BlockchainService("0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d");
-    user2_service = new BlockchainService("0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a");
+    const provider = new ethers.JsonRpcProvider(config.RPC_URL as string);
+
+    const user1 = new ethers.Wallet('0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d', provider);
+    const user2 = new ethers.Wallet('0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a', provider);
+
+    user1_service = new BlockchainService(user1);
+    user2_service = new BlockchainService(user2);
   });
   
   describe('Loan Creation, Loan Details and Health Factors', () => {
@@ -369,6 +374,16 @@ describe('Integration Tests', () => {
       await delay(50);
 
       expect(await user1_service.repay(loanId)).toBe(false);
+    });
+  });
+
+  describe('Oracle Integration tests', () => {
+    it('Gets token prices', async () => {
+      expect(await user1_service.getTokenPrice(TOKEN_A)).toBe(2);
+    });
+
+    it('Gets token prices', async () => {
+      expect(await getPriceApi(TOKEN_A)).toBe(2);
     });
   });
 });

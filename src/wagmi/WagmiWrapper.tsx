@@ -1,20 +1,19 @@
 "use client";
 import React, { ReactNode } from "react";
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { cookieStorage, createStorage, WagmiProvider } from "wagmi";
-
-// 2. Set up a React Query client.
-const queryClient = new QueryClient();
-
 import { http, createConfig } from "wagmi";
-import { base, mainnet } from "wagmi/chains";
+import { Chain } from 'wagmi/chains';
 import { injected, metaMask, safe, walletConnect } from "wagmi/connectors";
+import { AppChain } from '@/utils/chain.config';
+
+// Set up a React Query client
+const queryClient = new QueryClient();
 
 const projectId = "18f45d4c6ab419ec257168ecbc48df46";
 
 export const config = createConfig({
-  chains: [mainnet, base],
+  chains: [AppChain],
   connectors: [
     injected(),
     metaMask({
@@ -33,8 +32,7 @@ export const config = createConfig({
   }),
   ssr: true,
   transports: {
-    [mainnet.id]: http(),
-    [base.id]: http(),
+    [AppChain.id]: http(),
   },
 });
 

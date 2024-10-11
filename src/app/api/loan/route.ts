@@ -14,7 +14,6 @@ export async function GET(req: Request) {
     status: url.searchParams.get("status"),
     name: url.searchParams.get("name"),
   };
-
   try {
     await connectDB();
 
@@ -46,7 +45,6 @@ export async function GET(req: Request) {
     const loans = await LoanModel.find(filter);
     return NextResponse.json(loans, { status: 200 });
   } catch (errors) {
-    console.error("Unexpected error", errors);
     return NextResponse.json(
       { message: "Validation failed", errors },
       { status: 400 }

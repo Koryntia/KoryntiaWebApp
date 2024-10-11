@@ -18,19 +18,11 @@ export type LoanData = {
 };
 
 type GetRecentLoanResponse = LoanData[];
-// type GetRecentLoanResponse = {
-//    //   success: boolean;
-//    //   status: number;
-//    data: LoanData[];
-// };
-
-// export const getRecentLoan = async () =>
-//   get<GetRecentLoanResponse>("/getRecentLoan").then((data) => data.data?.data);
 
 export const getRecentLoan = async (walletAddress: String) => {
   return get<GetRecentLoanResponse>(
     `${process.env.NEXT_PUBLIC_BASE_URL}/loan?borrowerID=` + walletAddress
   ).then((data) => {
-    return data.data;
+    return data != null ? data.data : null;
   });
 };

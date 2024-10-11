@@ -1,4 +1,5 @@
-import config from "@/utils/config";
+import config, { test_config } from "@/utils/config";
+
 export const getTokenAddress = (tokenName: string) => {
    if (config.NETWORK_ID == "11155111") {
       switch (tokenName) {
@@ -10,8 +11,21 @@ export const getTokenAddress = (tokenName: string) => {
             return "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238";
          case "LINK/USD":
             return "0x779877a7b0d9e8603169ddbd7836e478b4624789";
+         case "TKNA/USD":
+            return test_config.TOKEN_A as string;
+         case "TKNB/USD":
+            return test_config.TOKEN_B as string;
          default:
             return "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14";
+      }
+   } else if (config.NETWORK_ID == "31337") {
+      switch (tokenName) {
+         case "TKNA/USD":
+            return test_config.TOKEN_A as string;
+         case "TKNB/USD":
+            return test_config.TOKEN_B as string;
+         default:
+            return test_config.TOKEN_A;
       }
    } else {
       return "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14";

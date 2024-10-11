@@ -1,5 +1,6 @@
 export interface ILoanRequest {
   _id?: string;
+  loanId: Number;
   userAddress: string;
   loanAmount: string;
   loanToken: string;

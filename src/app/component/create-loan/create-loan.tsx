@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
+import { ethers } from 'ethers';
 import toast from "react-hot-toast";
 import Button from "../elements/button/Button";
 import CreateLoanForm from "./create-loan-form";
@@ -9,6 +10,7 @@ import { Select as SelectComponent } from 'antd'
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { collateralAmountOptions, requestAmountOptions } from "@/app/data/currency";
 import { getPriceApi } from "@/services/api/getPrice";
+import { useEthersSigner } from '@/services/contract-services/wagmi-to-ethers';
 
 type LoanFormProps = {
   name: string;
@@ -42,6 +44,7 @@ const CreateLoan = () => {
   const [interestRate, setInterestRate] = useState("");
   const [name, setName] = useState("");
   const [formInvalid, setFormInvalid] = useState(false);
+  const signer = useEthersSigner();
 
   const toggleModal = () => {
     if (formInvalid) {
@@ -94,16 +97,16 @@ const CreateLoan = () => {
     // use total usdAmount to determine expected collateral amount
     const requestToken = `${selectedRequestAmountOption.name}/USD`
     const collateralToken = `${selectedCollateralAmountOptions.name}/USD`
-    const requestTokenPrice = await getPriceApi(requestToken)
+    const requestTokenPrice = await getPriceApi(requestToken);
     const collateralTokenPrice = await getPriceApi(collateralToken);
-    if (requestTokenPrice && collateralTokenPrice) {
-      setCollateralAmount(requestTokenPrice?.price * Number(requestAmount) / collateralTokenPrice.price)
+    if (requestTokenPrice.price && collateralTokenPrice.price) {
+      setCollateralAmount(requestTokenPrice.price * Number(requestAmount) / collateralTokenPrice.price)
     }
   }, [requestAmount, selectedCollateralAmountOptions, selectedRequestAmountOption])
 
   useEffect(() => {
     if (Number(requestAmount) > 0 && selectedRequestAmountOption.value && selectedCollateralAmountOptions.value) {
-      calculateRequestAmount()
+      calculateRequestAmount();
     }
   }, [calculateRequestAmount, requestAmount, selectedRequestAmountOption, selectedCollateralAmountOptions])
 
@@ -150,7 +153,6 @@ const CreateLoan = () => {
                 type="number"
                 value={collateralAmount}
                 onChange={(e) => setCollateralAmount(Number(e.target.value))}
-                disabled={true}
               />
               {/* <span></span> */}
               <div className="w-[45%] flex gap-4 justify-end self-center relative">
@@ -261,7 +263,10 @@ const CreateLoan = () => {
                 >
                   &times;
                 </span>
-                <div className="flex items-center h-full px-4">
+                <div 
+                  className="flex items-center h-full px-4"
+                  style={{ fontSize: "medium", overflowY: "scroll", paddingTop: "25vh" }}
+                >
                   <CreateLoanForm
                     requestAmount={+requestAmount}
                     requestToken={selectedRequestAmountOption?.name}

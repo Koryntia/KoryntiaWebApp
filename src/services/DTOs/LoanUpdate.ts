@@ -27,14 +27,14 @@ export class UpdateLoanDto {
          "borrowedStatus",
          "investorAddress",
          "loanToken",
+         "name",
       ],
-      { message: "At least one field other than loanToken must be provided" }
+      { message: "At least one field must be provided" }
    )
-   someField: any;
 
    @IsOptional()
    @IsString()
-   loanToken: string;
+   loanToken?: string;
 
    @IsString()
    @IsOptional()
@@ -96,5 +96,5 @@ export class UpdateLoanDto {
 
    @IsOptional()
    @IsString()
-   name: string;
+   name?: string;
 }

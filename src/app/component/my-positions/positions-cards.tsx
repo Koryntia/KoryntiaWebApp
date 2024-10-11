@@ -21,7 +21,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
    const [sectionWidth, sectionRef] = useElementWidth<HTMLDivElement>();
    const [slidesToShow, setSlidesToShow] = useState<number>(3);
    const { address } = useAuth();
-   const [loanData, setLoanData] = useState<ILoanRequest[]>();
+   const [loanData, setLoanData] = useState<ILoanRequest[]>([]);
    const [isLoading, setIsLoading] = useState(false);
 
    useEffect(() => {

@@ -6,9 +6,9 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { decrement, increment } from "../../redux/features/count-slice";
 
 import { useAccount } from "wagmi";
-import Dashboard from "../component/dashboard/Dashboard";
-import RecentPositionsList from "../component/common/Tables/recent-loans-container";
-import CreateLoan from "../component/create-loan/create-loan";
+import Dashboard from "@/app/component/dashboard/Dashboard";
+import RecentPositionsList from "@/app/component/common/Tables/recent-loans-container";
+import CreateLoan from "@/app/component/create-loan/create-loan";
 
 export default function Home() {
   const { address } = useAccount();

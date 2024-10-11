@@ -4,10 +4,15 @@ import {
   IsDateString,
   IsEnum,
   IsOptional,
+  IsNumber,
 } from "class-validator";
 import { ILoanRequest, STATUS } from "@/interfaces/loan-interface";
 
 export class LoanRequestDto implements ILoanRequest {
+  @IsNotEmpty({ message: "Loan ID is required." })
+  @IsNumber()
+  loanId: Number;
+
   @IsNotEmpty({ message: "User address is required." })
   @IsString()
   userAddress: string;

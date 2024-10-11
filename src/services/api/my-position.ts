@@ -1,18 +1,19 @@
 import { ILoanRequest } from "@/interfaces/loan-interface";
 import { post, get } from "@/services/utils";
+import config from '@/utils/config';
 
 type GetMyLoanResponse = ILoanRequest[];
 
 export const getMyLoan = async (walletAddress: String) => {
   return get<GetMyLoanResponse>(
     `${process.env.NEXT_PUBLIC_BASE_URL}/loan?borrowerID=` + walletAddress
-  ).then((data) => data.data);
+  ).then((data) => data != null ? data.data : null);
 };
 
 export const getMySuppliedLoan = async (walletAddress: String) => {
   return get<GetMyLoanResponse>(
     `${process.env.NEXT_PUBLIC_BASE_URL}/loan?investorAddress=` + walletAddress
-  ).then((data) => data.data);
+  ).then((data) => data != null ? data.data : null);
 };
 
 export const getMyLoansByStatus = async (
@@ -20,6 +21,6 @@ export const getMyLoansByStatus = async (
   status: String
 ) => {
   return get<GetMyLoanResponse>(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/loan?borrowerId=${walletAddress}&status=${status}`
-  ).then((data) => data.data);
+    `${config.BASE_URL}/loan?borrowerId=${walletAddress}&status=${status}`
+  ).then((data) => data != null ? data.data : null);
 };

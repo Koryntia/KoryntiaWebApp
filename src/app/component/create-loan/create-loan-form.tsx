@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Summary from "./Summary";
 import { createNewLoan } from "@/services/api/loan-service";
@@ -5,10 +6,13 @@ import Button from "../elements/button/Button";
 import { AiOutlineDollarCircle } from "react-icons/ai";
 import { useAccount } from "wagmi";
 import { getPriceApi } from "@/services/api/getPrice";
+import { getTokenAddress } from "@/constant/tokens";
+import { useLoanService } from '@/services/contract-services/loan-service.hook';
+import MessageHandler from '@/utils/message-handler';
 
 const INITIAL_THRESHOLD_PERCENTAGE = 15;
 const PLATFORM_FEE = 12;
-const INTEREST_PRECISION = 10 ** 18;
+const INTEREST_PRECISION = 10000;
 import toast from "react-hot-toast";
 import { STATUS } from "@/interfaces/loan-interface";
 
@@ -44,6 +48,8 @@ interface CreateLoanFormProps {
    interestRate: number;
    name: string;
 }
+
+const messageHandler = MessageHandler.get();
 
 const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
    requestAmount,
@@ -86,6 +92,7 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
    const [formValues, setFormValues] = useState<FormValues>(initialState);
    const [formInvalid, setFormInvalid] = useState(false);
    const [isSubmitting, setIsSubmitting] = useState(false);
+   const { LoanService, isInitialized } = useLoanService();
 
    useEffect(() => {
       setConnectedAccount(account?.address || "");
@@ -134,8 +141,6 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
             return;
          }
 
-         console.log(formValues)
-
          if (formInvalid) {
             toast.error("Please fill all the required fields");
             return;
@@ -145,19 +150,32 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
             ...formValues,
          };
 
-         const response: any = await createNewLoan(data);
-         console.log(response)
+         if (!isInitialized) {
+            messageHandler.handleError('Loan service not yet initialized');
+            return 0;
+          }
 
-         if (response.data.status === 201) {
-            toast.success(response.data.message || "Successfully created a Loan");
-         } else if (response.data.status === 400) {
-            toast.error(response.data.message || "Failed to create loan");
+         const LoanId = await LoanService().createLoan(
+            getTokenAddress(`${data.loanToken}/USD`),
+            getTokenAddress(`${data.collateralToken}/USD`),
+            ethers.parseEther(data.loanAmount),
+            ethers.parseEther(data.collateralAmount),
+            +data.liquidationThreshold,
+            +data.initialThreshold,
+            +data.loanPeriod,
+            +data.loanRequestPeriod,
+            +data.interestRate,
+         );
+         if (!LoanId) return 0;
+
+         const response: any = await createNewLoan({ loanId: LoanId, ...data });
+         if (response) {
+            toast.success("Successfully created a Loan");
          } else {
-            toast.error(response.data.message || "Server Error: Failed to create Loan");
+            toast.error("Failed to create loan");
          }
          setIsSubmitting(false);
       } catch (error) {
-         console.log(error)
          toast.error("An error occurred while creating the loan. Please try again.");
          setIsSubmitting(false);
       }

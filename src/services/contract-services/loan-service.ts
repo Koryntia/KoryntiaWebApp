@@ -1,33 +1,39 @@
 import { ethers } from 'ethers';
 import LoanPositionManagerABI from '@/abis/LoanPositionManager.json';
+import OracleABI from '@/abis/Oracle.json'
 import config from "@/utils/config";
-import MessageHandler from "@/services/message-handler";
+import MessageHandler from "@/utils/message-handler";
 import { ILoanPosition } from "@/interfaces/loan-position-interface";
 
 const messageHandler = MessageHandler.get();
 
 class BlockchainService {
   private provider: ethers.JsonRpcProvider;
-  private signer: ethers.JsonRpcSigner;
-  private wallet: ethers.Wallet;
+  private signer: ethers.Signer;
   private loanPositionManagerContract: ethers.Contract;
+  private oracleContract: ethers.Contract;
 
   // Zero address
   private ZERO_ADDRESS: string = '0x0000000000000000000000000000000000000000' 
 
-  constructor(privateKey: string) {
-    this.provider = new ethers.JsonRpcProvider(config.RPC_URL as string);
-    this.wallet = new ethers.Wallet(privateKey, this.provider);
+  constructor(signer: ethers.Signer) {
+    this.signer = signer;
 
     const loanPositionManagerAddress = config.LOAN_POSITION_MANAGER_ADDRESS;
-    if (!loanPositionManagerAddress) {
+    const oracleContractAddress = config.ORACLE_CONTRACT_ADDRESS;
+    if (!loanPositionManagerAddress || !oracleContractAddress) {
       throw new Error("Missing LOAN_POSITION_MANAGER_ADDRESS in environment variables.");
     }
 
     this.loanPositionManagerContract = new ethers.Contract(
       loanPositionManagerAddress,
       LoanPositionManagerABI,
-      this.wallet
+      this.signer
+    );
+    this.oracleContract = new ethers.Contract(
+      oracleContractAddress,
+      OracleABI,
+      this.signer
     );
   }
 
@@ -36,7 +42,7 @@ class BlockchainService {
       const tokenContract = new ethers.Contract(tokenAddress, [
         "function balanceOf(address owner) view returns (uint256)",
       ], this.provider);
-      const balance = await tokenContract.balanceOf(this.wallet.address);
+      const balance = await tokenContract.balanceOf(await this.signer.getAddress());
   
       return ethers.formatEther(balance);
     } catch (error) {
@@ -52,7 +58,7 @@ class BlockchainService {
   ): Promise<void> {
     const tokenContract = new ethers.Contract(tokenAddress, [
       "function approve(address spender, uint256 amount) external returns (bool)",
-    ], this.wallet);
+    ], this.signer);
 
     const tx = await tokenContract.approve(spenderAddress, amount);
     await tx.wait();
@@ -99,12 +105,13 @@ class BlockchainService {
           loanRequestDeadline,
           interestRate,
         ).catch((error) => {
-          messageHandler.handleError(`Error creating loan: ${(error as Error).message}`);
+          console.log(error);
+          messageHandler.handleError((error as Error).message);
           resolve(null);
         });
       });
     } catch (error) {
-      messageHandler.handleError(`Error in createLoan: ${(error as Error).message}`);
+      messageHandler.handleError((error as Error).message);
       return null;
     }
   }
@@ -153,17 +160,18 @@ class BlockchainService {
         return false;
       }
 
-      const debtAmount = await this.loanPositionManagerContract.calculateDebtAmount(
-        loanPosition.collateralToken,
-        loanPosition.collateralAmount,
-        loanPosition.loanToken,
-        loanPosition.initialThreshold,
-      );
+      // const debtAmount = await this.loanPositionManagerContract.calculateDebtAmount(
+      //   loanPosition.loanToken,
+      //   loanPosition.collateralAmount,
+      //   loanPosition.loanToken,
+      //   loanPosition.initialThreshold,
+      // );
+      // console.log(ethers.formatUnits(debtAmount));
 
       await this.approveSpender(
         loanPosition.loanToken,
         this.loanPositionManagerContract.target as string,
-        debtAmount,
+        loanPosition.loanAmount,
       );
 
       return new Promise<boolean>((resolve) => {
@@ -178,13 +186,11 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.fundLoan(loanId).catch((error) => {
-          console.error(error);
-          messageHandler.handleError(`Error funding loan: ${(error as Error).message}`);
+          messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
-      console.error(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -226,13 +232,11 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.repay(loanId).catch((error) => {
-          console.error(error);
-          messageHandler.handleError(`Error repaying loan: ${(error as Error).message}`);
+          messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
-      console.error(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -251,14 +255,12 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.liquidate(loanId).catch((error) => {
-          console.error(error);
-          messageHandler.handleError(`Error creating loan: ${(error as Error).message}`);
+          messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
-      console.error(error);
-      messageHandler.handleError(`Error liquidating loan: ${(error as Error).message}`);
+      messageHandler.handleError((error as Error).message);
       return false;
     }
   }
@@ -294,7 +296,7 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.addCollateral(loanId, amount).catch((error) => {
-          messageHandler.handleError(`Error adding collateral: ${(error as Error).message}`);
+          messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
@@ -327,13 +329,11 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.withdrawCollateral(loanId).catch((error) => {
-          console.log(error);
-          messageHandler.handleError(`Error withdrawing collateral: ${(error as Error).message}`);
+          messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -355,6 +355,27 @@ class BlockchainService {
     }
   }
 
+  async getTokenPrice(tokenAddress: string): Promise<number | null> {
+    try {
+      const [, price] = await this.oracleContract.getPrice(tokenAddress);
+      return Number(ethers.formatUnits(price, 8));
+    } catch (error) {
+      console.log(error);
+      messageHandler.handleError((error as Error).message);
+      return null;
+    }
+  }
+
+  async calculateMaxAllowedLiquidationThreshold(interestRate: ethers.BigNumberish): Promise<number | null> {
+    try {
+      const liquidationThreshold = await this.loanPositionManagerContract.calculateMaxAllowedLiquidationThreshold(interestRate);
+      return Number(liquidationThreshold);
+    } catch (error) {
+      console.log(error);
+      messageHandler.handleError((error as Error).message);
+      return null;
+    }
+  }
 }
 
 export default BlockchainService;

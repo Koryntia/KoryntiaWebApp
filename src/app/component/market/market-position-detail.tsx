@@ -19,7 +19,6 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
   const [isPositionName, setIsPositionName] = useState(false);
   const [sectionWidth, sectionRef] = useElementWidth<HTMLDivElement>();
   const [slidesToShow, setSlidesToShow] = useState<number>(3);
-  console.log(marketLoans)
 
   function calculateCountdown(date: string) {
     const targetDate = DateTime.fromISO(date);

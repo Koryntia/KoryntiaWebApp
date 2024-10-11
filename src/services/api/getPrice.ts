@@ -1,4 +1,5 @@
-import { get } from "../utils";
+import { getTokenAddress } from "@/constant/tokens";
+import { getTokenPrice } from './oracle';
 
 interface Price {
   token: string;
@@ -6,9 +7,9 @@ interface Price {
 }
 
 export const getPriceApi = async (tokenPair: string) => {
+  const tokenAddress = getTokenAddress(tokenPair.toUpperCase());
+  
   return (
-    await get<Price>(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/get-price?tokenPair=${tokenPair}`
-    )
-  ).data;
+    {price: await getTokenPrice(tokenAddress as string), token: tokenAddress}
+  );
 };

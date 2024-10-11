@@ -93,7 +93,10 @@ const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, isLl
                      </p>
                   </div>
                   <div>
-                     <Button styling="text-xs px-6 py-2" variant="solid-purple">
+                     <Button
+                        styling="text-xs px-6 py-2"
+                        variant="solid-purple"
+                     >
                         {isLliquidation ? "Liquidate" : "Supply"}
                      </Button>
                   </div>

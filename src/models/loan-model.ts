@@ -3,6 +3,7 @@ import { ILoanRequest } from "@/interfaces/loan-interface";
 
 const loanSchema = new Schema<ILoanRequest>(
   {
+    loanId: { type: Number, required: true },
     userAddress: { type: String, required: true },
     loanAmount: { type: String, required: true },
     loanToken: { type: String, required: true },

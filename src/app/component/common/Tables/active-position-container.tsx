@@ -5,25 +5,36 @@ import { useTranslations } from "next-intl";
 import { getMyLoansByStatus, getMySuppliedLoan } from "@/services/api/my-position";
 import { useAccount } from "wagmi";
 import { ILoanRequest, STATUS } from "@/interfaces/loan-interface";
+import { Spinner } from "@/app/component/common/Spinner";
 
 const ActivePositions = () => {
    const t = useTranslations("ActivePositions");
    const [loanData, setLoanData] = useState<ILoanRequest[]>([]);
+   const [isLoading, setIsLoading] = useState(true);
    const [active, setActive] = useState(true);
    const { address } = useAccount();
 
    const handleGetMyLoanAPI = useCallback(() => {
       if (!address) return;
-      getMyLoansByStatus(address, STATUS.borrowed).then((data) => {
+      getMyLoansByStatus(address, STATUS.funded).then((data) => {
          setLoanData( data != null ? data : [] )
    });
    }, [address]);
 
-   useEffect(() => handleGetMyLoanAPI(), [handleGetMyLoanAPI]);
+   useEffect(() => {
+      handleGetMyLoanAPI();
+      setIsLoading(false);
+   }, [handleGetMyLoanAPI]);
 
    let activePositionsTableData = active ? (loanData as ILoanRequest[])?.slice(0, 2) : loanData;
 
    const tableButtonInfo: string = active ? "View All" : "View Less";
+
+   if (isLoading) return (
+      <div className="justify-center flex items-center w-full m-3">
+         <Spinner />
+      </div>
+   );
 
    return (
       <>

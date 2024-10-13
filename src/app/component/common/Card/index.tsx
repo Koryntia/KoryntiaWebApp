@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import { useAccount } from 'wagmi';
 import { AiOutlineHeart } from "react-icons/ai";
 import { TbCurrencyEthereum } from "react-icons/tb";
 import Button from "../../elements/button/Button";
@@ -20,10 +21,14 @@ export type CardProps = {
   };
   liked?: boolean;
   buttonText?: string;
-  isLliquidation?: boolean;
+  status?: string;
   isCurrentBid?: boolean;
   onButtonClick?: (title: string) => void;
-  onCardClick?: () => void;
+  onCardClick?: (title: string) => void;
+  userDetails: {
+    borrower: string;
+    investor: string;
+ };
 };
 
 const Card = ({
@@ -33,23 +38,27 @@ const Card = ({
   interestRate,
   bid,
   liked,
-  isLliquidation,
+  status= "requested",
   buttonText,
   isCurrentBid,
   onButtonClick,
   onCardClick,
+  userDetails,
 }: CardProps) => {
   const handleButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     onButtonClick && onButtonClick(title);
   };
+  const handleCardClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    onCardClick && onCardClick(title);
+  };
+  const { address } = useAccount();
 
   return (
     <article
       className="bg-gray-50 rounded-lg cursor-pointer shadow-sm"
-      onClick={(event) => {
-        event.stopPropagation(), onCardClick && onCardClick();
-      }}
+      onClick={(event) => handleCardClick(event)}
     >
       <header className="max-w-xs relative">
         <Image
@@ -97,17 +106,41 @@ const Card = ({
             </p>
           </div>
           <div>
-            <Button
+            {status === "requested" && userDetails.borrower !== address && <Button
               styling="text-xs px-6 py-2"
               variant="solid-purple"
               onClick={(event) => handleButtonClick(event)}
+              >
+              Supply
+            </Button>}
+            {status === "requested" && userDetails.borrower === address && <Button
+              styling="text-xs px-6 py-2"
+              variant="solid-purple"
+              onClick={(event) => handleButtonClick(event)}
+              >
+              Withdraw
+            </Button>}
+            {status === "funded" && userDetails.borrower === address && <Button
+              styling="text-xs px-6 py-2"
+              variant="solid-purple"
+              onClick={(event) => handleButtonClick(event)}
+              >
+              Repay
+            </Button>}
+            {(status === "expired" || status === "unhealthy") && userDetails.investor === address && <Button
+              styling="text-xs px-6 py-2"
+              variant="error"
+              onClick={(event) => handleButtonClick(event)}
+              >
+              Liquidate
+            </Button>}
+            {status === "unhealthy" && userDetails.borrower === address && <Button
+              styling="text-xs px-6 py-2"
+              variant="error"
+              onClick={() => router.push(`/market/${encodeURIComponent(title)}/details`)}
             >
-              {isLliquidation
-                ? "Liquidate"
-                : buttonText
-                  ? buttonText
-                  : "Supply"}
-            </Button>
+              Add Collateral
+            </Button>}
           </div>
         </footer>
       </div>

@@ -78,7 +78,7 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
       loanPeriod: convertYearsToDateFormat(loanPeriod.toString()),
       healthFactor: "to_be_made_dynamic",
       investorAddress: "0x0000000000000000000000000000000000000000",
-      loanStatus: STATUS.pending,
+      loanStatus: STATUS.requested,
       nftManager: "0x0000000000000000000000000000000000000000",
       nftVersion: "to_be_made_dynamic",
       liquidationThreshold: liquidationThreshold.toString(),

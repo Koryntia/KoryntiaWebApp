@@ -12,8 +12,11 @@ export async function GET(req: Request) {
     investorAddress: url.searchParams.get("investorAddress"),
     loanToken: url.searchParams.get("loanToken"),
     status: url.searchParams.get("status"),
-    name: url.searchParams.get("name"),
+    name: url.searchParams.get("name") ?
+      decodeURIComponent(url.searchParams.get("name"))
+      : null,
   };
+
   try {
     await connectDB();
 

@@ -41,11 +41,14 @@ export const AvailablePositions = ({ loanData }: { loanData: ILoanRequest[] }) =
                <Card
                   key={index}
                   title={item.name || "title"}
+                  status={item.loanStatus}
+                  userDetails={{ borrower: item.userAddress, investor: item.investorAddress }}
                   bid={{ amount: item.loanAmount, currency: item.loanToken }}
                   interestRate={item.interestRate}
                   image={"/assets/placeholder/cover.png"}
                   time={calculateCountdown(item.loanRequestPeriod.toString())}
                   onButtonClick={handleButtonClick}
+                  onCardClick={handleButtonClick}
                />
             ))}
          {/* <LiquidationModal

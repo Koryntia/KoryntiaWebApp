@@ -1,0 +1,10 @@
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+  width: 40px;
+  height: 40px;
+}
+.slick-list {
+  padding-bottom: 15px;
+  overflow-x: scroll;
+}

@@ -8,6 +8,10 @@ import { DateTime } from "luxon";
 import { ILoanRequest } from "@/interfaces/loan-interface";
 import { getMyLoan, getMySuppliedLoan } from "@/services/api/my-position";
 import EmptyComponent from "../common/Empty";
+import { Spinner } from "@/app/component/common/Spinner";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "./slider.css";
 
 interface PositionCardsProps {
    gridStyle?: string;
@@ -45,7 +49,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
       infinite: false,
       speed: 500,
       slidesToShow: slidesToShow,
-      arrows: false,
+      arrows: true,
       slidesToScroll: 1,
    };
 
@@ -57,7 +61,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
       getMyLoan(address)
          .then((data) => {
             if (data) {
-               setLoanData(data);
+               setLoanData(loanData.concat(data));
             }
          })
          .finally(() => setIsLoading(false));
@@ -72,7 +76,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
       getMySuppliedLoan(address)
          .then((data) => {
             if (data) {
-               setLoanData(data);
+               setLoanData(loanData.concat(data));
             }
          })
          .finally(() => setIsLoading(false));
@@ -86,7 +90,11 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
       }
    }, [suppliedLoans, handleGetMyLoanAPI, handleGetMySuppliedLoansAPI]);
 
-   if (isLoading) return <div>Loading...</div>;
+   if (isLoading) return (
+      <div className="justify-center flex items-center w-full m-3">
+         <Spinner />
+      </div>
+   );
 
    function calculateCountdown(date: string) {
       const targetDate = DateTime.fromISO(date);
@@ -99,7 +107,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
    return (
       <div className="w-full aspect-square h-[300px] " ref={sectionRef}>
          <Slider {...settings}>
-            {loanData ?
+            {loanData.length > 0 ?
                loanData.map((item, index) => (
                   <div key={index} className="max-w-xs px-2 rounded-[15px] shadow">
                      <Card
@@ -107,6 +115,8 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
                         bid={{ amount: item.loanAmount, currency: item.loanToken }}
                         description={{ by: "Static", collateral: item.collateralAmount, collateralToken: item.collateralToken }}
                         image={"/koryntia-logo.png"}
+                        status={item.loanStatus}
+                        userDetails={{ borrower: item.userAddress, investor: item.investorAddress }}
                         time={calculateCountdown(item.loanPeriod.toString())}
                      />
                   </div>

@@ -38,6 +38,8 @@ const getVariantClass = (variant: string) => {
       return "bg-whiteFFF";
     case "outlined":
       return "bg-blue-100 text-blue-500";
+    case "error":
+      return "bg-red-700 text-whiteFFF";
     default:
       return ""; // Default styles
   }

@@ -24,9 +24,11 @@ export interface ILoanRequest {
 }
 
 export enum STATUS {
-  "pending" = "pending",
-  "borrowed" = "borrowed",
+  "requested" = "requested",
+  "withdrawn" = "withdrawn",
+  "funded" = "funded",
+  "paid" = "paid",
   "expired" = "expired",
+  "unhealthy" = "unhealthy",
   "liquidated" = "liquidated",
-  "refunded" = "refunded",
 }

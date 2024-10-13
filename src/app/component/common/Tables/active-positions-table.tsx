@@ -5,12 +5,12 @@ import { FC } from "react";
 
 import { TbCurrencyEthereum } from "react-icons/tb";
 import EmptyComponent from "../Empty";
+import { truncateAddress } from "@/utils/helper";
 
 interface TablePorp {
    data: ILoanRequest[];
 }
 const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
-   // const keys = Object.values(data);
    let growt = {};
    const handleColor = (e: string) => {
       let numberGrowt = parseFloat(e);
@@ -51,10 +51,10 @@ const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
                      Amount
                   </th>
                   <th scope="col" align="left" className=" py-3">
-                     APR
+                     Interest Rate
                   </th>
                   <th scope="col" align="left" className=" py-3">
-                     Fees
+                     Collateral
                   </th>
                   <th scope="col" align="left" className=" py-3">
                      Supplier
@@ -76,8 +76,8 @@ const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
                            alt="Jese image"
                         />
                         <div className="pl-4">
-                           <p className="text-[16px] font-semibold not-italic leading-[20.8px]">{"static"}</p>
-                           <p className="font-medium text-[12px] text-slate-400">{"static"}</p>
+                           <p className="text-[16px] font-semibold not-italic leading-[20.8px]">{key.name}</p>
+                           <p className="font-medium text-[12px] text-slate-400">{new Date(key.creationDate).toLocaleDateString()}</p>
                         </div>
                      </th>
                      <td className="py-4 w-[10%] text-black font-semibold">
@@ -87,19 +87,26 @@ const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
                         </span>
                      </td>
                      <td className="py-4 w-[10%]">
-                        <div className="flex items-center">{handleColor("-8")}</div>
+                        <div className="flex items-center">{key.interestRate.toString()}%</div>
                      </td>
                      <td className="py-4 w-[10%]  text-black font-semibold">
                         <span>
                            <TbCurrencyEthereum className="inline-block  text-appColor1" />
-                           {"static"}
+                           {key.collateralAmount}
                         </span>
                      </td>
                      <td className="w-[10%] py-4 text-black font-semibold">
-                        <span>{"static"}</span>
+                        <span>{truncateAddress(key.investorAddress)}</span>
                      </td>
                      <td className="w-[20%] py-4 text-black text-center font-semibold">
-                        <span className="bg-[#8CB10C] text-[14px] rounded-3xl px-[15px] pt-0.5 pb-1 text-white">
+                        <span
+                           className={`text-[14px] rounded-3xl px-[15px] pt-0.5 pb-1 text-white ${
+                              key.healthFactor >= 85
+                                ? "bg-textGreen1"
+                                : key.healthFactor >= 50
+                                ? "bg-yellow-500"
+                                : "bg-red-700"
+                            }`}>
                            {key.healthFactor || 0}%
                         </span>
                      </td>

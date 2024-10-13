@@ -20,8 +20,8 @@ const loanSchema = new Schema<ILoanRequest>(
     creationDate: { type: Date, required: true },
     loanStatus: {
       type: String,
-      enum: ["pending", "borrowed", "expired", "liquidated", "refunded"],
-      default: "pending",
+      enum: ["requested", "withdrawn", "funded", "paid", "expired", "unhealthy", "liquidated"],
+      default: "requested",
       required: true,
     },
     investorAddress: { type: String, required: false },

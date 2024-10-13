@@ -8,6 +8,7 @@ import { AvailablePositions } from "./positions";
 import { ILoanRequest } from "@/interfaces/loan-interface";
 import { getMarketLoans } from "@/services/api/market-loans";
 import { useState, useEffect } from "react";
+import { Spinner } from '@/app/component/common/Spinner';
 
 type Tab = {
    label: string;
@@ -42,7 +43,11 @@ export default function Market() {
 
    useEffect(() => handleGetMarketLoans(), []);
 
-   if (isLoading) return <div>Loading...</div>;
+   if (isLoading) return (
+      <div className="justify-center flex items-center w-full mt-20">
+         <Spinner />
+      </div>
+   );
 
    return (
       <section className="w-full h-full p-8">

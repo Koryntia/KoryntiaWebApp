@@ -2,12 +2,7 @@
 import { IsString, IsNumber, IsDate, IsEnum, IsOptional, IsNotEmpty } from "class-validator";
 import { Type } from "class-transformer";
 import { AtLeastOneField } from "../validators/ATLeastOneField";
-
-enum BorrowedStatus {
-   new = "new",
-   invested = "invested",
-   closed = "closed",
-}
+import { STATUS } from "@/interfaces/loan-interface";
 
 export class UpdateLoanDto {
    @AtLeastOneField(
@@ -86,9 +81,9 @@ export class UpdateLoanDto {
    @IsOptional()
    nftVersion?: string;
 
-   @IsEnum(BorrowedStatus)
+   @IsEnum(STATUS)
    @IsOptional()
-   borrowedStatus?: BorrowedStatus;
+   borrowedStatus?: STATUS;
 
    @IsString()
    @IsOptional()

@@ -1,11 +1,13 @@
 "use client";
 import Image from "next/image";
+import { useAccount } from 'wagmi';
 import { useRouter } from "next/navigation";
 import etheriumIcon from "../../../../public/icons/etherium.svg";
 import useElementWidth from "@/hooks/useElementWidth";
 import Card from "../common/Card";
 import { useEffect, useState } from "react";
 import MarketModal from "./marketModal";
+import AddCollateral from './addCollateral';
 import Slider from "react-slick";
 import { calculateSlidesToShow } from "@/utils/helper";
 import Timer from "../common/Timer";
@@ -16,9 +18,11 @@ import EmptyComponent from "../common/Empty";
 
 export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoanRequest | null, marketLoans: ILoanRequest[] }) => {
   const router = useRouter();
-  const [isPositionName, setIsPositionName] = useState(false);
+  const { address } = useAccount();
+  const [action, setAction] = useState('');
   const [sectionWidth, sectionRef] = useElementWidth<HTMLDivElement>();
   const [slidesToShow, setSlidesToShow] = useState<number>(3);
+  const ZERO_ADDRESS: string = '0x0000000000000000000000000000000000000000';
 
   function calculateCountdown(date: string) {
     const targetDate = DateTime.fromISO(date);
@@ -29,7 +33,9 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
   }
 
   const currentDate = new Date();
-  const endDate = new Date(loanData ? loanData.loanRequestPeriod : currentDate);
+  const endDate = loanData?.loanStatus !== "requested" 
+    ? new Date(loanData ? loanData.loanPeriod : currentDate)
+    : new Date(loanData ? loanData.loanRequestPeriod : currentDate);
   endDate.setDate(endDate.getDate() + 1);
 
   useEffect(() => {
@@ -44,7 +50,7 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
     infinite: false,
     speed: 500,
     slidesToShow: slidesToShow,
-    arrows: false,
+    arrows: true,
     slidesToScroll: 1,
   };
 
@@ -77,7 +83,8 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
             </div>
             <div className="flex-1 flex flex-col justify-between">
               <div>
-                <h2 className="text-[28px] text-black222 font-semibold leading-[36.4px] not-italic ">
+                <h2 className="text-[28px] text-black222 font-semibold leading-[36.4px] not-italic mb-1">
+                  { loanData.name }
                 </h2>
                 <p className="text-textGray text-base leading-[180%] tracking-[0.14px]">{`The borrower is seeking a loan of ${loanData.loanAmount} ${loanData.loanToken}, showcasing a ${loanData.interestRate}% interest rate while leveraging a robust ${loanData.liquidationThreshold}% collateralization ratio. This demonstrates the borrower's intention to secure the loan by offering a substantial collateral base of ${Number(loanData.collateralAmount).toFixed(4)} ${loanData.collateralToken}, ensuring a lower risk profile within the lending ecosystem.`}</p>
                 <div>
@@ -85,11 +92,13 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
                   <div className="flex flex-col lg:flex-row lg:justify-between">
                     <div>
                       <p className="text-textGray text-[16px] leading-[20.8px] tracking-[0.16px] not-italic ">
-                        Auction End In
+                        {loanData.loanStatus === "requested" && <span>Auction End In</span>}
+                        {loanData.loanStatus === "funded" && <span>Loan Repayment Deadline</span>}
                       </p>
-                      <div className="pt-3">
-                        <Timer endTime={endDate} />
-                      </div>
+                      {(loanData.loanStatus === "requested" || loanData.loanStatus === "funded") &&
+                        <div className="pt-3">
+                          <Timer endTime={endDate} />
+                        </div>}
                     </div>
                     <div>
                       <p className="text-textGray text-[16px] leading-[20.8px] tracking-[0.16px] not-italic">
@@ -123,19 +132,58 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
                     <p className="opacity-90 text-neutral-400 text-base font-medium font-inter leading-tight tracking-tight">
                       Health factor
                     </p>
-                    <button className="bg-textGreen1 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
+                    {loanData.healthFactor >= 85 && <button className="bg-textGreen1 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
                       {loanData.healthFactor}% High
-                    </button>
+                    </button>}
+                    {loanData.healthFactor >= 50 && loanData.healthFactor < 85 && <button className="bg-yellow-500 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
+                      {loanData.healthFactor}% Medium
+                    </button>}
+                    {loanData.healthFactor < 50 && <button className="bg-red-700 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
+                      {loanData.healthFactor}% Low
+                    </button>}
                   </div>
                 </div>
               </div>
 
-              <button
-                className="bg-appColor1 px-4 py-3  rounded-md text-whiteFFF w-[210px]"
-                onClick={() => setIsPositionName(true)}
-              >
-                Supply
-              </button>
+              <div className="flex flex-col lg:flex-row lg:justify-between">
+                {loanData.loanStatus === "requested" && loanData.userAddress !== address && <button
+                  className="bg-appColor1 px-4 py-3  rounded-md text-whiteFFF w-[210px]"
+                  onClick={() => setAction('Supply')}
+                >
+                  Supply
+                </button>}
+
+                {loanData.loanStatus === "requested" && loanData.userAddress === address && <button
+                  className="bg-appColor1 px-4 py-3  rounded-md text-whiteFFF w-[210px]"
+                  onClick={() => setAction('Withdraw')}
+                >
+                  Withdraw
+                </button>}
+
+                {loanData.loanStatus === "funded" && loanData.userAddress === address && <button
+                  className="bg-appColor1 px-4 py-3  rounded-md text-whiteFFF w-[210px]"
+                  onClick={() => setAction('Repay')}
+                >
+                  Repay
+                </button>
+                }
+
+                {(loanData.loanStatus === "expired" || loanData.loanStatus === "unhealthy" ) && loanData.investorAddress === address && <button
+                  className="bg-red-700 px-4 py-3  rounded-md text-whiteFFF w-[210px]"
+                  onClick={() => setAction('Liquidate')}
+                >
+                  Liquidate
+                </button>
+                }
+
+                {loanData.loanStatus === "unhealthy" && loanData.userAddress === address && <button
+                  className="bg-red-700 px-4 py-3  rounded-md text-whiteFFF w-[210px]"
+                  onClick={() => setAction('Add Collateral')}
+                >
+                  Add Collateral
+                </button>
+                }
+              </div>
             </div>
           </div> :
           <EmptyComponent description="loan details not found" />
@@ -161,10 +209,10 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
                   interestRate={item.interestRate}
                   image={"/koryntia-logo.png"}
                   time={calculateCountdown(item.loanRequestPeriod.toString())}
-                  onButtonClick={() => setIsPositionName(true)}
                   onCardClick={() =>
                     router.push(`/market/${item.name}/details` as Route)
                   }
+                  userDetails={{ borrower: item.userAddress, investor: item.investorAddress }}
                 />
               </div>
             ))}
@@ -173,9 +221,17 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
       </div>
 
       {loanData && <MarketModal
-        open={isPositionName}
+        open={action !== '' && action !== "Add Collateral"}
         loanData={loanData}
-        handleClose={() => setIsPositionName(false)}
+        handleClose={() => setAction('')}
+        action={action}
+      />}
+
+      {loanData && <AddCollateral
+        open={action !== '' && action === "Add Collateral"}
+        loanData={loanData}
+        handleClose={() => setAction('')}
+        action={action}
       />}
     </section>
   );

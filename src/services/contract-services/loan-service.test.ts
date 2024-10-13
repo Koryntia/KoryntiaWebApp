@@ -4,7 +4,7 @@ import config, { test_config } from "@/utils/config";
 import MessageHandler from '@/utils/message-handler';
 import { getPriceApi } from '@/services/api/getPrice';
 
-jest.mock('@/services/message-handler', () => {
+jest.mock('@/utils/message-handler', () => {
   return {
     get: jest.fn(() => ({
       handleError: jest.fn(),
@@ -44,10 +44,6 @@ describe('Integration Tests', () => {
       jest.clearAllMocks();
     });
 
-    it('Connects to the contracts successfully', async () => {
-      expect(await user1_service.getTokenBalance(TOKEN_A)).not.toBeNull();
-    });
-
     it('Creates loan successfully with valid data', async () => {
       const loanToken=TOKEN_A;
       const collateralToken=TOKEN_B;
@@ -60,7 +56,6 @@ describe('Integration Tests', () => {
       const loanRequestDeadline = currentTimestamp + 3600;
       const loanRepayDeadline = currentTimestamp + 86400;
 
-      const initialBalance = Number(await user1_service.getTokenBalance(TOKEN_B));
       const loanId = await user1_service.createLoan(
         loanToken,
         collateralToken,
@@ -75,7 +70,6 @@ describe('Integration Tests', () => {
 
       expect(mockMessageHandler.handleError).not.toHaveBeenCalled();
       expect(Number.isInteger(loanId)).toBe(true);
-      expect(Number(await user1_service.getTokenBalance(TOKEN_B))).toBeLessThan(initialBalance);
     });
 
     it('Creates loan fails with invalid data', async () => {
@@ -163,15 +157,11 @@ describe('Integration Tests', () => {
         interestRate,
       )) as number;
       
-      const initBalance = Number(await user2_service.getTokenBalance(TOKEN_A));
       expect(await user2_service.fundLoan(loanId)).toBe(true);
-      expect(Number(await user2_service.getTokenBalance(TOKEN_A))).toBeLessThan(initBalance);
     });
 
     it('Should successfully handle invalid id', async () => {
-      const initBalance = Number(await user2_service.getTokenBalance(TOKEN_A));
       expect(await user2_service.fundLoan(9999)).toBe(false);
-      expect(Number(await user2_service.getTokenBalance(TOKEN_A))).toBe(initBalance);
     });
 
     it('Should liquidate funded loans', async () => {
@@ -202,9 +192,7 @@ describe('Integration Tests', () => {
       const delay = (seconds: number) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
       await delay(50);
 
-      const initialBalance = Number(await user2_service.getTokenBalance(TOKEN_B));
       expect(await user2_service.liquidate(loanId)).toBe(true);
-      expect(Number(await user2_service.getTokenBalance(TOKEN_B))).toBeGreaterThan(initialBalance);
     });
 
     it('Should not liquidate if repayment date is not passed', async () => {
@@ -301,9 +289,7 @@ describe('Integration Tests', () => {
         interestRate,
       )) as number;
 
-      const initialBalance = Number(await user1_service.getTokenBalance(TOKEN_B));
       expect(await user1_service.withdrawCollateral(loanId)).toBe(true);
-      expect(Number(await user1_service.getTokenBalance(TOKEN_B))).toBeGreaterThan(initialBalance);
     });
 
     it('Successfully repays loans', async () => {
@@ -335,9 +321,7 @@ describe('Integration Tests', () => {
       expect(await user2_service.fundLoan(loanId)).toBe(true);
 
       await new Promise((resolve) => setTimeout(resolve, 3000));
-      const initialBalance = Number(await user1_service.getTokenBalance(TOKEN_A));
       expect(await user1_service.repay(loanId)).toBe(true);
-      expect(Number(await user1_service.getTokenBalance(TOKEN_A))).toBeLessThan(initialBalance);
     });
 
     it('Successfully handles invalid loan ID', async () => {

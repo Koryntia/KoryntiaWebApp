@@ -5,11 +5,13 @@ import { useTranslations } from "next-intl";
 import { LoanData, getRecentLoan } from "@/services/api/dashboard";
 import { useAccount } from "wagmi";
 import EmptyComponent from "../Empty";
+import { Spinner } from "@/app/component/common/Spinner";
 
 const RecentPositionsList: FC = () => {
    const t = useTranslations("RecentLoans");
    const [active, setActive] = useState(true);
    const [recentLoan, setRecentLoan] = useState<LoanData[]>();
+   const [isLoading, setIsLoading] = useState(true);
    const { address } = useAccount();
 
    const handleClick = () => {
@@ -34,10 +36,17 @@ const RecentPositionsList: FC = () => {
    useEffect(() => {
       if (!address) return;
       _getRecentLoadAPI(address);
+      setIsLoading(false);
    }, [active, address]);
 
    const sortedData = recentLoan?.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
    const data = active ? sortedData?.slice(0, 3) : sortedData;
+
+   if (isLoading) return (
+      <div className="justify-center flex items-center w-full m-3">
+         <Spinner />
+      </div>
+   );
 
    return (
       <div className="">

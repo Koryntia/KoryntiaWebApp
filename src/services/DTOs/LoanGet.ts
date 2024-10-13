@@ -16,7 +16,7 @@ export class GetLoanDto {
 
   @IsEnum(STATUS)
   @IsOptional()
-  status?: STATUS;
+  loanStatus?: STATUS;
 
   @IsString()
   @IsOptional()

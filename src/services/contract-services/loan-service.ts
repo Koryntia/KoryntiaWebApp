@@ -209,17 +209,17 @@ class BlockchainService {
         return false;
       }
 
-      const debtAmount = await this.loanPositionManagerContract.calculateDebtAmount(
+      console.log(ethers.formatUnits(await this.loanPositionManagerContract.calculateDebtAmount(
         loanPosition.collateralToken,
         loanPosition.collateralAmount,
         loanPosition.loanToken,
         loanPosition.initialThreshold,
-      );
+      )));
 
       await this.approveSpender(
         loanPosition.loanToken,
         this.loanPositionManagerContract.target as string,
-        debtAmount,
+        loanPosition.loanAmount,
       );
 
       return new Promise<boolean>((resolve) => {
@@ -232,11 +232,13 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.repay(loanId).catch((error) => {
+          console.log(error);
           messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
+      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }

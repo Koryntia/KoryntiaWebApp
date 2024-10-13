@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import React, { FC } from "react";
+import { useAccount } from 'wagmi';
 import { AiOutlineHeart } from "react-icons/ai";
 import { TbCurrencyEthereum } from "react-icons/tb";
 import Link from "next/link";
@@ -22,14 +23,20 @@ export type CardProps = {
       currency: string;
    };
    liked?: boolean;
-   isLliquidation?: boolean;
+   status?: string;
+   userDetails: {
+      borrower: string;
+      investor: string;
+   };
 };
 
-const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, isLliquidation }) => {
+const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, status= "requested", userDetails }) => {
+   const router = useRouter();
+   const { address } = useAccount();
    return (
       <Link
          href={{
-            pathname: `/market/${title}/details`,
+            pathname: `/market/${encodeURIComponent(title)}/details`,
             query: {},
          }}
       >
@@ -93,12 +100,41 @@ const Card: FC<CardProps> = ({ image, time, title, description, bid, liked, isLl
                      </p>
                   </div>
                   <div>
-                     <Button
+                     {status === "requested" && userDetails.borrower !== address && <Button
                         styling="text-xs px-6 py-2"
                         variant="solid-purple"
+                        onClick={() => router.push(`/market/${encodeURIComponent(title)}/details`)}
                      >
-                        {isLliquidation ? "Liquidate" : "Supply"}
-                     </Button>
+                        Supply
+                     </Button>}
+                     {status === "requested" && userDetails.borrower === address && <Button
+                        styling="text-xs px-6 py-2"
+                        variant="solid-purple"
+                        onClick={() => router.push(`/market/${encodeURIComponent(title)}/details`)}
+                     >
+                        Withdraw
+                     </Button>}
+                     {status === "funded" && userDetails.borrower === address && <Button
+                        styling="text-xs px-6 py-2"
+                        variant="solid-purple"
+                        onClick={() => router.push(`/market/${encodeURIComponent(title)}/details`)}
+                     >
+                        Repay
+                     </Button>}
+                     {(status === "expired" || status === "unhealthy") && userDetails.investor === address && <Button
+                        styling="text-xs px-6 py-2"
+                        variant="error"
+                        onClick={() => router.push(`/market/${encodeURIComponent(title)}/details`)}
+                     >
+                        Liquidate
+                     </Button>}
+                     {status === "unhealthy" && userDetails.borrower === address && <Button
+                        styling="text-xs px-6 py-2"
+                        variant="error"
+                        onClick={() => router.push(`/market/${encodeURIComponent(title)}/details`)}
+                     >
+                        Add Collateral
+                     </Button>}
                   </div>
                </footer>
             </div>

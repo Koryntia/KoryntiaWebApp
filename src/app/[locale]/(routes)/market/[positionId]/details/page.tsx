@@ -4,6 +4,7 @@ import { ILoanRequest } from "@/interfaces/loan-interface";
 import { getMarketLoan, getMarketLoans } from "@/services/api/market-loans";
 import { usePathname } from "next/navigation";
 import { FC, useCallback, useEffect, useState } from "react";
+import { Spinner } from '@/app/component/common/Spinner';
 interface pageProps { }
 
 const Page: FC<pageProps> = () => {
@@ -31,7 +32,11 @@ const Page: FC<pageProps> = () => {
     handleGetMarketLoan()
   }, [handleGetMarketLoan]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return (
+    <div className="justify-center flex items-center w-full mt-20">
+      <Spinner />
+    </div>
+  );
 
   return (
     <div>

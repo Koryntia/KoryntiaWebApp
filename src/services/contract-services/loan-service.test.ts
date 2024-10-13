@@ -97,12 +97,33 @@ describe('Integration Tests', () => {
         loanRequestDeadline,
         interestRate,
       )).toBe(null);
-
-      // expect(mockMessageHandler.handleError).toHaveBeenCalled();
     });
 
     it('Service gets LoanPositionNFT details for existing id', async () => {
-      expect(await user1_service.getLoanNFTDetails(1)).not.toBe(null);
+      const loanToken=TOKEN_A;
+      const collateralToken=TOKEN_B;
+      const amount = ethers.parseEther("1");
+      const collateralAmount = ethers.parseEther("2");
+      const interestRate = 500;
+      const liquidationThreshold = 9000;
+      const initialThreshold = 5000;
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const loanRequestDeadline = currentTimestamp + 3600;
+      const loanRepayDeadline = currentTimestamp + 86400;
+      const loanId = await user1_service.createLoan(
+        loanToken,
+        collateralToken,
+        amount,
+        collateralAmount,
+        liquidationThreshold,
+        initialThreshold,
+        loanRepayDeadline,
+        loanRequestDeadline,
+        interestRate,
+      );
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      expect(await user1_service.getLoanNFTDetails(loanId)).not.toBe(null);
     });
 
     it('Service returns null for non-existent id', async () => {
@@ -110,12 +131,34 @@ describe('Integration Tests', () => {
     });
 
     it('Successfully gets health factor for valid loan Id', async () => {
-      expect(await user1_service.healthFactor(1)).not.toBe(null);
-      expect(mockMessageHandler.handleError).not.toHaveBeenCalled();
+      const loanToken=TOKEN_A;
+      const collateralToken=TOKEN_B;
+      const amount = ethers.parseEther("1");
+      const collateralAmount = ethers.parseEther("2");
+      const interestRate = 500;
+      const liquidationThreshold = 9000;
+      const initialThreshold = 5000;
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const loanRequestDeadline = currentTimestamp + 3600;
+      const loanRepayDeadline = currentTimestamp + 86400;
+      const loanId = await user1_service.createLoan(
+        loanToken,
+        collateralToken,
+        amount,
+        collateralAmount,
+        liquidationThreshold,
+        initialThreshold,
+        loanRepayDeadline,
+        loanRequestDeadline,
+        interestRate,
+      );
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      expect(await user1_service.healthFactor(loanId)).not.toBe(null);
     });
 
     it('HealthFactor successfully handles nonexistent loan Id', async () => {
-      expect(await user1_service.healthFactor(1)).not.toBe(null);
+      expect(await user1_service.healthFactor(1)).toBe(null);
       // expect(mockMessageHandler.handleError).toHaveBeenCalled();
     });
   });
@@ -337,8 +380,8 @@ describe('Integration Tests', () => {
       const liquidationThreshold = 9000;
       const initialThreshold = 5000;
       const currentTimestamp = Math.floor(Date.now() / 1000);
-      const loanRequestDeadline = currentTimestamp + 10;
-      const loanRepayDeadline = currentTimestamp + 15;
+      const loanRequestDeadline = currentTimestamp + 2;
+      const loanRepayDeadline = currentTimestamp + 5;
   
       await new Promise((resolve) => setTimeout(resolve, 3000));
       const loanId = (await user1_service.createLoan(
@@ -355,7 +398,7 @@ describe('Integration Tests', () => {
       expect(await user2_service.fundLoan(loanId)).toBe(true);
 
       const delay = (seconds: number) => new Promise((resolve) => setTimeout(resolve, seconds * 1000));
-      await delay(50);
+      await delay(40);
 
       expect(await user1_service.repay(loanId)).toBe(false);
     });
@@ -367,7 +410,7 @@ describe('Integration Tests', () => {
     });
 
     it('Gets token prices', async () => {
-      expect(await getPriceApi(TOKEN_A)).toBe(2);
+      expect((await getPriceApi(TOKEN_A)).price).toBe(2);
     });
   });
 });

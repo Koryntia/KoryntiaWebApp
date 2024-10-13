@@ -37,20 +37,6 @@ class BlockchainService {
     );
   }
 
-  async getTokenBalance(tokenAddress: string): Promise<string | null> {
-    try {
-      const tokenContract = new ethers.Contract(tokenAddress, [
-        "function balanceOf(address owner) view returns (uint256)",
-      ], this.provider);
-      const balance = await tokenContract.balanceOf(await this.signer.getAddress());
-  
-      return ethers.formatEther(balance);
-    } catch (error) {
-      messageHandler.handleError((error as Error).message);
-      return null;
-    }
-  }
-
   async approveSpender(
     tokenAddress: string,
     spenderAddress: string,
@@ -111,6 +97,7 @@ class BlockchainService {
         });
       });
     } catch (error) {
+      console.log(error);
       messageHandler.handleError((error as Error).message);
       return null;
     }
@@ -143,6 +130,7 @@ class BlockchainService {
         interestRate: loanPosition.interestRate.toString()
       };
     } catch (error) {
+      console.log(error);
       messageHandler.handleError((error as Error).message);
       return null;
     }
@@ -186,11 +174,13 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.fundLoan(loanId).catch((error) => {
+          console.log(error);
           messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
+      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -209,17 +199,20 @@ class BlockchainService {
         return false;
       }
 
-      console.log(ethers.formatUnits(await this.loanPositionManagerContract.calculateDebtAmount(
+      let debtAmount = await this.loanPositionManagerContract.calculateDebtAmount(
         loanPosition.collateralToken,
         loanPosition.collateralAmount,
         loanPosition.loanToken,
         loanPosition.initialThreshold,
-      )));
+      );
+      debtAmount = ethers.parseEther(
+        Math.ceil(ethers.formatUnits(debtAmount)).toString()
+      );
 
       await this.approveSpender(
         loanPosition.loanToken,
         this.loanPositionManagerContract.target as string,
-        loanPosition.loanAmount,
+        debtAmount,
       );
 
       return new Promise<boolean>((resolve) => {
@@ -257,11 +250,13 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.liquidate(loanId).catch((error) => {
+          console.log(error);
           messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
+      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -298,11 +293,13 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.addCollateral(loanId, amount).catch((error) => {
+          console.log(error);
           messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
+      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -331,11 +328,13 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.withdrawCollateral(loanId).catch((error) => {
+          console.log(error);
           messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
+      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -352,6 +351,7 @@ class BlockchainService {
 
       return Number(ethers.formatUnits(healthFactor, 18));
     } catch (error) {
+      console.log(error);
       messageHandler.handleError((error as Error).message);
       return null;
     }
@@ -361,17 +361,6 @@ class BlockchainService {
     try {
       const [, price] = await this.oracleContract.getPrice(tokenAddress);
       return Number(ethers.formatUnits(price, 8));
-    } catch (error) {
-      console.log(error);
-      messageHandler.handleError((error as Error).message);
-      return null;
-    }
-  }
-
-  async calculateMaxAllowedLiquidationThreshold(interestRate: ethers.BigNumberish): Promise<number | null> {
-    try {
-      const liquidationThreshold = await this.loanPositionManagerContract.calculateMaxAllowedLiquidationThreshold(interestRate);
-      return Number(liquidationThreshold);
     } catch (error) {
       console.log(error);
       messageHandler.handleError((error as Error).message);

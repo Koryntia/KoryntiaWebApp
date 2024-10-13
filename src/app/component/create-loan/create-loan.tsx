@@ -274,7 +274,7 @@ const CreateLoan = () => {
                     loanPeriod={+loanPeriod}
                     collateralAmount={+collateralAmount}
                     liquidationThreshold={calculateMaxThreshold()}
-                    initialThreshold={Math.round(+initialThreshold)}
+                    initialThreshold={Math.round(+initialThreshold / (calculateMaxThreshold() / 100))}
                     interestRate={Math.round(+interestRate)}
                     name={name}
                   />

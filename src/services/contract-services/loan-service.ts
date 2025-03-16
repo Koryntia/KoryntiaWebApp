@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import LoanPositionManagerABI from '@/abis/LoanPositionManager.json';
+import LoanPositionManagerArtifact from '@/abis/LoanPositionManager.json';
 import OracleABI from '@/abis/Oracle.json'
 import config from "@/utils/config";
 import MessageHandler from "@/utils/message-handler";
@@ -27,7 +27,7 @@ class BlockchainService {
 
     this.loanPositionManagerContract = new ethers.Contract(
       loanPositionManagerAddress,
-      LoanPositionManagerABI,
+      LoanPositionManagerArtifact.abi,
       this.signer
     );
     this.oracleContract = new ethers.Contract(
@@ -52,9 +52,8 @@ class BlockchainService {
 
   async createLoan(
     loanToken: string,
-    collateralToken: string,
-    amount: ethers.BigNumberish,
-    collateralAmount: ethers.BigNumberish,
+    collateralToken: string,     
+    collateralAmount: ethers.BigNumberish,  
     liquidationThreshold: ethers.BigNumberish,
     initialThreshold: ethers.BigNumberish,
     loanRepayDeadline: ethers.BigNumberish,
@@ -69,40 +68,41 @@ class BlockchainService {
       );
       
       return new Promise<number | null>((resolve) => {
-        this.loanPositionManagerContract.once("LoanPositionCreated",
-            (
-              borrower: string,
-              loanId: ethers.BigNumberish,
-              collateralAmount: ethers.BigNumberish,
-              amount: ethers.BigNumberish,
-              event: ethers.ContractEvent
-            ) => {
-          resolve(Number(loanId));
-        });
-
+        this.loanPositionManagerContract.once(
+          "LoanPositionCreated",
+          (
+            _borrower: string,
+            loanId: ethers.BigNumberish,
+            _eventCollateralAmount: ethers.BigNumberish,
+            _eventAmount: ethers.BigNumberish,
+            _event: ethers.ContractEvent
+          ) => {
+            resolve(Number(loanId));
+          }
+        );
+    
         this.loanPositionManagerContract.createLoanPosition(
           loanToken,
           collateralToken,
-          amount,
           collateralAmount,
           liquidationThreshold,
           initialThreshold,
           loanRepayDeadline,
           loanRequestDeadline,
-          interestRate,
-        ).catch((error) => {
-          console.log(error);
-          messageHandler.handleError((error as Error).message);
-          resolve(null);
-        });
+          interestRate
+        )
+          .then(() => {})
+          .catch((error) => {
+            messageHandler.handleError((error as Error).message);
+            resolve(null);
+          });
       });
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return null;
     }
   }
-
+  
   async getLoanNFTDetails(loanId: number): Promise<ILoanPosition | null> {
     try {
       const loanPosition = await this.loanPositionManagerContract.getLoanPosition(loanId);

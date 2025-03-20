@@ -9,12 +9,12 @@ import { getPriceApi } from "@/services/api/getPrice";
 import { getTokenAddress } from "@/constant/tokens";
 import { useLoanService } from '@/services/contract-services/loan-service.hook';
 import MessageHandler from '@/utils/message-handler';
+import toast from "react-hot-toast";
+import { STATUS } from "@/interfaces/loan-interface";
 
 const INITIAL_THRESHOLD_PERCENTAGE = 15;
 const PLATFORM_FEE = 12;
 const INTEREST_PRECISION = 10000;
-import toast from "react-hot-toast";
-import { STATUS } from "@/interfaces/loan-interface";
 
 interface FormValues {
    name: string;
@@ -146,17 +146,14 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
          }
    
          const data = { ...formValues };
-         console.log("DEBUG: Form values before submission:", data);
    
          if (!isInitialized) {
             messageHandler.handleError('Loan service not yet initialized');
             return 0;
          }
-         console.log("DEBUG: Loan service is initialized.");
-   
+        
          const loanTokenAddress = getTokenAddress(`${data.loanToken}/USD`);
          const collateralTokenAddress = getTokenAddress(`${data.collateralToken}/USD`);
-         //const parsedLoanAmount = ethers.parseEther(data.loanAmount);
          const parsedCollateralAmount = ethers.parseEther(data.collateralAmount);
          const liquidationThreshold = +data.liquidationThreshold;
          const initialThreshold = +data.initialThreshold;
@@ -164,7 +161,7 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
          const loanRequestPeriodTimestamp = Math.floor(+data.loanRequestPeriod / 1000);
          const interestRate = +data.interestRate;
    
-         const LoanId = await LoanService().createLoan(
+         const loanIdBN = await LoanService().createLoan(
             loanTokenAddress,
             collateralTokenAddress,
             parsedCollateralAmount,
@@ -173,11 +170,11 @@ const CreateLoanForm: React.FC<CreateLoanFormProps> = ({
             loanPeriodTimestamp,
             loanRequestPeriodTimestamp,
             interestRate,
-         );
-         
-         if (!LoanId) return 0;
-   
-         const response: any = await createNewLoan({ loanId: LoanId, ...data });
+          );
+          
+          if (!loanIdBN) return 0;
+          
+          const response: any = await createNewLoan({ loanId: Number(loanIdBN), ...data });
    
          if (response) {
             toast.success("Successfully created a Loan");

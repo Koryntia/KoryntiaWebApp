@@ -13,26 +13,33 @@ import { RoundedInput } from "../elements/Input";
 import Select from "../elements/select";
 import MessageHandler from '@/utils/message-handler';
 import { collateralAmountOptions } from "@/app/data/currency";
+import { CurrencyOption } from '@/types/liquidation';
 
 const messageHandler = MessageHandler.get();
 
-type MarketModalProps = {
+type AddCollateralProps = {
   open: boolean;
   loanData: ILoanRequest;
   handleClose: () => void;
-  action: "Request" | "Withdraw" | "Repay" | "Liquidate";
+  action: "Add Collateral";
 };
 
-
-const AddCollateral = (props: MarketModalProps) => {
+const AddCollateral = (props: AddCollateralProps) => {
   const { open, loanData, handleClose, action } = props;
   const { address } = useAccount();
   const { LoanService, isInitialized } = useLoanService();
   const [collateralAmount, setCollateralAmount] = useState(0);
   const collateralOption = collateralAmountOptions.find((option) => option.name === loanData.collateralToken);
-  const [selectedCollateralAmountOptions, setSelectedCollateralAmountOption] = useState<CurrencyOption>(
-    collateralOption
+  const foundOption = collateralAmountOptions.find(
+    (option) => option.name === loanData.collateralToken
   );
+  const defaultOption: CurrencyOption = foundOption ?? {
+    name: loanData.collateralToken,
+    value: "",
+    address: "",
+    image: ""
+  };
+  const [selectedCollateralOption, setSelectedCollateralOption] = useState<CurrencyOption>(defaultOption);
 
   function calculateCountdown(date: string) {
     const targetDate = DateTime.fromISO(date);
@@ -45,7 +52,7 @@ const AddCollateral = (props: MarketModalProps) => {
   const handleCollateralOptionChange = (selectedValue: string) => {
     const selectedOption = collateralAmountOptions.find((option) => option.value === selectedValue);
     if (!selectedOption) return;
-    setSelectedCollateralAmountOption(selectedOption);
+    setSelectedCollateralOption(selectedOption);
   };
 
   const addCollateral = async () => {

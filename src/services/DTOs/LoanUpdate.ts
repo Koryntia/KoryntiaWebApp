@@ -19,7 +19,7 @@ export class UpdateLoanDto {
          "liquidationThreshold",
          "nftManager",
          "nftVersion",
-         "borrowedStatus",
+         "loanStatus",
          "investorAddress",
          "loanToken",
          "name",
@@ -83,7 +83,7 @@ export class UpdateLoanDto {
 
    @IsEnum(STATUS)
    @IsOptional()
-   borrowedStatus?: STATUS;
+   loanStatus?: STATUS;
 
    @IsString()
    @IsOptional()

@@ -15,7 +15,7 @@ export interface ILoanRequest {
   nftManager: string;
   nftVersion: string;
   creationDate: Date;
-  loanStatus: string;
+  loanStatus: STATUS;
   investorAddress: string;
   updatedDate: Date;
   createdAt?: Date;

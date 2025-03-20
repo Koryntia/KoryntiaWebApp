@@ -1,5 +1,6 @@
-import { ethers } from 'ethers';
+import { ethers, ZeroAddress } from 'ethers';
 import LoanPositionManagerArtifact from '@/abis/LoanPositionManager.json';
+import LoanPositionNFTArtifact from '@/abis/LoanPositionNFT.json';
 import OracleABI from '@/abis/Oracle.json'
 import config from "@/utils/config";
 import MessageHandler from "@/utils/message-handler";
@@ -12,6 +13,7 @@ class BlockchainService {
   private signer: ethers.Signer;
   private loanPositionManagerContract: ethers.Contract;
   private oracleContract: ethers.Contract;
+  private nftContract: ethers.Contract;
 
   // Zero address
   private ZERO_ADDRESS: string = '0x0000000000000000000000000000000000000000' 
@@ -21,7 +23,8 @@ class BlockchainService {
 
     const loanPositionManagerAddress = config.LOAN_POSITION_MANAGER_ADDRESS;
     const oracleContractAddress = config.ORACLE_CONTRACT_ADDRESS;
-    if (!loanPositionManagerAddress || !oracleContractAddress) {
+    const nftAddress = config.NFT_ADDRESS;
+    if (!loanPositionManagerAddress || !oracleContractAddress || !nftAddress) {
       throw new Error("Missing LOAN_POSITION_MANAGER_ADDRESS in environment variables.");
     }
 
@@ -33,6 +36,11 @@ class BlockchainService {
     this.oracleContract = new ethers.Contract(
       oracleContractAddress,
       OracleABI,
+      this.signer
+    );
+    this.nftContract = new ethers.Contract(
+      nftAddress,
+      LoanPositionNFTArtifact.abi,
       this.signer
     );
   }
@@ -59,25 +67,28 @@ class BlockchainService {
     loanRepayDeadline: ethers.BigNumberish,
     loanRequestDeadline: ethers.BigNumberish,
     interestRate: ethers.BigNumberish,
-  ): Promise<number | null> {
+  ): Promise<string | null> {
     try {
+      // Aprobamos el gasto del token de colateral
       await this.approveSpender(
         collateralToken,
         this.loanPositionManagerContract.target as string,
         collateralAmount
       );
       
-      return new Promise<number | null>((resolve) => {
+      return new Promise<string | null>((resolve) => {
         this.loanPositionManagerContract.once(
           "LoanPositionCreated",
           (
-            _borrower: string,
             loanId: ethers.BigNumberish,
             _eventCollateralAmount: ethers.BigNumberish,
-            _eventAmount: ethers.BigNumberish,
-            _event: ethers.ContractEvent
+            _eventInitialThreshold: ethers.BigNumberish,
+            _borrower: string,
+            _eventLoanToken: string,
+            _eventCollateralToken: string,
+            _event?: ethers.ContractEvent
           ) => {
-            resolve(Number(loanId));
+            resolve(loanId.toString());
           }
         );
     
@@ -90,22 +101,20 @@ class BlockchainService {
           loanRepayDeadline,
           loanRequestDeadline,
           interestRate
-        )
-          .then(() => {})
-          .catch((error) => {
-            messageHandler.handleError((error as Error).message);
-            resolve(null);
-          });
+        ).catch((error: any) => {
+           messageHandler.handleError(`Error al crear el préstamo: ${error.message}`);
+           resolve(null);
+        });
       });
-    } catch (error) {
-      messageHandler.handleError((error as Error).message);
+    } catch (error: any) {
+      messageHandler.handleError(`Error en createLoan: ${error.message}`);
       return null;
     }
-  }
+  }  
   
   async getLoanNFTDetails(loanId: number): Promise<ILoanPosition | null> {
     try {
-      const loanPosition = await this.loanPositionManagerContract.getLoanPosition(loanId);
+      const loanPosition = await this.loanPositionManagerContract.getLoanPositions(loanId);
       if (
         !(loanPosition) ||
         (loanPosition.borrowerAddress === this.ZERO_ADDRESS &&
@@ -130,15 +139,14 @@ class BlockchainService {
         interestRate: loanPosition.interestRate.toString()
       };
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return null;
     }
   }
 
-  async fundLoan(loanId: number): Promise<boolean> {
+  async fundLoan(loanId: ethers.BigNumberish): Promise<boolean> {
     try{
-      const loanPosition = await this.loanPositionManagerContract.getLoanPosition(loanId);
+      const loanPosition = await this.loanPositionManagerContract.getLoanPositions(loanId);
       if (
         !(loanPosition) ||
         (loanPosition.borrowerAddress === this.ZERO_ADDRESS &&
@@ -165,22 +173,21 @@ class BlockchainService {
       return new Promise<boolean>((resolve) => {
         this.loanPositionManagerContract.once("LoanFunded",
             (
-              loanId: ethers.BigNumberish,
-              loanAmount: ethers.BigNumberish,
-              debtAmount: ethers.BigNumberish,
-              event: ethers.ContractEvent
+              _loanId: ethers.BigNumberish,
+              _loanAmount: ethers.BigNumberish,
+              _debtAmount: ethers.BigNumberish,
+              _event: ethers.ContractEvent
             ) => {
           resolve(true);
         });
-
-        this.loanPositionManagerContract.fundLoan(loanId).catch((error) => {
-          console.log(error);
+        const bigLoanId = BigInt(loanId.toString());
+        
+        this.loanPositionManagerContract.fundLoan(bigLoanId).catch((error) => {
           messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -189,7 +196,7 @@ class BlockchainService {
   // Repay Loan
   async repay(loanId: number): Promise<boolean> {
     try{
-      const loanPosition = await this.loanPositionManagerContract.getLoanPosition(loanId);
+      const loanPosition = await this.loanPositionManagerContract.getLoanPositions(loanId);
       if (
         !(loanPosition) ||
         (loanPosition.borrowerAddress === this.ZERO_ADDRESS &&
@@ -225,13 +232,11 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.repay(loanId).catch((error) => {
-          console.log(error);
           messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -243,20 +248,18 @@ class BlockchainService {
       return new Promise<boolean>((resolve) => {
         this.loanPositionManagerContract.once("LoanLiquidation",
             (
-              loanId: ethers.BigNumberish,
-              event: ethers.ContractEvent
+              _loanId: ethers.BigNumberish,
+              _event: ethers.ContractEvent
             ) => {
           resolve(true);
         });
 
         this.loanPositionManagerContract.liquidate(loanId).catch((error) => {
-          console.log(error);
           messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
@@ -265,7 +268,7 @@ class BlockchainService {
   // Add Collateral
   async addCollateral(loanId: number, amount: ethers.BigNumberish): Promise<boolean> {
     try {
-      const loanPosition = await this.loanPositionManagerContract.getLoanPosition(loanId);
+      const loanPosition = await this.loanPositionManagerContract.getLoanPositions(loanId);
       if (
         !(loanPosition) ||
         (loanPosition.borrowerAddress === this.ZERO_ADDRESS &&
@@ -293,52 +296,51 @@ class BlockchainService {
         });
 
         this.loanPositionManagerContract.addCollateral(loanId, amount).catch((error) => {
-          console.log(error);
           messageHandler.handleError((error as Error).message);
           resolve(false);
         });
       });
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
   }
 
-  async withdrawCollateral(loanId: number): Promise<boolean> {
+  async withdrawCollateral(loanId: ethers.BigNumberish): Promise<boolean> {
     try {
-      const loanPosition = await this.loanPositionManagerContract.getLoanPosition(loanId);
+      const loanPosition = await this.loanPositionManagerContract.getLoanPositions(loanId);
+      const formattedLoanAmount = ethers.formatUnits(loanPosition.loanAmount, 18);
+      const formattedCollateralAmount = ethers.formatUnits(loanPosition.collateralAmount, 18);
       if (
-        !(loanPosition) ||
+        !loanPosition ||
         (loanPosition.borrowerAddress === this.ZERO_ADDRESS &&
-        ethers.formatUnits(loanPosition.loanAmount) === "0.0" &&
-        ethers.formatUnits(loanPosition.collateralAmount) === "0.0")
+         formattedLoanAmount === "0.0" &&
+         formattedCollateralAmount === "0.0")
       ) {
         messageHandler.handleError("Loan position not found");
         return false;
       }
-
+  
       return new Promise<boolean>((resolve) => {
-        this.loanPositionManagerContract.once("CollateralWithdrawn",
-            (
-              loanId: ethers.BigNumberish,
-              event: ethers.ContractEvent,
-            ) => {
-          resolve(true);
-        });
-
-        this.loanPositionManagerContract.withdrawCollateral(loanId).catch((error) => {
-          console.log(error);
-          messageHandler.handleError((error as Error).message);
-          resolve(false);
-        });
+        this.nftContract.once('Transfer', (from: string, to: string, tokenId: ethers.BigNumberish, event: ethers.ContractEvent) => {
+          if (to === ZeroAddress && tokenId.toString() === loanId.toString()) {
+             resolve(true);
+          }
+       });
+       
+        this.loanPositionManagerContract.withdrawCollateral(loanId)
+          .then((tx: any) => {})
+          .catch((error: any) => {
+            messageHandler.handleError((error as Error).message);
+            resolve(false);
+          });
       });
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return false;
     }
   }
+  
 
   // Check Health Factor
   async healthFactor(loanId: number): Promise<number | null> {
@@ -351,7 +353,6 @@ class BlockchainService {
 
       return Number(ethers.formatUnits(healthFactor, 18));
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return null;
     }
@@ -362,7 +363,6 @@ class BlockchainService {
       const [, price] = await this.oracleContract.getPrice(tokenAddress);
       return Number(ethers.formatUnits(price, 8));
     } catch (error) {
-      console.log(error);
       messageHandler.handleError((error as Error).message);
       return null;
     }

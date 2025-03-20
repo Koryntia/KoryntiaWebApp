@@ -28,15 +28,17 @@ export default function Home() {
   };
 
   return (
-    <section>
-      <div className="flex w-full justify-between gap-[20px]">
-        <div className="flex-grow pl-[35px] pt-[34px]">
+    <section className="relative w-full min-h-screen">
+      <div className="flex flex-wrap pr-[360px] gap-4">
+        <div className="w-full pl-[35px] pt-[34px]">
           <Dashboard />
         </div>
-        <div className="flex flex-col h-full gap-3 px-[26px] py-[20px] min-w-[330px]">
-          <CreateLoan />
+        <div className="w-full">
           <RecentPositionsList />
         </div>
+      </div>
+      <div className="absolute top-0 right-0 w-[360px] h-full bg-white border-l px-4 py-5 overflow-y-auto">
+        <CreateLoan />
       </div>
     </section>
   );

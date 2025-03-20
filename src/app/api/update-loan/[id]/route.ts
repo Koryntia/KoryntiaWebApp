@@ -27,7 +27,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
             return NextResponse.json({ message: `The loan with the id ${id} doesn't exist` }, { status: 404 });
          }
 
-         if (loan.borrowedStatus === "invested" && data.borrowedStatus === "invested") {
+         if (loan.loanStatus === "invested" && data.loanStatus === "invested") {
             return NextResponse.json({ message: "This Loan is already invested" }, { status: 409 });
          }
 

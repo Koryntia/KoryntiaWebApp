@@ -52,7 +52,6 @@ const ActivePositions = () => {
           {t("title")}
         </h1>
         <div className="flex flex-wrap items-center gap-4">
-          {/* Contenedor relativo para el select + ícono */}
           <div className="relative">
             <select
               value={selectedStatuses.join(",")}
@@ -60,7 +59,6 @@ const ActivePositions = () => {
                 const statuses = e.target.value.split(",") as STATUS[];
                 setSelectedStatuses(statuses);
               }}
-              // Estilos de botón: color de fondo claro, borde, texto, padding, etc.
               className="appearance-none bg-white border border-gray-300 text-gray-700 px-4 py-2 pr-8 rounded-md focus:outline-none"
             >
               <option value={STATUS.funded}>Funded</option>
@@ -70,7 +68,6 @@ const ActivePositions = () => {
               <option value={STATUS.paid}>Paid</option>
               <option value={STATUS.liquidated}>Liquidated</option>
             </select>
-            {/* Flecha personalizada (ícono SVG) */}
             <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-700">
               <svg
                 className="w-4 h-4"
@@ -83,7 +80,6 @@ const ActivePositions = () => {
               </svg>
             </div>
           </div>
-          {/* Botón para alternar vista */}
           <button
             className="bg-appColor1 text-whiteFFF px-4 py-2 rounded-md"
             onClick={() => setActive(!active)}

@@ -1,10 +1,7 @@
 "use client";
 import { useState } from "react";
-
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-
 import { decrement, increment } from "../../redux/features/count-slice";
-
 import { useAccount } from "wagmi";
 import Dashboard from "@/app/component/dashboard/Dashboard";
 import RecentPositionsList from "@/app/component/common/Tables/recent-loans-container";
@@ -24,13 +21,13 @@ export default function Home() {
   const [showSummary, setShowSummary] = useState<boolean>(true);
 
   const handleShowSummary = () => {
-    return setShowSummary((prevState) => !prevState);
+    setShowSummary((prevState) => !prevState);
   };
 
   return (
-    <section className="relative w-full min-h-screen">
+    <section className="relative w-full min-h-screen px-6 py-4 box-border">
       <div className="flex flex-wrap pr-[360px] gap-4">
-        <div className="w-full pl-[35px] pt-[34px]">
+        <div className="w-full">
           <Dashboard />
         </div>
         <div className="w-full">

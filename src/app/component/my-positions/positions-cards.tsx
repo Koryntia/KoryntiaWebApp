@@ -49,7 +49,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
       infinite: false,
       speed: 500,
       slidesToShow: slidesToShow,
-      arrows: true,
+      arrows: false,
       slidesToScroll: 1,
    };
 

@@ -19,14 +19,14 @@ const Dashboard = ({ onToggleCreateLoan }: DashboardProps) => {
           <h2 className="text-black222 text-[24px] not-italic leading-[31.2px] font-semibold">
             Market Position
           </h2>
-          <Link href={"/mypositions"}>
+          <Link href={"/market"}>
             <p className="text-appColor1 text-[14px] tracking-[0.14px] leading-[18.2px] not-italic font-medium cursor-pointer">
               View All
             </p>
           </Link>
         </div>
         <div className="flex">
-          <PositionCards suppliedLoans={false} description="No Loans" />
+          <PositionCards isMarket={true} description="No Loans" />
         </div>
       </div>
       <div className="dashboard-user-active-position">

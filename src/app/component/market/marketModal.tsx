@@ -35,10 +35,11 @@ const MarketModal = (props: MarketModalProps) => {
 
   const actionHandler: { [key: string]: () => Promise<void> } = {
     Supply: async () => {
+      console.log('going to fund loan')
       const success = await LoanService().fundLoan(loanData.loanId);
       if (!success) return;
-
-      const response: any = await updateLoan(loanData._id as string, {
+      console.log('Success: ', success)
+      const response: any = await updateLoan(String(loanData.loanId), {
         investorAddress: address,
         loanStatus: STATUS.funded,
       });
@@ -54,7 +55,7 @@ const MarketModal = (props: MarketModalProps) => {
       const success = await LoanService().repay(loanData.loanId);
       if (!success) return;
 
-      const response: any = await updateLoan(loanData._id as string, { loanStatus: STATUS.paid } );
+      const response: any = await updateLoan(String(loanData.loanId), { loanStatus: STATUS.paid } );
       if (!response) {
         messageHandler.handleError("Failed to repay loan");
         return;
@@ -67,7 +68,7 @@ const MarketModal = (props: MarketModalProps) => {
       const success = await LoanService().withdrawCollateral(bigLoanId);
 
       if (!success) return;
-      const response: any = await updateLoan(loanData._id as string, { loanStatus: STATUS.withdrawn  } );
+      const response = await updateLoan(String(loanData.loanId), { loanStatus: STATUS.withdrawn});
       if (!response) {
         messageHandler.handleError("Failed to withdraw loan");
         return;
@@ -79,7 +80,7 @@ const MarketModal = (props: MarketModalProps) => {
       const success = await LoanService().liquidate(loanData.loanId);
       if (!success) return;
 
-      const response: any = await updateLoan(loanData._id as string, { loanStatus: STATUS.liquidated } );
+      const response: any = await updateLoan(String(loanData.loanId), { loanStatus: STATUS.liquidated } );
       if (!response) {
         messageHandler.handleError("Failed to liquidate loan");
         return;

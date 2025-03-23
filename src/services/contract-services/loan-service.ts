@@ -112,7 +112,7 @@ class BlockchainService {
     }
   }  
   
-  async getLoanNFTDetails(loanId: number): Promise<ILoanPosition | null> {
+  async getLoanNFTDetails(loanId: string): Promise<ILoanPosition | null> {
     try {
       const loanPosition = await this.loanPositionManagerContract.getLoanPositions(loanId);
       if (
@@ -145,43 +145,54 @@ class BlockchainService {
   }
 
   async fundLoan(loanId: ethers.BigNumberish): Promise<boolean> {
-    try{
+    try {
       const loanPosition = await this.loanPositionManagerContract.getLoanPositions(loanId);
       if (
-        !(loanPosition) ||
+        !loanPosition ||
         (loanPosition.borrowerAddress === this.ZERO_ADDRESS &&
-        ethers.formatUnits(loanPosition.loanAmount) === "0.0" &&
-        ethers.formatUnits(loanPosition.collateralAmount) === "0.0")
+         ethers.formatUnits(loanPosition.loanAmount) === "0.0" &&
+         ethers.formatUnits(loanPosition.collateralAmount) === "0.0")
       ) {
         return false;
       }
-
-      // const debtAmount = await this.loanPositionManagerContract.calculateDebtAmount(
-      //   loanPosition.loanToken,
-      //   loanPosition.collateralAmount,
-      //   loanPosition.loanToken,
-      //   loanPosition.initialThreshold,
-      // );
-      // console.log(ethers.formatUnits(debtAmount));
-
-      await this.approveSpender(
+      const tokenContract = new ethers.Contract(
         loanPosition.loanToken,
-        this.loanPositionManagerContract.target as string,
-        loanPosition.loanAmount,
+        ["function allowance(address owner, address spender) view returns (uint256)"],
+        this.signer
       );
 
+      const owner = await this.signer.getAddress();
+      
+      const currentAllowance = await tokenContract.allowance(owner, this.loanPositionManagerContract.target as string);
+
+      const debtAmount = await this.loanPositionManagerContract.calculateDebtAmount(
+        loanPosition.collateralToken,
+        loanPosition.collateralAmount,
+        loanPosition.loanToken,
+        loanPosition.initialThreshold
+      );
+      
+      const INTEREST_PRECISION = BigInt(10000);
+      const interestRate = BigInt(loanPosition.interestRate);
+      const requiredAmount = debtAmount * INTEREST_PRECISION / (INTEREST_PRECISION + interestRate);
+      
+      if (currentAllowance < requiredAmount) {
+        await this.approveSpender(
+          loanPosition.loanToken,
+          this.loanPositionManagerContract.target as string,
+          requiredAmount.toString()
+        );
+      }      
+      
+      console.log('Setting up event listener for LoanFunded event');
       return new Promise<boolean>((resolve) => {
-        this.loanPositionManagerContract.once("LoanFunded",
-            (
-              _loanId: ethers.BigNumberish,
-              _loanAmount: ethers.BigNumberish,
-              _debtAmount: ethers.BigNumberish,
-              _event: ethers.ContractEvent
-            ) => {
-          resolve(true);
-        });
+        this.loanPositionManagerContract.once(
+          "LoanFunded",
+          (_loanId: ethers.BigNumberish, _loanAmount: ethers.BigNumberish, _debtAmount: ethers.BigNumberish, _event: ethers.ContractEvent) => {
+            resolve(true);
+          }
+        );
         const bigLoanId = BigInt(loanId.toString());
-        
         this.loanPositionManagerContract.fundLoan(bigLoanId).catch((error) => {
           messageHandler.handleError((error as Error).message);
           resolve(false);
@@ -192,7 +203,7 @@ class BlockchainService {
       return false;
     }
   }
-
+  
   // Repay Loan
   async repay(loanId: number): Promise<boolean> {
     try{

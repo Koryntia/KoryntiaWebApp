@@ -2,127 +2,143 @@
 import { ILoanRequest } from "@/interfaces/loan-interface";
 import Image from "next/image";
 import { FC } from "react";
-
+import { useAccount } from "wagmi";
 import { TbCurrencyEthereum } from "react-icons/tb";
 import EmptyComponent from "../Empty";
 import { truncateAddress } from "@/utils/helper";
 
 interface TablePorp {
-   data: ILoanRequest[];
+  data: ILoanRequest[];
 }
+
 const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
-   let growt = {};
-   const handleColor = (e: string) => {
-      let numberGrowt = parseFloat(e);
-      if (numberGrowt > 0) {
-         growt = {
-            color: "lime",
-         };
+  const { address } = useAccount();
 
-         return (
-            <span className="font-semibold " style={growt}>
-               +{e}%
-            </span>
-         );
-      }
-      if (numberGrowt < 0) {
-         growt = {
-            color: "red",
-         };
+  const myPositions = data.filter((loan) =>
+    address ? loan.userAddress.toLowerCase() === address.toLowerCase() : false
+  );
 
-         return (
-            <span className="font-semibold " style={growt}>
-               {e}%
-            </span>
-         );
-      }
-      return <span className="font-semibold ">{e}%</span>;
-   };
+  let growt = {};
+  const handleColor = (e: string) => {
+    let numberGrowt = parseFloat(e);
+    if (numberGrowt > 0) {
+      growt = {
+        color: "lime",
+      };
 
-   return (
-      <>
-         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
-            <thead className="text-xs bg-gray-50 text-gray-400">
-               <tr>
-                  <th scope="col" align="left" className=" py-3">
-                     Collection
-                  </th>
-                  <th scope="col" align="left" className=" py-3">
-                     Amount
-                  </th>
-                  <th scope="col" align="left" className=" py-3">
-                     Interest Rate
-                  </th>
-                  <th scope="col" align="left" className=" py-3">
-                     Collateral
-                  </th>
-                  <th scope="col" align="left" className=" py-3">
-                     Supplier
-                  </th>
-                  <th scope="col" align="center" className=" py-3">
-                     Health factor
-                  </th>
-               </tr>
-            </thead>
-            <tbody>
-               {data && data.map((key, index) => (
-                  <tr key={index} className="bg-white border-b-2  border-zinc-50">
-                     <th scope="row" className="flex items-center py-2 w-[20%]  text-gray-900 whitespace-nowrap text">
-                        <Image
-                           className="w-8 h-8 rounded-full"
-                           src={"/assets/placeholder/image.png"}
-                           width={10}
-                           height={10}
-                           alt="Jese image"
-                        />
-                        <div className="pl-4">
-                           <p className="text-[16px] font-semibold not-italic leading-[20.8px]">{key.name}</p>
-                           <p className="font-medium text-[12px] text-slate-400">{new Date(key.creationDate).toLocaleDateString()}</p>
-                        </div>
-                     </th>
-                     <td className="py-4 w-[10%] text-black font-semibold">
-                        <span>
-                           <TbCurrencyEthereum className="inline-block  text-appColor1" />
-                           {key.loanAmount}
-                        </span>
-                     </td>
-                     <td className="py-4 w-[10%]">
-                        <div className="flex items-center">{key.interestRate.toString()}%</div>
-                     </td>
-                     <td className="py-4 w-[10%]  text-black font-semibold">
-                        <span>
-                           <TbCurrencyEthereum className="inline-block  text-appColor1" />
-                           {key.collateralAmount}
-                        </span>
-                     </td>
-                     <td className="w-[10%] py-4 text-black font-semibold">
-                        <span>{truncateAddress(key.investorAddress)}</span>
-                     </td>
-                     <td className="w-[20%] py-4 text-black text-center font-semibold">
-                        <span
-                           className={`text-[14px] rounded-3xl px-[15px] pt-0.5 pb-1 text-white ${
-                              key.healthFactor >= 85
-                                ? "bg-textGreen1"
-                                : key.healthFactor >= 50
-                                ? "bg-yellow-500"
-                                : "bg-red-700"
-                            }`}>
-                           {key.healthFactor || 0}%
-                        </span>
-                     </td>
-                  </tr>
-               ))}
-            </tbody>
-         </table>
+      return (
+        <span className="font-semibold " style={growt}>
+          +{e}%
+        </span>
+      );
+    }
+    if (numberGrowt < 0) {
+      growt = {
+        color: "red",
+      };
 
-         {data.length == 0 &&
-            <div className="mt-24">
-               <EmptyComponent description="No Active Loans" />
-            </div>
-         }
-      </>
+      return (
+        <span className="font-semibold " style={growt}>
+          {e}%
+        </span>
+      );
+    }
+    return <span className="font-semibold ">{e}%</span>;
+  };
 
-   );
+  return (
+    <>
+      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 ">
+        <thead className="text-xs bg-gray-50 text-gray-400">
+          <tr>
+            <th scope="col" align="left" className="py-3">
+              Collection
+            </th>
+            <th scope="col" align="left" className="py-3">
+              Amount
+            </th>
+            <th scope="col" align="left" className="py-3">
+              Interest Rate
+            </th>
+            <th scope="col" align="left" className="py-3">
+              Collateral
+            </th>
+            <th scope="col" align="left" className="py-3">
+              Supplier
+            </th>
+            <th scope="col" align="center" className="py-3">
+              Health factor
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {myPositions.map((key, index) => (
+            <tr key={index} className="bg-white border-b-2 border-zinc-50">
+              <th
+                scope="row"
+                className="flex items-center py-2 w-[20%] text-gray-900 whitespace-nowrap"
+              >
+                <Image
+                  className="w-8 h-8 rounded-full"
+                  src={"/assets/placeholder/image.png"}
+                  width={10}
+                  height={10}
+                  alt="Jese image"
+                />
+                <div className="pl-4">
+                  <p className="text-[16px] font-semibold not-italic leading-[20.8px]">
+                    {key.name}
+                  </p>
+                  <p className="font-medium text-[12px] text-slate-400">
+                    {new Date(key.creationDate).toLocaleDateString()}
+                  </p>
+                </div>
+              </th>
+              <td className="py-4 w-[10%] text-black font-semibold">
+                <span>
+                  <TbCurrencyEthereum className="inline-block text-appColor1" />
+                  {key.loanAmount}
+                </span>
+              </td>
+              <td className="py-4 w-[10%]">
+                <div className="flex items-center">
+                  {key.interestRate.toString()}%
+                </div>
+              </td>
+              <td className="py-4 w-[10%] text-black font-semibold">
+                <span>
+                  <TbCurrencyEthereum className="inline-block text-appColor1" />
+                  {key.collateralAmount}
+                </span>
+              </td>
+              <td className="w-[10%] py-4 text-black font-semibold">
+                <span>{truncateAddress(key.investorAddress)}</span>
+              </td>
+              <td className="w-[20%] py-4 text-black text-center font-semibold">
+                <span
+                  className={`text-[14px] rounded-3xl px-[15px] pt-0.5 pb-1 text-white ${
+                    Number(key.healthFactor) >= 85
+                      ? "bg-textGreen1"
+                      : Number(key.healthFactor) >= 50
+                      ? "bg-yellow-500"
+                      : "bg-red-700"
+                  }`}
+                >
+                  {key.healthFactor || 0}%
+                </span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {myPositions.length === 0 && (
+        <div className="mt-24">
+          <EmptyComponent description="No Active Loans" />
+        </div>
+      )}
+    </>
+  );
 };
 
 export default ActivePositionsTable;

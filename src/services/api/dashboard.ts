@@ -21,7 +21,7 @@ type GetRecentLoanResponse = LoanData[];
 
 export const getRecentLoan = async (walletAddress: String) => {
   return get<GetRecentLoanResponse>(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/loan?borrowerID=` + walletAddress
+    `/loan?borrowerID=` + walletAddress
   ).then((data) => {
     return data != null ? data.data : null;
   });

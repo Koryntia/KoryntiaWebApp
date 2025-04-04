@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Card from "./_components/card";
 import useAuth from "@/hooks/useAuth";
 import { positionCardsData } from "@/data";
+import { getMarketLoans } from '@/services/api/market-loans'
 import Slider from "react-slick";
 import useElementWidth from "@/hooks/useElementWidth";
 import { DateTime } from "luxon";
@@ -16,12 +17,13 @@ import "./slider.css";
 interface PositionCardsProps {
    gridStyle?: string;
    suppliedLoans?: boolean;
+   isMarket?: boolean;
    image?: string;
    description?: string;
    action?: string;
 }
 
-export const PositionCards = ({ suppliedLoans, description, image, action }: PositionCardsProps) => {
+export const PositionCards = ({ isMarket, suppliedLoans, description, image, action }: PositionCardsProps) => {
    const [sectionWidth, sectionRef] = useElementWidth<HTMLDivElement>();
    const [slidesToShow, setSlidesToShow] = useState<number>(3);
    const { address } = useAuth();
@@ -49,7 +51,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
       infinite: false,
       speed: 500,
       slidesToShow: slidesToShow,
-      arrows: true,
+      arrows: false,
       slidesToScroll: 1,
    };
 
@@ -61,7 +63,7 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
       getMyLoan(address)
          .then((data) => {
             if (data) {
-               setLoanData(loanData.concat(data));
+               setLoanData(prev => prev.concat(data));
             }
          })
          .finally(() => setIsLoading(false));
@@ -76,25 +78,47 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
       getMySuppliedLoan(address)
          .then((data) => {
             if (data) {
-               setLoanData(loanData.concat(data));
+               setLoanData(prev => prev.concat(data));
             }
          })
          .finally(() => setIsLoading(false));
    }, [address]);
 
-   useEffect(() => {
-      if (suppliedLoans) {
-         handleGetMySuppliedLoansAPI();
-      } else {
-         handleGetMyLoanAPI();
-      }
-   }, [suppliedLoans, handleGetMyLoanAPI, handleGetMySuppliedLoansAPI]);
+   const handleGetMarketLoansAPI = useCallback(() => {
+      setIsLoading(true);
+      getMarketLoans()
+         .then((data) => {
+            if (data) {
+               setLoanData(data);
+            }
+         })
+         .finally(() => setIsLoading(false));
+   }, []);
 
-   if (isLoading) return (
-      <div className="justify-center flex items-center w-full m-3">
-         <Spinner />
-      </div>
-   );
+   useEffect(() => {
+      if (isMarket) {
+         handleGetMarketLoansAPI();
+      } else {
+         if (suppliedLoans) {
+            handleGetMySuppliedLoansAPI();
+         } else {
+            handleGetMyLoanAPI();
+         }
+      }
+   }, [
+      isMarket,
+      suppliedLoans,
+      handleGetMarketLoansAPI,
+      handleGetMyLoanAPI,
+      handleGetMySuppliedLoansAPI,
+   ]);
+
+   if (isLoading)
+      return (
+         <div className="justify-center flex items-center w-full m-3">
+            <Spinner />
+         </div>
+      );
 
    function calculateCountdown(date: string) {
       const targetDate = DateTime.fromISO(date);
@@ -105,25 +129,35 @@ export const PositionCards = ({ suppliedLoans, description, image, action }: Pos
    }
 
    return (
-      <div className="w-full aspect-square h-[300px] " ref={sectionRef}>
+      <div className="w-full aspect-square h-[300px]" ref={sectionRef}>
          <Slider {...settings}>
-            {loanData.length > 0 ?
+            {loanData.length > 0 ? (
                loanData.map((item, index) => (
                   <div key={index} className="max-w-xs px-2 rounded-[15px] shadow">
                      <Card
                         title={item.name || "Title"}
-                        bid={{ amount: item.loanAmount, currency: item.loanToken }}
-                        description={{ by: "Static", collateral: item.collateralAmount, collateralToken: item.collateralToken }}
+                        bid={{
+                           amount: item.loanAmount,
+                           currency: item.loanToken,
+                        }}
+                        description={{
+                           by: "Static",
+                           collateral: item.collateralAmount,
+                           collateralToken: item.collateralToken,
+                        }}
                         image={"/koryntia-logo.png"}
                         status={item.loanStatus}
-                        userDetails={{ borrower: item.userAddress, investor: item.investorAddress }}
+                        userDetails={{
+                           borrower: item.userAddress,
+                           investor: item.investorAddress,
+                        }}
                         time={calculateCountdown(item.loanPeriod.toString())}
                      />
                   </div>
                ))
-               :
+            ) : (
                <EmptyComponent image={image} description={description} action={action} />
-            }
+            )}
          </Slider>
       </div>
    );

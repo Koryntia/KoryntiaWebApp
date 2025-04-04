@@ -5,7 +5,7 @@ import LoanSummaryContainer from "../create-loan/LoanSummaryContainer";
 import LoanSummary from "../create-loan/LoanSummary";
 import Button from "../elements/button/Button";
 import { updateLoan } from '@/services/api/update-loan';
-import { ILoanRequest } from "@/interfaces/loan-interface";
+import { ILoanRequest, STATUS } from "@/interfaces/loan-interface";
 import { useLoanService } from '@/services/contract-services/loan-service.hook';
 import { useAccount } from "wagmi";
 import { DateTime } from "luxon";
@@ -13,26 +13,33 @@ import { RoundedInput } from "../elements/Input";
 import Select from "../elements/select";
 import MessageHandler from '@/utils/message-handler';
 import { collateralAmountOptions } from "@/app/data/currency";
+import { CurrencyOption } from '@/types/liquidation';
 
 const messageHandler = MessageHandler.get();
 
-type MarketModalProps = {
+type AddCollateralProps = {
   open: boolean;
   loanData: ILoanRequest;
   handleClose: () => void;
-  action: "Request" | "Withdraw" | "Repay" | "Liquidate";
+  action: "Add Collateral";
 };
 
-
-const AddCollateral = (props: MarketModalProps) => {
+const AddCollateral = (props: AddCollateralProps) => {
   const { open, loanData, handleClose, action } = props;
   const { address } = useAccount();
   const { LoanService, isInitialized } = useLoanService();
   const [collateralAmount, setCollateralAmount] = useState(0);
   const collateralOption = collateralAmountOptions.find((option) => option.name === loanData.collateralToken);
-  const [selectedCollateralAmountOptions, setSelectedCollateralAmountOption] = useState<CurrencyOption>(
-    collateralOption
+  const foundOption = collateralAmountOptions.find(
+    (option) => option.name === loanData.collateralToken
   );
+  const defaultOption: CurrencyOption = foundOption ?? {
+    name: loanData.collateralToken,
+    value: "",
+    address: "",
+    image: ""
+  };
+  const [selectedCollateralOption, setSelectedCollateralOption] = useState<CurrencyOption>(defaultOption);
 
   function calculateCountdown(date: string) {
     const targetDate = DateTime.fromISO(date);
@@ -45,17 +52,17 @@ const AddCollateral = (props: MarketModalProps) => {
   const handleCollateralOptionChange = (selectedValue: string) => {
     const selectedOption = collateralAmountOptions.find((option) => option.value === selectedValue);
     if (!selectedOption) return;
-    setSelectedCollateralAmountOption(selectedOption);
+    setSelectedCollateralOption(selectedOption);
   };
 
   const addCollateral = async () => {
     const success = await LoanService().addCollateral(
-      loanData.loanId,
+      Number(loanData.loanId),
       ethers.parseEther(collateralAmount.toString())
     );
     if (!success) return;
 
-    const response: any = await updateLoan(loanData._id as string, { loanStatus: "funded" } );
+    const response: any = await updateLoan(loanData._id as string, { loanStatus: STATUS.funded } );
     if (!response) {
       messageHandler.handleError("Failed to add collateral");
       return;
@@ -84,12 +91,12 @@ const AddCollateral = (props: MarketModalProps) => {
               <div className="w-[45%] flex gap-4 justify-end self-center relative">
                 <span className="h-full text-[#C3C8CA]">{"|"}</span>
                 <div className="flex justify-center gap-2 items-center relative">
-                  <Select
-                    name="requestAmount"
-                    id="requestAmount"
-                    options={[collateralOption]}
-                    onChange={handleCollateralOptionChange}
-                  />
+                <Select
+                  name="requestAmount"
+                  id="requestAmount"
+                  options={collateralOption ? [collateralOption] : []}
+                  onChange={handleCollateralOptionChange}
+                />
                 </div>
               </div>
             </div>

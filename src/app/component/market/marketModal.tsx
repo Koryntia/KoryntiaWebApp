@@ -3,11 +3,12 @@ import LoanSummaryContainer from "../create-loan/LoanSummaryContainer";
 import LoanSummary from "../create-loan/LoanSummary";
 import Button from "../elements/button/Button";
 import { updateLoan } from '@/services/api/update-loan';
-import { ILoanRequest } from "@/interfaces/loan-interface";
+import { ILoanRequest, STATUS } from "@/interfaces/loan-interface";
 import { useLoanService } from '@/services/contract-services/loan-service.hook';
 import { useAccount } from "wagmi";
 import { DateTime } from "luxon";
 import MessageHandler from '@/utils/message-handler';
+import { LoanAction } from "@/types/loanActions";
 
 const messageHandler = MessageHandler.get();
 
@@ -15,14 +16,14 @@ type MarketModalProps = {
   open: boolean;
   loanData: ILoanRequest;
   handleClose: () => void;
-  action: "Request" | "Withdraw" | "Repay" | "Liquidate";
+  action: Exclude<LoanAction, "Add Collateral" | "">;
 };
 
 
 const MarketModal = (props: MarketModalProps) => {
   const { open, loanData, handleClose, action } = props;
   const { address } = useAccount();
-  const { LoanService, isInitialized } = useLoanService();
+  const { LoanService, isInitialized } = useLoanService();  
 
   function calculateCountdown(date: string) {
     const targetDate = DateTime.fromISO(date);
@@ -34,10 +35,15 @@ const MarketModal = (props: MarketModalProps) => {
 
   const actionHandler: { [key: string]: () => Promise<void> } = {
     Supply: async () => {
-      const success = await LoanService().fundLoan(loanData.loanId);
+      console.log('going to fund loan')
+      const success = await LoanService().fundLoan(Number(loanData.loanId));
       if (!success) return;
-
-      const response: any = await updateLoan(loanData._id as string, { investorAddress: address, loanStatus: "funded" } );
+      console.log('Success: ', success)
+      const response: any = await updateLoan(String(loanData.loanId), {
+        investorAddress: address,
+        loanStatus: STATUS.funded,
+      });
+     
       if (!response) {
         messageHandler.handleError("Failed to fund loan");
         return;
@@ -46,11 +52,10 @@ const MarketModal = (props: MarketModalProps) => {
     },
 
     Repay: async () => {
-      console.log('Repaying...');
-      const success = await LoanService().repay(loanData.loanId);
+      const success = await LoanService().repay(Number(loanData.loanId));
       if (!success) return;
 
-      const response: any = await updateLoan(loanData._id as string, { loanStatus: "paid" } );
+      const response: any = await updateLoan(String(loanData.loanId), { loanStatus: STATUS.paid } );
       if (!response) {
         messageHandler.handleError("Failed to repay loan");
         return;
@@ -59,10 +64,11 @@ const MarketModal = (props: MarketModalProps) => {
     },
 
     Withdraw: async () => {
-      const success = await LoanService().withdrawCollateral(loanData.loanId);
-      if (!success) return;
+      const bigLoanId = BigInt(loanData.loanId.toString());
+      const success = await LoanService().withdrawCollateral(bigLoanId);
 
-      const response: any = await updateLoan(loanData._id as string, { loanStatus: "withdrawn" } );
+      if (!success) return;
+      const response = await updateLoan(String(loanData.loanId), { loanStatus: STATUS.withdrawn});
       if (!response) {
         messageHandler.handleError("Failed to withdraw loan");
         return;
@@ -71,10 +77,10 @@ const MarketModal = (props: MarketModalProps) => {
     },
 
     Liquidate: async () => {
-      const success = await LoanService().liquidate(loanData.loanId);
+      const success = await LoanService().liquidate(Number(loanData.loanId));
       if (!success) return;
 
-      const response: any = await updateLoan(loanData._id as string, { loanStatus: "liquidated" } );
+      const response: any = await updateLoan(String(loanData.loanId), { loanStatus: STATUS.liquidated } );
       if (!response) {
         messageHandler.handleError("Failed to liquidate loan");
         return;

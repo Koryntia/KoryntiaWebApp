@@ -24,7 +24,7 @@ class LoanServiceManager {
     }
   }
 
-  get(): LoanService {
+  get(): BlockchainService {
     if (!this.loanService) {
       throw new Error('Loan service not initialized. Please connect wallet first.');
     }

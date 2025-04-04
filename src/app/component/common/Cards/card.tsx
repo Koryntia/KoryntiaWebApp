@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect } from "react";
-import { FC } from "react";
-import { DateTime, Interval } from "luxon";
+import { useState, useEffect, FC } from "react";
+import { DateTime } from "luxon";
 import { TbCurrencyEthereum } from "react-icons/tb";
 import { calculateTPass } from "@/utils/helper";
+import Image from "next/image";
 
 interface CardData {
   data: any;
@@ -11,12 +11,9 @@ interface CardData {
 
 const Card: FC<CardData> = ({ data }) => {
   const keys = Object.values(data);
-  const Clock = (time: string) => {
-    const creationDate = DateTime.fromFormat(
-      time,
-      "EEE, MMM dd yyyy HH:mm:ss ZZZ"
-    ); // Date of creation of the nft
 
+  const Clock = (time: string) => {
+    const creationDate = DateTime.fromFormat(time, "EEE, MMM dd yyyy HH:mm:ss ZZZ");
     const [timePassed, setTimepassed] = useState(calculateTPass(creationDate));
 
     useEffect(() => {
@@ -24,33 +21,37 @@ const Card: FC<CardData> = ({ data }) => {
         const elapsed = calculateTPass(creationDate);
         setTimepassed(elapsed);
       }, 1000);
-      return () => {
-        clearInterval(interval);
-      };
+      return () => clearInterval(interval);
     }, [creationDate]);
 
     return (
       <span className="cardCount mr-2 mb-2">
-        {" "}
-        {timePassed.hours}h {timePassed.minutes}m {timePassed.seconds}s{" "}
+        {timePassed.hours}h {timePassed.minutes}m {timePassed.seconds}s
       </span>
     );
   };
 
   return (
-    <div className=" grid grid-rows-none grid-flow-col overflow-scroll overflow-y-hidden scroll-smooth ">
-      {keys.map((key: any, index) => (
+    <div className="grid grid-rows-none grid-flow-col overflow-scroll overflow-y-hidden scroll-smooth">
+      {keys.map((key: any, index: number) => (
         <div
-          key={index}
-          className=" shadow-lg bg-white border-black cardContainer rounded-2xl text-xs inline-block m-4"
+          key={key.id || index} 
+          className="shadow-lg bg-white border-black cardContainer rounded-2xl text-xs inline-block m-4"
         >
-          <img
-            className="w-full rounded-xl cardImg "
+          <Image
+            className="w-full rounded-xl cardImg"
             src={key.imageId}
             alt={key.title}
+            width={400}
+            height={300}
           />
           <button className="cardChild">
-            <img src="../cards/Duration.svg" alt="heart simbol" />
+            <Image
+              src="/cards/Duration.svg"
+              alt="heart symbol"
+              width={20}
+              height={20}
+            />
           </button>
           {Clock(key.timeOfCreation)}
           <div className="text-gray-400 grid grid-rows-2 grid-cols-4 px-4 gap-10">
@@ -60,14 +61,14 @@ const Card: FC<CardData> = ({ data }) => {
                 APR {key.Apr}% Collateral {key.collateral}%
               </span>
             </div>
-            <div className=" col-start-1 col-span-2 ">
+            <div className="col-start-1 col-span-2">
               <h6>current bid</h6>
               <span className="cardBid">
-                <TbCurrencyEthereum className="inline-block  text-appColor1" />
+                <TbCurrencyEthereum className="inline-block text-appColor1" />
                 {key.bid}ETH
               </span>
             </div>
-            <button className="buttonPurple col-start-3 col-span-2  row-start-2 ">
+            <button className="buttonPurple col-start-3 col-span-2 row-start-2">
               supply
             </button>
           </div>

@@ -15,15 +15,15 @@ import { Route } from "next";
 import { ILoanRequest } from "@/interfaces/loan-interface";
 import { DateTime } from "luxon";
 import EmptyComponent from "../common/Empty";
+import { LoanAction } from "@/types/loanActions";
 
 export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoanRequest | null, marketLoans: ILoanRequest[] }) => {
   const router = useRouter();
   const { address } = useAccount();
-  const [action, setAction] = useState('');
+  const [action, setAction] = useState<LoanAction>("");
   const [sectionWidth, sectionRef] = useElementWidth<HTMLDivElement>();
   const [slidesToShow, setSlidesToShow] = useState<number>(3);
-  const ZERO_ADDRESS: string = '0x0000000000000000000000000000000000000000';
-
+  
   function calculateCountdown(date: string) {
     const targetDate = DateTime.fromISO(date);
     const now = DateTime.now();
@@ -132,14 +132,14 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
                     <p className="opacity-90 text-neutral-400 text-base font-medium font-inter leading-tight tracking-tight">
                       Health factor
                     </p>
-                    {loanData.healthFactor >= 85 && <button className="bg-textGreen1 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
-                      {loanData.healthFactor}% High
+                    {Number(loanData.healthFactor) >= 85 && <button className="bg-textGreen1 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
+                      {Number(loanData.healthFactor)}% High
                     </button>}
-                    {loanData.healthFactor >= 50 && loanData.healthFactor < 85 && <button className="bg-yellow-500 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
-                      {loanData.healthFactor}% Medium
+                    {Number(loanData.healthFactor) >= 50 && Number(loanData.healthFactor) < 85 && <button className="bg-yellow-500 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
+                      {Number(loanData.healthFactor)}% Medium
                     </button>}
-                    {loanData.healthFactor < 50 && <button className="bg-red-700 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
-                      {loanData.healthFactor}% Low
+                    {Number(loanData.healthFactor) < 50 && <button className="bg-red-700 my-4 rounded-2xl py-[3px] px-6 text-whiteFFF  text-[12px]">
+                      {Number(loanData.healthFactor)}% Low
                     </button>}
                   </div>
                 </div>
@@ -153,12 +153,16 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
                   Supply
                 </button>}
 
-                {loanData.loanStatus === "requested" && loanData.userAddress === address && <button
-                  className="bg-appColor1 px-4 py-3  rounded-md text-whiteFFF w-[210px]"
-                  onClick={() => setAction('Withdraw')}
-                >
-                  Withdraw
-                </button>}
+                {loanData.loanStatus === "requested" && loanData.userAddress === address && (
+                  <button
+                    className="bg-appColor1 px-4 py-3  rounded-md text-whiteFFF w-[210px]"
+                    onClick={() => {
+                      setAction('Withdraw');
+                    }}
+                  >
+                    Withdraw
+                  </button>
+                )}
 
                 {loanData.loanStatus === "funded" && loanData.userAddress === address && <button
                   className="bg-appColor1 px-4 py-3  rounded-md text-whiteFFF w-[210px]"
@@ -224,14 +228,14 @@ export const MarketPositionDetail = ({ loanData, marketLoans }: { loanData: ILoa
         open={action !== '' && action !== "Add Collateral"}
         loanData={loanData}
         handleClose={() => setAction('')}
-        action={action}
+        action={action as Exclude<LoanAction, "Add Collateral" | "">}
       />}
 
       {loanData && <AddCollateral
         open={action !== '' && action === "Add Collateral"}
         loanData={loanData}
         handleClose={() => setAction('')}
-        action={action}
+        action={action as "Add Collateral"}
       />}
     </section>
   );

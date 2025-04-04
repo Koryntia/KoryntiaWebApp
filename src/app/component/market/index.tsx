@@ -31,13 +31,13 @@ const tabs: Tab[] = [
 ];
 
 export default function Market() {
-   const [loanData, setLoanData] = useState<ILoanRequest[]>();
+   const [loanData, setLoanData] = useState<ILoanRequest[]>([]);
    const [isLoading, setIsLoading] = useState(false);
 
    const handleGetMarketLoans = () => {
       setIsLoading(true);
       getMarketLoans()
-         .then((data) => setLoanData(data))
+         .then((data) => setLoanData(data || []))
          .finally(() => setIsLoading(false));
    };
 

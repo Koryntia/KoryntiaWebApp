@@ -21,8 +21,8 @@ export const LliquidationCards = ({ positionCardsData }: PositionCardsProps) => 
    const handleGetLiquidationLoans = () => {
       setIsLoading(true);
       getLiquidationLoans()
-         .then((data) => setLoanData(data))
-         .finally(() => setIsLoading(false));
+        .then((data) => setLoanData(data || []))
+        .finally(() => setIsLoading(false));
    };
 
    useEffect(() => handleGetLiquidationLoans(), []);
@@ -43,23 +43,29 @@ export const LliquidationCards = ({ positionCardsData }: PositionCardsProps) => 
          {isLoading && <p>Loading...</p>}
          {loanData &&
             loanData.map((item, index) => (
-               <>
+               <React.Fragment key={item._id || index}>
                   <Card
-                     key={index}
-                     title={item.name || "title"}
-                     bid={{
-                        amount: item.loanAmount,
-                        currency: item.loanToken,
-                     }}
-                     interestRate="10"
-                     // description={{ by: "12%", collateral: item.collateralAmount + "%" }}
-                     image={"/assets/placeholder/cover.png"}
-                     time={calculateCountdown(item.loanPeriod.toString())}
-                     isLliquidation={true}
-                     onButtonClick={() => setIsModalOpen(true)}
+                  title={item.name || "title"}
+                  bid={{
+                     amount: item.loanAmount,
+                     currency: item.loanToken,
+                  }}
+                  interestRate="10"
+                  image={"/assets/placeholder/cover.png"}
+                  time={calculateCountdown(item.loanPeriod.toString())}
+                  isLliquidation={true}
+                  onButtonClick={() => setIsModalOpen(true)}
+                  userDetails={{
+                     borrower: item.userAddress,
+                     investor: item.investorAddress || "",
+                  }}
                   />
-                  <LiquidationModal open={isModalOpen} handleClose={() => setIsModalOpen(false)} data={item} />
-               </>
+                  <LiquidationModal
+                  open={isModalOpen}
+                  handleClose={() => setIsModalOpen(false)}
+                  data={item}
+                  />
+               </React.Fragment>
             ))}
       </section>
    );

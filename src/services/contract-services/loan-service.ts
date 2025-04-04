@@ -1,7 +1,7 @@
 import { ethers, ZeroAddress } from 'ethers';
 import LoanPositionManagerArtifact from '@/abis/LoanPositionManager.json';
 import LoanPositionNFTArtifact from '@/abis/LoanPositionNFT.json';
-import OracleABI from '@/abis/Oracle.json'
+import OracleArtifact from '@/abis/Oracle.json'
 import config from "@/utils/config";
 import MessageHandler from "@/utils/message-handler";
 import { ILoanPosition } from "@/interfaces/loan-position-interface";
@@ -35,7 +35,7 @@ class BlockchainService {
     );
     this.oracleContract = new ethers.Contract(
       oracleContractAddress,
-      OracleABI,
+      OracleArtifact.abi,
       this.signer
     );
     this.nftContract = new ethers.Contract(
@@ -69,7 +69,6 @@ class BlockchainService {
     interestRate: ethers.BigNumberish,
   ): Promise<string | null> {
     try {
-      // Aprobamos el gasto del token de colateral
       await this.approveSpender(
         collateralToken,
         this.loanPositionManagerContract.target as string,

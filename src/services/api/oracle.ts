@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import OracleABI from '@/abis/Oracle.json';
+import OracleArtifact from '@/abis/Oracle.json'
 import MessageHandler from '@/utils/message-handler';
 import config from "@/utils/config";
 
@@ -12,7 +12,7 @@ export async function getTokenPrice(tokenAddress: string): Promise<number | null
 
     const oracleContract = new ethers.Contract(
       config.ORACLE_CONTRACT_ADDRESS,
-      OracleABI,
+      OracleArtifact.abi,
       provider
     );
     console.log('oracle contract: ', oracleContract)

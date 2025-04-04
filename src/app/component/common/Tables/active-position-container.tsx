@@ -24,9 +24,11 @@ const ActivePositions = () => {
     Promise.all(
       selectedStatuses.map((status) => getMyLoansByStatus(address, status))
     ).then((results) => {
-      const merged = results.flat();
-      setLoanData(merged || []);
-    });
+      const merged = results.flat().filter(
+        (item): item is ILoanRequest => item != null
+      );
+      setLoanData(merged);
+    });    
   }, [address, selectedStatuses]);
 
   useEffect(() => {

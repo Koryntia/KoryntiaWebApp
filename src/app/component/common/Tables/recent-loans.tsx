@@ -20,8 +20,9 @@ const RecentLoans: FC<RecentLoansProps> = ({ data }) => {
          {data &&
             data.map((key, index) => (
                <Link
+                  key={key._id}
                   href={{
-                     pathname: `/market/${encodeURIComponent(key.name)}/details`,
+                     pathname: `/market/${encodeURIComponent(key._id)}/details`,
                      query: {},
                   }}
                >
@@ -41,7 +42,7 @@ const RecentLoans: FC<RecentLoansProps> = ({ data }) => {
                         </div>
                         <div>
                            <div className="font-semibold tracking-wider font-inter text-base">
-                              <span>{truncateName(key.name)}</span>
+                              <span>{truncateName(key._id)}</span>
                               {/* <span>Uzachi #4390</span> */}
                            </div>
                            <div className="font-normal font-inter text-slate-400 text-xs">

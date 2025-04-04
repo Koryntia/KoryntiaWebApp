@@ -11,8 +11,8 @@ const config = {
 };
 
 export const test_config = {
-  TOKEN_A: process.env.NEXT_PUBLIC_TOKEN_A_ADDRESS,
-  TOKEN_B: process.env.NEXT_PUBLIC_TOKEN_B_ADDRESS,
-}
+  TOKEN_A: process.env.NEXT_PUBLIC_TOKEN_A_ADDRESS ?? "",
+  TOKEN_B: process.env.NEXT_PUBLIC_TOKEN_B_ADDRESS ?? "",
+};
 
 export default config;

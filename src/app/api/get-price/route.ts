@@ -6,6 +6,7 @@ import { GetPriceDTO } from "@/services/DTOs/PriceGet";
 import { getTokenAddress } from "@/constant/tokens";
 import BlockchainService from '@/services/contract-services/loan-service';
 import config from "@/utils/config";
+import { verifyMessage } from "ethers";
 
 export async function GET(req: Request) {
    const url = new URL(req.url);
@@ -25,7 +26,7 @@ export async function GET(req: Request) {
 
    try {
       // Verify the signature
-      const recoveredAddress = ethers.utils.verifyMessage(message, signature);
+      const recoveredAddress = verifyMessage(message, signature);
 
       if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
          return NextResponse.json({ message: "Invalid signature" }, { status: 401 });
@@ -45,13 +46,13 @@ export async function GET(req: Request) {
 
       // Create a provider and a signer based on the recovered address
       const provider = new ethers.JsonRpcProvider(config.RPC_URL);
-      const signer = provider.getSigner(recoveredAddress);
+      const signer = await provider.getSigner(recoveredAddress);
 
       // Initialize your service with the signer
       const service = new BlockchainService(signer);
 
       // Fetch token price using the service with signer
-      const tokenAddress = getTokenAddress(query.tokenPair.toUpperCase());
+      const tokenAddress = getTokenAddress(query.tokenPair.toUpperCase()) as string;
       const tokenPrice = await service.getTokenPrice(tokenAddress);
 
       return NextResponse.json({ token: query.tokenPair, price: tokenPrice }, { status: 200 });

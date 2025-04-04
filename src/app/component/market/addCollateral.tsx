@@ -5,7 +5,7 @@ import LoanSummaryContainer from "../create-loan/LoanSummaryContainer";
 import LoanSummary from "../create-loan/LoanSummary";
 import Button from "../elements/button/Button";
 import { updateLoan } from '@/services/api/update-loan';
-import { ILoanRequest } from "@/interfaces/loan-interface";
+import { ILoanRequest, STATUS } from "@/interfaces/loan-interface";
 import { useLoanService } from '@/services/contract-services/loan-service.hook';
 import { useAccount } from "wagmi";
 import { DateTime } from "luxon";
@@ -57,12 +57,12 @@ const AddCollateral = (props: AddCollateralProps) => {
 
   const addCollateral = async () => {
     const success = await LoanService().addCollateral(
-      loanData.loanId,
+      Number(loanData.loanId),
       ethers.parseEther(collateralAmount.toString())
     );
     if (!success) return;
 
-    const response: any = await updateLoan(loanData._id as string, { loanStatus: "funded" } );
+    const response: any = await updateLoan(loanData._id as string, { loanStatus: STATUS.funded } );
     if (!response) {
       messageHandler.handleError("Failed to add collateral");
       return;
@@ -91,12 +91,12 @@ const AddCollateral = (props: AddCollateralProps) => {
               <div className="w-[45%] flex gap-4 justify-end self-center relative">
                 <span className="h-full text-[#C3C8CA]">{"|"}</span>
                 <div className="flex justify-center gap-2 items-center relative">
-                  <Select
-                    name="requestAmount"
-                    id="requestAmount"
-                    options={[collateralOption]}
-                    onChange={handleCollateralOptionChange}
-                  />
+                <Select
+                  name="requestAmount"
+                  id="requestAmount"
+                  options={collateralOption ? [collateralOption] : []}
+                  onChange={handleCollateralOptionChange}
+                />
                 </div>
               </div>
             </div>

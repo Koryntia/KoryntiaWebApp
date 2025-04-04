@@ -15,6 +15,10 @@ export const positionCardsData: CardProps[] = [
       currency: "KRT",
     },
     liked: false,
+    userDetails: {
+      borrower: "0x0000000000000000000000000000000000000000", 
+      investor: "0x0000000000000000000000000000000000000000", 
+    },
   },
   {
     image:
@@ -30,6 +34,10 @@ export const positionCardsData: CardProps[] = [
       currency: "KRT",
     },
     liked: false,
+    userDetails: {
+      borrower: "0x0000000000000000000000000000000000000000",  
+      investor: "0x0000000000000000000000000000000000000000", 
+    },
   },
   {
     image:
@@ -45,6 +53,10 @@ export const positionCardsData: CardProps[] = [
       currency: "KRT",
     },
     liked: false,
+    userDetails: {
+      borrower: "0x0000000000000000000000000000000000000000",
+      investor: "0x0000000000000000000000000000000000000000", 
+    },
   },
   {
     image:
@@ -60,6 +72,10 @@ export const positionCardsData: CardProps[] = [
       currency: "KRT",
     },
     liked: false,
+    userDetails: {
+      borrower: "0x0000000000000000000000000000000000000000", 
+      investor: "0x0000000000000000000000000000000000000000", 
+    },
   },
   {
     image:
@@ -75,5 +91,9 @@ export const positionCardsData: CardProps[] = [
       currency: "KRT",
     },
     liked: false,
+    userDetails: {
+      borrower: "0x0000000000000000000000000000000000000000", 
+      investor: "0x0000000000000000000000000000000000000000", 
+    },
   },
 ];

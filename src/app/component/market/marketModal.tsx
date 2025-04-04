@@ -36,7 +36,7 @@ const MarketModal = (props: MarketModalProps) => {
   const actionHandler: { [key: string]: () => Promise<void> } = {
     Supply: async () => {
       console.log('going to fund loan')
-      const success = await LoanService().fundLoan(loanData.loanId);
+      const success = await LoanService().fundLoan(Number(loanData.loanId));
       if (!success) return;
       console.log('Success: ', success)
       const response: any = await updateLoan(String(loanData.loanId), {
@@ -52,7 +52,7 @@ const MarketModal = (props: MarketModalProps) => {
     },
 
     Repay: async () => {
-      const success = await LoanService().repay(loanData.loanId);
+      const success = await LoanService().repay(Number(loanData.loanId));
       if (!success) return;
 
       const response: any = await updateLoan(String(loanData.loanId), { loanStatus: STATUS.paid } );
@@ -77,7 +77,7 @@ const MarketModal = (props: MarketModalProps) => {
     },
 
     Liquidate: async () => {
-      const success = await LoanService().liquidate(loanData.loanId);
+      const success = await LoanService().liquidate(Number(loanData.loanId));
       if (!success) return;
 
       const response: any = await updateLoan(String(loanData.loanId), { loanStatus: STATUS.liquidated } );

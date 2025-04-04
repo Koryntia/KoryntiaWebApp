@@ -5,6 +5,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { TbCurrencyEthereum } from "react-icons/tb";
 import Button from "../../elements/button/Button";
 import { MouseEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export type CardProps = {
   image: string;
@@ -24,6 +25,7 @@ export type CardProps = {
   status?: string;
   isCurrentBid?: boolean;
   onButtonClick?: (title: string) => void;
+  isLliquidation?: boolean;
   onCardClick?: (title: string) => void;
   userDetails: {
     borrower: string;
@@ -49,11 +51,12 @@ const Card = ({
     event.stopPropagation();
     onButtonClick && onButtonClick(title);
   };
-  const handleCardClick = (event: MouseEvent<HTMLButtonElement>) => {
+  const handleCardClick = (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     onCardClick && onCardClick(title);
-  };
+  };  
   const { address } = useAccount();
+  const router = useRouter();
 
   return (
     <article

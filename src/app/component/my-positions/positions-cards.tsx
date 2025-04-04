@@ -63,7 +63,7 @@ export const PositionCards = ({ isMarket, suppliedLoans, description, image, act
       getMyLoan(address)
          .then((data) => {
             if (data) {
-               setLoanData(loanData.concat(data));
+               setLoanData(prev => prev.concat(data));
             }
          })
          .finally(() => setIsLoading(false));
@@ -78,7 +78,7 @@ export const PositionCards = ({ isMarket, suppliedLoans, description, image, act
       getMySuppliedLoan(address)
          .then((data) => {
             if (data) {
-               setLoanData(loanData.concat(data));
+               setLoanData(prev => prev.concat(data));
             }
          })
          .finally(() => setIsLoading(false));

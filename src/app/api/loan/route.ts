@@ -7,14 +7,13 @@ import connectDB from "@/lib/db";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
+  const nameParam = url.searchParams.get("name");
   const query = {
     borrowerID: url.searchParams.get("borrowerID"),
     investorAddress: url.searchParams.get("investorAddress"),
     loanToken: url.searchParams.get("loanToken"),
     status: url.searchParams.get("status"),
-    name: url.searchParams.get("name") ?
-      decodeURIComponent(url.searchParams.get("name"))
-      : null,
+    name: nameParam !== null ? decodeURIComponent(nameParam) : null,
   };
 
   try {

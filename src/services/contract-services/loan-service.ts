@@ -224,7 +224,7 @@ class BlockchainService {
         loanPosition.initialThreshold,
       );
       debtAmount = ethers.parseEther(
-        Math.ceil(ethers.formatUnits(debtAmount)).toString()
+        Math.ceil(Number(ethers.formatUnits(debtAmount))).toString()
       );
 
       await this.approveSpender(
@@ -236,8 +236,8 @@ class BlockchainService {
       return new Promise<boolean>((resolve) => {
         this.loanPositionManagerContract.once("LoanRepaid",
             (
-              loanId: ethers.BigNumberish,
-              event: ethers.ContractEvent
+              _loanId: ethers.BigNumberish,
+              _event: ethers.ContractEvent
             ) => {
           resolve(true);
         });

@@ -1,5 +1,5 @@
 import { Document, Schema, model, models } from "mongoose";
-import { ILoanRequest } from "@/interfaces/loan-interface";
+import { ILoanRequest, STATUS } from "@/interfaces/loan-interface";
 
 const loanSchema = new Schema<ILoanRequest>(
   {
@@ -20,8 +20,8 @@ const loanSchema = new Schema<ILoanRequest>(
     creationDate: { type: Date, required: true },
     loanStatus: {
       type: String,
-      enum: ["requested", "withdrawn", "funded", "paid", "expired", "unhealthy", "liquidated"],
-      default: "requested",
+      enum: Object.values(STATUS),
+      default: STATUS.requested,  
       required: true,
     },
     investorAddress: { type: String, required: false },
@@ -33,7 +33,6 @@ const loanSchema = new Schema<ILoanRequest>(
   }
 );
 
-const LoanModel =
-  models.LoanModel || model<ILoanRequest>("LoanModel", loanSchema);
+const LoanModel = models.LoanModel || model<ILoanRequest>("LoanModel", loanSchema);
 
 export default LoanModel;

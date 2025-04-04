@@ -117,9 +117,9 @@ const ActivePositionsTable: FC<TablePorp> = ({ data }) => {
               <td className="w-[20%] py-4 text-black text-center font-semibold">
                 <span
                   className={`text-[14px] rounded-3xl px-[15px] pt-0.5 pb-1 text-white ${
-                    key.healthFactor >= 85
+                    Number(key.healthFactor) >= 85
                       ? "bg-textGreen1"
-                      : key.healthFactor >= 50
+                      : Number(key.healthFactor) >= 50
                       ? "bg-yellow-500"
                       : "bg-red-700"
                   }`}
